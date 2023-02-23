@@ -72,14 +72,13 @@ public class VesselServiceImpl implements VesselService {
     }
 
     @Override
-    public String removeVesselFromBase(String IMO){
+    public String removeVesselFromBase(String IMO) {
         Vessel vessel = vesselRepository.findByIMO(IMO)
                 .stream().findAny().orElse(null);
-        if(vessel != null){
+        if (vessel != null) {
             vesselRepository.delete(vessel);
             return "Vessel have been deleted from base";
         }
         return "Vessel is not available";
     }
-
 }

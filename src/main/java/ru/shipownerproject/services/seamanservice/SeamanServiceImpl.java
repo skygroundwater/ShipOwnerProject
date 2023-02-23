@@ -9,8 +9,7 @@ import ru.shipownerproject.models.seaman.Seaman;
 import ru.shipownerproject.models.vessels.Vessel;
 
 @Service
-public class SeamanServiceImpl implements SeamanService{
-
+public class SeamanServiceImpl implements SeamanService {
 
     private final SeamanRepository seamanRepository;
 
@@ -18,34 +17,34 @@ public class SeamanServiceImpl implements SeamanService{
 
     private final VesselRepository vesselRepository;
 
-    public SeamanServiceImpl(SeamanRepository seamanRepository, CountryRepository countryRepository, VesselRepository vesselRepository){
+    public SeamanServiceImpl(SeamanRepository seamanRepository, CountryRepository countryRepository, VesselRepository vesselRepository) {
         this.seamanRepository = seamanRepository;
         this.countryRepository = countryRepository;
         this.vesselRepository = vesselRepository;
     }
 
     @Override
-    public String showInfoAboutSeaman(String fullName){
+    public String showInfoAboutSeaman(String fullName) {
         Seaman seaman = seamanRepository.findByFullName(fullName)
                 .stream().findAny().orElse(null);
-        if(seaman != null){
+        if (seaman != null) {
             return seaman.getInfo();
-        }else {
+        } else {
             return "We don't have a seaman with that name";
         }
     }
 
     @Override
     public String addNewSeamanToBase(String fullName, String position, String birthDate,
-                                     String birthPlace, String citizenship, String IMO){
+                                     String birthPlace, String citizenship, String IMO) {
         Country country = countryRepository.findByName(citizenship)
                 .stream().findAny().orElse(null);
         Vessel vessel = vesselRepository.findByIMO(IMO)
                 .stream().findAny().orElse(null);
-        if(seamanRepository.findByFullName(fullName)
-                .stream().findAny().orElse(null) != null){
+        if (seamanRepository.findByFullName(fullName)
+                .stream().findAny().orElse(null) != null) {
             return "That seaman is already in base";
-        }else if(country!= null && vessel != null){
+        } else if (country != null && vessel != null) {
             Seaman seaman = new Seaman();
             seaman.setFullName(fullName);
             seaman.setPosition(position);

@@ -36,17 +36,16 @@ public class ShipOwner {
     private String description;
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Ship Owner: " + name + "\n"
                 + description;
     }
 
-    public ShipOwner(){}
-
-    public ShipOwner(String name, String description){
-        this.name = name;
-        this.description=description;
+    public ShipOwner() {
     }
 
-
+    public ShipOwner(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 }

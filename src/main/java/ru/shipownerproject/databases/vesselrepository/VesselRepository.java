@@ -8,12 +8,9 @@ import java.util.List;
 
 @Repository
 public interface VesselRepository extends JpaRepository<Vessel, Integer> {
-
     List<Vessel> findByName(String name);
 
     List<Vessel> findByIMO(String IMO);
 
     void deleteByIMO(String IMO);
-
-
 }

@@ -13,20 +13,19 @@ public class SeamanController {
 
     private final SeamanService seamanService;
 
-    public SeamanController(SeamanService seamanService){
+    public SeamanController(SeamanService seamanService) {
         this.seamanService = seamanService;
     }
 
     @GetMapping("/get")
-    public ResponseEntity<String> showInfoAboutSeaman(String fullName){
+    public ResponseEntity<String> showInfoAboutSeaman(String fullName) {
         return ResponseEntity.ok(seamanService.showInfoAboutSeaman(fullName));
     }
 
     @PostMapping
     public ResponseEntity<String> addNewSeamanToBase(String fullName, String position, String birthDate,
-                                                     String birthPlace, String citizenship, String IMO){
+                                                     String birthPlace, String citizenship, String IMO) {
         return ResponseEntity.ok(seamanService.
-                addNewSeamanToBase(fullName,position,birthDate,birthPlace,citizenship,IMO));
+                addNewSeamanToBase(fullName, position, birthDate, birthPlace, citizenship, IMO));
     }
-
 }

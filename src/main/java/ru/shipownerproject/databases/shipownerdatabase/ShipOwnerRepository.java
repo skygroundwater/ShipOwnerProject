@@ -8,9 +8,7 @@ import java.util.List;
 
 @Repository
 public interface ShipOwnerRepository extends JpaRepository<ShipOwner, Long> {
-
     List<ShipOwner> findByName(String name);
 
     void deleteByName(String name);
-
 }

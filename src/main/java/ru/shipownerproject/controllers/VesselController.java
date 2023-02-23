@@ -8,7 +8,6 @@ import ru.shipownerproject.services.vesselservice.VesselService;
 @RequestMapping("/vessel")
 public class VesselController {
 
-
     private final VesselService vesselService;
 
     public VesselController(VesselService vesselService) {
@@ -18,19 +17,19 @@ public class VesselController {
     @PostMapping
     public ResponseEntity<String> addNewVessel(@RequestParam String vesselName,
                                                @RequestParam String IMO,
-                                               @RequestParam String shipOwnerName){
+                                               @RequestParam String shipOwnerName) {
         return ResponseEntity.ok(vesselService.addNewVessel(
                 vesselName, shipOwnerName, IMO));
 
     }
 
     @GetMapping("/get")
-    public  ResponseEntity<String> getVessel(@RequestParam String name){
+    public ResponseEntity<String> getVessel(@RequestParam String name) {
         return ResponseEntity.ok(vesselService.vessel(name));
     }
 
     @DeleteMapping("/remove")
-    public ResponseEntity<String> removeVesselFromBase(String IMO){
+    public ResponseEntity<String> removeVesselFromBase(String IMO) {
         return ResponseEntity.ok(vesselService.removeVesselFromBase(String.valueOf(IMO)));
     }
 

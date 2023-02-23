@@ -44,14 +44,15 @@ public class Seaman {
     @Column(name = "birthplace")
     private String birthPlace;
 
-    public Seaman(){}
+    public Seaman() {
+    }
 
     @Override
-    public String toString(){
+    public String toString() {
         return fullName + " " + position;
     }
 
-    public String getInfo(){
+    public String getInfo() {
         return fullName + " Position: " + position
                 + "\n Date of birth: " + birth
                 + "\n Place of birth: " + birthPlace
@@ -59,6 +60,4 @@ public class Seaman {
                 + "\n Company of work: " + vessel.getShipOwner().getName()
                 + "\n Vessel of work: " + vessel.getName();
     }
-
-
 }

@@ -16,7 +16,7 @@ import java.util.List;
 public class Vessel {
 
     @Id
-    @Column(name="id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
@@ -31,22 +31,22 @@ public class Vessel {
     @OneToMany(mappedBy = "vessel", cascade = CascadeType.ALL)
     private List<Seaman> seamen;
 
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
 
     @Column(name = "IMO")
     private String IMO;
 
     @Override
-    public String toString(){
+    public String toString() {
         return name + " " + IMO + " " + shipOwner.getName() + " Country of registered: " + country.getName();
     }
 
-    public Vessel(){}
+    public Vessel() {
+    }
 
-    public Vessel(String name, String IMO){
+    public Vessel(String name, String IMO) {
         this.name = name;
         this.IMO = IMO;
     }
-
 }

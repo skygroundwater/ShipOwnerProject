@@ -15,25 +15,24 @@ public class CountryController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<String> returnCountry(@RequestParam String name){
-            return ResponseEntity.ok(countryService.oneCountry(name));
+    public ResponseEntity<String> returnCountry(@RequestParam String name) {
+        return ResponseEntity.ok(countryService.oneCountry(name));
     }
 
     @GetMapping("/get/shipowners")
-    public ResponseEntity<String> returnCountryShipOwners(@RequestParam String name){
+    public ResponseEntity<String> returnCountryShipOwners(@RequestParam String name) {
         return ResponseEntity.ok(countryService.countryShipOwners(name));
     }
 
     @PostMapping
-    public ResponseEntity<Void> addNewCountry(@RequestParam String name){
+    public ResponseEntity<Void> addNewCountry(@RequestParam String name) {
         countryService.newCountry(name);
-        return  ResponseEntity.ok().build();
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/refactor/name")
     public ResponseEntity<String> refactorCountryName(@RequestParam String oldCountryName,
-                                                      @RequestParam String newCountryName){
-        return ResponseEntity.ok(countryService.refactorCountryName(oldCountryName,newCountryName));
+                                                      @RequestParam String newCountryName) {
+        return ResponseEntity.ok(countryService.refactorCountryName(oldCountryName, newCountryName));
     }
-
 }

@@ -78,7 +78,7 @@ public class ShipsOwnerServiceImpl implements ShipsOwnerService {
                 stream().findAny().orElse(null);
         if (shipOwner == null) {
             return "This Ship Owner is not in the base. At first please POST it";
-        }else if(country != null){
+        } else if (country != null) {
             shipOwner.setCountry(country);
             shipOwner.getVessels().forEach(vessel -> vessel.setCountry(country));
             shipOwnerRepository.save(shipOwner);
@@ -88,23 +88,23 @@ public class ShipsOwnerServiceImpl implements ShipsOwnerService {
     }
 
     @Override
-    public String setNameForShipOwner(String oldShipOwnerName, String newShipOwnerName){
+    public String setNameForShipOwner(String oldShipOwnerName, String newShipOwnerName) {
         ShipOwner shipOwner = shipOwnerRepository.findByName(oldShipOwnerName)
                 .stream().findAny().orElse(null);
-        if(shipOwner != null){
+        if (shipOwner != null) {
             shipOwner.setName(newShipOwnerName);
             shipOwnerRepository.save(shipOwner);
             return "Ship Owner have been refactor his name";
-        }else {
+        } else {
             return "We do not have this Ship Owner in the base. At first please add it";
         }
     }
 
     @Override
-    public String removeFromBaseShipOwner(String shipOwnerName){
+    public String removeFromBaseShipOwner(String shipOwnerName) {
         ShipOwner shipOwner = shipOwnerRepository.findByName(shipOwnerName)
                 .stream().findAny().orElse(null);
-        if(shipOwner != null) {
+        if (shipOwner != null) {
             shipOwnerRepository.delete(shipOwner);
             return "Ship Owner has been deleted";
         } else {

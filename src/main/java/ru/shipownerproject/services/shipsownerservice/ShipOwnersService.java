@@ -1,15 +1,19 @@
 package ru.shipownerproject.services.shipsownerservice;
 
-public interface ShipsOwnerService {
+import ru.shipownerproject.models.vessels.Vessel;
+
+import java.util.List;
+
+public interface ShipOwnersService {
 
     String shipOwner(String name);
 
-    String shipOwnerVessels(String shipOwnerName);
+    List<Vessel> shipOwnerVessels(String shipOwnerName);
 
     String addNewShipOwner(String country, String name,
                            String description);
 
-    String setCountryForShipOwner(String shipOwnerName, String countryName);
+    String refactorCountryForShipOwner(String shipOwnerName, String countryName);
 
     String setNameForShipOwner(String oldShipOwnerName, String newShipOwnerName);
 

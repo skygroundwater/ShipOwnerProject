@@ -1,10 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Create country</title>
+    <title>ship owner project</title>
 </head>
 <body>
+
+<form th:method="POST" th:action="@{/country}" th:object="${country}">
+
+        <label for="name">Enter name for new country: </label>
+
+        <input type="text" th:field="*{name}" id="name">
+
+        <br/>
+
+        <input type="submit" value="Add country to base"/>
+
+</form>
+
+<a href="/general">Back</a>
 
 
 

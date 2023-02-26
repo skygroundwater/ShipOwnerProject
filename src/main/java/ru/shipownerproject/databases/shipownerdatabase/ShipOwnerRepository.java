@@ -10,5 +10,4 @@ import java.util.List;
 public interface ShipOwnerRepository extends JpaRepository<ShipOwner, Long> {
     List<ShipOwner> findByName(String name);
 
-    void deleteByName(String name);
 }

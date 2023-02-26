@@ -16,8 +16,8 @@ import java.util.List;
 public class Country {
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
 
     @OneToMany(mappedBy = "country", cascade = CascadeType.ALL)

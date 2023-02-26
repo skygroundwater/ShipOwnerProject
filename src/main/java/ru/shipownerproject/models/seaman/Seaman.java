@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 import ru.shipownerproject.models.countries.Country;
+import ru.shipownerproject.models.seaman.passport.SeamanPassport;
 import ru.shipownerproject.models.shipowners.ShipOwner;
 import ru.shipownerproject.models.vessels.Vessel;
 
@@ -44,12 +46,34 @@ public class Seaman {
     @Column(name = "birthplace")
     private String birthPlace;
 
+    @OneToOne(mappedBy = "seaman")
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    private SeamanPassport seamanPassport;
+
     public Seaman() {
+    }
+
+    public Seaman(String fullName, String position, Vessel vessel, Country citizenship,
+                  String birth, String birthPlace, ShipOwner shipOwner, String passport){
+        this.fullName = fullName;
+        this.position = position;
+        this.vessel = vessel;
+        this.citizenship = citizenship;
+        this.birth = birth;
+        this.birthPlace = birthPlace;
+        this.shipowner = shipOwner;
+        setSeamanPassport(new SeamanPassport(this, passport));
+    }
+
+
+    public void setSeamanPassport(SeamanPassport seamanPassport){
+        this.seamanPassport = seamanPassport;
+        seamanPassport.setSeaman(this);
     }
 
     @Override
     public String toString() {
-        return fullName + " " + position;
+        return fullName + " " + position + " Passport number: " + seamanPassport.getPassport();
     }
 
     public String getInfo() {

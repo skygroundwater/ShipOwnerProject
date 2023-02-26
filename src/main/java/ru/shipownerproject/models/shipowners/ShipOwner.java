@@ -1,7 +1,8 @@
 package ru.shipownerproject.models.shipowners;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import ru.shipownerproject.models.countries.Country;
 import ru.shipownerproject.models.seaman.Seaman;
 import ru.shipownerproject.models.vessels.Vessel;
@@ -17,7 +18,7 @@ public class ShipOwner {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "country", referencedColumnName = "id")
@@ -47,5 +48,15 @@ public class ShipOwner {
     public ShipOwner(String name, String description) {
         this.name = name;
         this.description = description;
+    }
+    public ShipOwner(String name, String description, String countryName) {
+        this.name = name;
+        this.description = description;
+        this.setCountry(new Country(countryName));
+    }
+    public ShipOwner(String name, String description, Country country) {
+        this.name = name;
+        this.description = description;
+        this.setCountry(country);
     }
 }

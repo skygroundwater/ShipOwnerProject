@@ -8,7 +8,7 @@ public interface ShipOwnersService {
 
     String shipOwner(String name);
 
-    List<Vessel> shipOwnerVessels(String shipOwnerName);
+    String shipOwnerVessels(String shipOwnerName);
 
     String addNewShipOwner(String country, String name,
                            String description);

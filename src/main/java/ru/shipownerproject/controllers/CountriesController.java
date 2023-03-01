@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.shipownerproject.models.countries.Country;
 import ru.shipownerproject.services.countryservice.CountriesService;
 
-@Controller
+@RestController
 @RequestMapping("/country")
 public class CountriesController {
 
@@ -17,32 +17,15 @@ public class CountriesController {
         this.countriesService = countriesService;
     }
 
-    @ModelAttribute("header")
-    public String title(){
-        return "Ship Owner Project";
-    }
-
-
-    @GetMapping("/add")
-    public String startCreateNewCountry(@ModelAttribute("country") Country country){
-
-        return "countries/create-country";
-    }
 
     @PostMapping
-    public String addNewCountry(@ModelAttribute("country") Country country, Model model) {
-
-        countriesService.newCountry(country);
-
-        return "redirect:/general";
+    public ResponseEntity<String> addNewCountry(@RequestParam String name) {
+        return ResponseEntity.ok(countriesService.newCountry(name));
     }
 
     @GetMapping("/all")
-    public String allCountries(Model model){
-
-        model.addAttribute("countries", countriesService.allCountries());
-
-        return "countries/all-countries";
+    public ResponseEntity<String> allCountries(){
+        return ResponseEntity.ok(countriesService.allCountries());
     }
 
 
@@ -53,15 +36,14 @@ public class CountriesController {
     }
 
     @GetMapping("/get/shipowners/{name}")
-    public String returnCountryShipOwners(@PathVariable String name, Model model) {
-        model.addAttribute("shipowners", countriesService.countryShipOwners(name));
-        return "countries/all-shipowners-for-country";
+    public ResponseEntity<String> returnCountryShipOwners(@PathVariable String name, Model model) {
+
+        return ResponseEntity.ok(countriesService.countryShipOwners(name));
     }
 
-    @GetMapping("/get/vessels/{name}")
-    public String returnCountryVessels(@PathVariable String name, Model model){
-        model.addAttribute("vessels", countriesService.countryVessels(name));
-        return "countries/all-vessels-for-country";
+    @GetMapping("/get/vessels")
+    public ResponseEntity<String> returnCountryVessels(@RequestParam String name, Model model){
+        return ResponseEntity.ok(countriesService.countryVessels(name));
     }
 
     @PutMapping("/refactor/name")

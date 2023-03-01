@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface CountriesService {
 
-    List<Country> allCountries();
+    String allCountries();
 
-    Country newCountry(Country country);
+    String newCountry(String name);
 
     String oneCountry(String name);
 
-    List<ShipOwner> countryShipOwners(String name);
+    String countryShipOwners(String name);
 
     String countryVessels(String countryName);
 

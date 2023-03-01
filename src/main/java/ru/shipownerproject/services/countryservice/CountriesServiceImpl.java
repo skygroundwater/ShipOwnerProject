@@ -18,20 +18,26 @@ public class CountriesServiceImpl implements CountriesService {
 
     public static final String NC = "This country is not available";
 
+    private List<Country> findAll(){
+        return countryRepository.findAll();
+    }
 
     private Country findCountryByName(String countryName){
         return countryRepository.findByName(countryName).stream().findAny().orElse(null);
     }
 
     @Override
-    public List<Country> allCountries(){
-        return countryRepository.findAll();
+    public String allCountries(){
+        StringBuilder stringBuilder = new StringBuilder();
+        findAll().forEach(country -> stringBuilder.append(country).append("\n"));
+        return stringBuilder.toString();
     }
 
     @Override
-    public Country newCountry(Country country) {
-        if (findCountryByName(country.getName()) != null) return null;
-        return countryRepository.save(country);
+    public String newCountry(String name) {
+        if (findCountryByName(name) != null) return "That country is already added";
+        else countryRepository.save(new Country(name));
+        return "Country added";
     }
 
     @Override
@@ -42,9 +48,15 @@ public class CountriesServiceImpl implements CountriesService {
     }
 
     @Override
-    public List<ShipOwner> countryShipOwners(String countryName) {
-
-           return findCountryByName(countryName).getShipOwners();
+    public String countryShipOwners(String countryName) {
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            findCountryByName(countryName).getShipOwners()
+                    .forEach(shipOwner -> stringBuilder.append(shipOwner).append("\n"));
+        }catch (NullPointerException e){
+            return NC;
+        }
+           return stringBuilder.toString();
     }
 
     @Override

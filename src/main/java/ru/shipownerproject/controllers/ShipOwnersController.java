@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.shipownerproject.services.shipsownerservice.ShipOwnersService;
 
-@Controller
+@RestController
 @RequestMapping("/shipowner")
 public class ShipOwnersController {
 
@@ -17,14 +17,13 @@ public class ShipOwnersController {
     }
 
     @GetMapping("/get")
-    public ResponseEntity<String> shipOwner(@RequestParam String name, Model model) {
+    public ResponseEntity<String> shipOwner(@RequestParam String name) {
         return ResponseEntity.ok(shipOwnersService.shipOwner(name));
     }
 
-    @GetMapping("/get/vessels/{name}")
-    public String shipOwnerVessels(@PathVariable String name, Model model) {
-        model.addAttribute("vessels", shipOwnersService.shipOwnerVessels(name));
-        return "shipowners/shipowners-vessels";
+    @GetMapping("/get/vessels")
+    public ResponseEntity<String> shipOwnerVessels(@RequestParam String name) {
+        return ResponseEntity.ok(shipOwnersService.shipOwnerVessels(name));
     }
 
     @PostMapping

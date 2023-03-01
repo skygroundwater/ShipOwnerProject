@@ -44,8 +44,11 @@ public class ShipOwnersServiceImpl implements ShipOwnersService {
     }
 
     @Override
-    public List<Vessel> shipOwnerVessels(String shipOwnerName) {
-        return findShipOwnerByName(shipOwnerName).getVessels();
+    public String shipOwnerVessels(String shipOwnerName) {
+        StringBuilder stringBuilder = new StringBuilder();
+        findShipOwnerByName(shipOwnerName).getVessels().forEach(vessel ->
+                stringBuilder.append(vessel).append("\n"));
+        return String.valueOf(stringBuilder);
     }
 
     @Override
@@ -98,7 +101,7 @@ public class ShipOwnersServiceImpl implements ShipOwnersService {
         try {
             shipOwnerRepository.delete(findShipOwnerByName(shipOwnerName));
             return "Ship Owner has been deleted";
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             return NS;
         }
     }

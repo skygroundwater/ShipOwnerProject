@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ship Owner Project</title>
+</head>
+<body>
+<p th:text="${country.getName()}"></p>
+<form th:method="PUT" th:action="@{/countries/refactor/{id}(id=${country.getId()})}" th:object="${country}">
+    <label for="name">Enter name for new country: </label>
+    <input type="text" th:field="*{name}" id="name">
+    <br/>
+    <input type="submit" value="Refactor!"/>
+</form>
+<br>
+<form th:method="GET" th:action="@{/countries}" >
+    <input type="submit" value="BACK">
+</form>
+</body>
+</html>

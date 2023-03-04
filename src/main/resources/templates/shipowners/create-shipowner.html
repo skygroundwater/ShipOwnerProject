@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ship Owner Project</title>
+</head>
+<body>
+<form th:method="POST" th:action="@{/shipowners}" th:object="${shipowner}">
+    <label for="name">Enter name: </label>
+    <input type="text" th:field="*{name}" id="name">
+    <br/>
+    <label for="country">Choose country of registration:
+        <select th:field="*{country}" id="country">
+            <option th:each="country : ${countries}" th:value="${country.getId()}" th:text="${country.getName()}"></option>
+        </select>
+    </label>
+    <br/>
+    <label for="description">Enter description: </label>
+    <input type="text" th:field="*{description}" id="description">
+    <br/>
+    <input type="submit" value="Add!"/>
+    <br>
+    <form th:method="GET" th:action="@{/shipowners}" >
+        <input type="submit" value="BACK">
+    </form>
+
+</body>
+</html>

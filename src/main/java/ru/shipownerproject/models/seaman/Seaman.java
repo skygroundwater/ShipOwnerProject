@@ -65,7 +65,6 @@ public class Seaman {
         setSeamanPassport(new SeamanPassport(this, passport));
     }
 
-
     public void setSeamanPassport(SeamanPassport seamanPassport){
         this.seamanPassport = seamanPassport;
         seamanPassport.setSeaman(this);

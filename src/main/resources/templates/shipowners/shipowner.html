@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ship Owner Project</title>
+</head>
+<body>
+<br>
+<p th:text="${shipowner.getName()}"></p>
+<br>
+<p th:text="${shipowner.getCountry()}"></p>
+<br>
+<p th:text="${shipowner.getDescription()}"></p>
+<br>
+<form th:method="GET" th:action="@{/shipowners/vessels/{id}(id=${shipowner.getId()})}" >
+    <input type="submit" value="Vessels for that shipowner">
+</form>
+<br>
+
+<form th:method="GET" th:action="@{/shipowners/seamen/{id}(id=${shipowner.getId()})}" >
+    <input type="submit" value="Seamen for that shipowner">
+</form>
+
+<br>
+<form th:method="DELETE" th:action="@{/shipowners/delete/{id}(id=${shipowner.getId()})}" >
+    <input type="submit" value="Delete from base">
+</form>
+
+<br>
+<form th:method="GET" th:action="@{/shipowners}" >
+    <input type="submit" value="BACK">
+</form>
+
+</body>
+</html>

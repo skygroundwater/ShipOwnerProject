@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<p th:text="${vessel.toString()}"></p>
+<br>
+
+<form th:method="GET" th:action="@{/vessels/crew/{id}(id=${vessel.getId()})}" >
+    <input type="submit" value="Crew for this vessel">
+</form>
+<br>
+<form th:method="GET" th:action="@{/vessels/ref/{id}(id=${vessel.getId()})}">
+    <input type="submit" value="Refactor info about that vessel">
+</form>
+<br>
+<form th:method="GET" th:action="@{/vessels/all}" >
+    <input type="submit" value="BACK">
+</form>
+</body>
+</html>

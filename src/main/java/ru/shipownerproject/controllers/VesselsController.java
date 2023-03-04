@@ -1,12 +1,15 @@
 package ru.shipownerproject.controllers;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.shipownerproject.models.vessels.Vessel;
 import ru.shipownerproject.services.vesselservice.VesselsService;
 import ru.shipownerproject.services.vesselservice.typeservice.VesselTypesService;
 
-@RestController
-@RequestMapping("/vessel")
+@Controller
+@RequestMapping("/vessels")
 public class VesselsController {
 
     private final VesselsService vesselsService;
@@ -19,47 +22,65 @@ public class VesselsController {
     }
 
     @PostMapping("/addallvesseltypes")
-    public ResponseEntity<String> addAllVesselTypes(){
+    public ResponseEntity<String> addAllVesselTypes() {
         return ResponseEntity.ok(vesselTypesService.addAllVesselTypeToBase());
     }
 
-    @PostMapping
-    public ResponseEntity<String> addNewVessel(@RequestParam String vesselName,
-                                               @RequestParam String IMO,
-                                               @RequestParam String country,
-                                               @RequestParam String shipOwnerName,
-                                               @RequestParam Short typeId) {
-        return ResponseEntity.ok(vesselsService.addNewVessel(
-                vesselName, country, shipOwnerName, IMO, typeId));
-
-    }
-
-    @GetMapping("/get")
-    public ResponseEntity<String> getVessel(@RequestParam String IMO) {
-        return ResponseEntity.ok(vesselsService.vessel(IMO));
-    }
-
-    @GetMapping("/crew")
-    public ResponseEntity<String> getCrew(@RequestParam String IMO){
-        return ResponseEntity.ok(vesselsService.getInfoAboutCrew(IMO));
-    }
-
     @GetMapping("/type")
-    public ResponseEntity<String> getVesselsByType(@RequestParam Short id){
+    public ResponseEntity<String> getVesselsByType(@RequestParam Byte id) {
         return ResponseEntity.ok(vesselsService.allVesselsByType(id));
     }
 
-    @PutMapping("/refactor")
-    public ResponseEntity<String> refactorVesselInBase(@RequestParam String IMO,
-                                                       @RequestParam String newName,
-                                                       @RequestParam String newCountry, Short newVesselTypeId,
-                                                       @RequestParam String newShipOwnerName){
-        return ResponseEntity.ok(vesselsService.refactorVesselInBase(IMO, newName, newCountry,
-                newVesselTypeId, newShipOwnerName));
+    @GetMapping("/all")
+    public String vessels(Model model) {
+        model.addAttribute("vessels", vesselsService.allVessels());
+        return "vessels/vessels";
     }
 
-    @DeleteMapping("/remove")
-    public ResponseEntity<String> removeVesselFromBase(String IMO) {
-        return ResponseEntity.ok(vesselsService.removeVesselFromBase(String.valueOf(IMO)));
+    @GetMapping
+    public String createNewVessel(@ModelAttribute("vessel") Vessel vessel, Model model) {
+        model.addAttribute("types", vesselTypesService.allTypes());
+        model.addAttribute("countries", vesselsService.allCountries());
+        model.addAttribute("shipowners", vesselsService.allShipOwners());
+        return "vessels/create-vessel";
+    }
+
+    @PostMapping
+    public String addNewVessel(@ModelAttribute("vessel") Vessel vessel, Model model) {
+        vesselsService.addNewVessel(vessel);
+        return "redirect:/vessels/all";
+    }
+
+    @GetMapping("/one/{id}")
+    public String getVessel(@PathVariable Long id, Model model) {
+        model.addAttribute("vessel", vesselsService.vessel(id));
+        return "vessels/vessel";
+    }
+
+    @GetMapping("/crew/{id}")
+    public String getCrew(@PathVariable Long id, Model model) {
+        model.addAttribute("crew", vesselsService.crew(id));
+        return "vessels/vessel-crew";
+    }
+
+    @GetMapping("/ref/{id}")
+    public String refVesselPage(@PathVariable Long id, Model model) {
+        model.addAttribute("vessel", vesselsService.vessel(id));
+        model.addAttribute("types", vesselTypesService.allTypes());
+        model.addAttribute("countries", vesselsService.allCountries());
+        model.addAttribute("shipowners", vesselsService.allShipOwners());
+        return "vessels/refactor-vessel";
+    }
+
+    @PutMapping("/refactor/{id}")
+    public String refactorVesselInBase(@ModelAttribute("vessel") Vessel vessel, @PathVariable Long id) {
+        vesselsService.refactorVesselInBase(vessel, id);
+        return "redirect:/vessels/all";
+    }
+
+    @DeleteMapping("/remove/{id}")
+    public String removeVesselFromBase(@ModelAttribute("vessel") Vessel vessel) {
+        vesselsService.removeVesselFromBase(vessel);
+        return "redirect:/vessels/all";
     }
 }

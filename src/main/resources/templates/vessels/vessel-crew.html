@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ship Owner project</title>
+</head>
+<body>
+
+<p>Crew : </p>
+<div th:each="seaman : ${crew}">
+    <a th:text="${seaman.getInfo()}"></a>
+    <a th:href="@{/seaman/ref/{id}(id=${seaman.getId()})}" th:text="Refactor"></a>
+</div>
+<br>
+<form th:method="GET" th:action="@{/seaman}" >
+    <input type="submit" value="Add new seaman to crew">
+</form>
+<br>
+<br>
+<form th:method="GET" th:action="@{/vessels/all}" >
+    <input type="submit" value="BACK">
+</form>
+<br>
+
+</body>
+</html>

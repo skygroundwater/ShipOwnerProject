@@ -8,6 +8,7 @@ import ru.shipownerproject.models.countries.Country;
 import ru.shipownerproject.models.seaman.Seaman;
 import ru.shipownerproject.models.vessels.Vessel;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import static ru.shipownerproject.services.countryservice.CountriesServiceImpl.NC;
@@ -44,6 +45,24 @@ public class SeamenServiceImpl implements SeamenService {
         return countryRepository.findByName(countryName).stream()
                 .findAny().orElse(null);
     }
+    private Seaman findById(Long id){
+        return seamanRepository.findById(id).get();
+    }
+
+    @Override
+    public List<Country> allCountries(){
+        return countryRepository.findAll();
+    }
+
+    @Override
+    public List<Vessel> allVessels(){
+        return vesselRepository.findAll();
+    }
+
+    @Override
+    public Seaman seaman(Long id){
+        return seamanRepository.findById(id).get();
+    }
 
     @Override
     public String showInfoAboutSeaman(String passport) {
@@ -70,11 +89,35 @@ public class SeamenServiceImpl implements SeamenService {
     }
 
     @Override
+    public void addNewSeamanToBase(Seaman seaman){
+        seaman.setShipowner(seaman.getVessel().getShipOwner());
+        seamanRepository.save(seaman);
+    }
+
+    @Override
+    public void removeSeamanFromBase(Long id){
+        seamanRepository.deleteById(id);
+    }
+
+    @Override
     public String removeSeamanFromBaseByPassport(String passport){
         Seaman foundedSeaman = findSeamanByPassportNumber(passport);
         if(foundedSeaman == null) return NSM;
         seamanRepository.delete(foundedSeaman);
         return "Seaman has been deleted";
+    }
+
+    @Override
+    public void refactorSeamanInBase(Seaman seaman, Long id){
+        seamanRepository.save(Stream.of(findById(id)).peek(s -> {
+            s.setFullName(seaman.getFullName());
+            s.setVessel(seaman.getVessel());
+            s.setShipowner(seaman.getVessel().getShipOwner());
+            s.setPosition(seaman.getPosition());
+            s.setBirth(seaman.getBirth());
+            s.setBirthPlace(seaman.getBirthPlace());
+        }).findAny().get());
+
     }
 
     @Override

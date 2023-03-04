@@ -1,10 +1,13 @@
 package ru.shipownerproject.controllers;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.shipownerproject.models.seaman.Seaman;
 import ru.shipownerproject.services.seamanservice.SeamenService;
 
-@RestController
+@Controller
 @RequestMapping("/seaman")
 public class SeamenController {
 
@@ -14,27 +17,37 @@ public class SeamenController {
         this.seamenService = seamenService;
     }
 
-    @GetMapping("/get")
-    public ResponseEntity<String> showInfoAboutSeaman(String passport) {
-        return ResponseEntity.ok(seamenService.showInfoAboutSeaman(passport));
+    @GetMapping
+    public String showInfoAboutSeaman(Model model) {
+        model.addAttribute("seaman", new Seaman());
+        model.addAttribute("countries", seamenService.allCountries());
+        model.addAttribute("vessels", seamenService.allVessels());
+        return "seamen/create-seaman";
     }
 
     @PostMapping
-    public ResponseEntity<String> addNewSeamanToBase(String fullName, String seamanPassport, String position, String birthDate,
-                                                     String birthPlace, String citizenship, String IMO) {
-        return ResponseEntity.ok(seamenService.
-                addNewSeamanToBase(fullName, seamanPassport, position, birthDate, birthPlace, citizenship, IMO));
+    public String addNewSeamanToBase(@ModelAttribute("seaman") Seaman seaman) {
+        seamenService.addNewSeamanToBase(seaman);
+        return "redirect:/vessels/all";
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<String> removeSeamanFromBase(String passport){
-        return ResponseEntity.ok(seamenService.removeSeamanFromBaseByPassport(passport));
+    @DeleteMapping("/delete/{id}")
+    public String removeSeamanFromBase(@PathVariable Long id){
+        seamenService.removeSeamanFromBase(id);
+        return "redirect:vessels/all";
     }
 
-    @PutMapping("/refactor")
-    public ResponseEntity<String> refactorSeamanInBase(String passport,String newFullName, String newPosition, String newBirthDate,
-                                                       String newBirthPlace, String newCitizenship){
-        return ResponseEntity.ok(seamenService.refactorSeamanInBase(passport, newFullName, newPosition, newBirthDate, newBirthPlace, newCitizenship));
+    @GetMapping("/ref/{id}")
+    public String refSeamanInBase(@PathVariable Long id, Model model){
+        model.addAttribute("seaman", seamenService.seaman(id));
+        model.addAttribute("vessels", seamenService.allVessels());
+        return "seamen/refactor-seaman";
+    }
+
+    @PutMapping("/refactor/{id}")
+    public String refactorSeamanInBase(@ModelAttribute("seaman") Seaman seaman, @PathVariable Long id){
+        seamenService.refactorSeamanInBase(seaman, id);
+        return "redirect:/vessels/all";
     }
 
 }

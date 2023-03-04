@@ -5,13 +5,12 @@
     <title>Vessels for country</title>
 </head>
 <body>
-
 <div th:each="vessel: ${vessels}">
-
   <a th:text="${vessel.toString()}">vessel</a>
-
-
 </div>
-
+<br>
+<form th:method="GET" th:action="@{/countries}" >
+    <input type="submit" value="BACK">
+</form>
 </body>
 </html>

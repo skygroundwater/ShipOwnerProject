@@ -6,16 +6,13 @@
 </head>
 <body>
 <div th:each="shipowner : ${shipowners}">
-
-  <a th:href="@{/shipowner/get/vessels/{name}(name=${shipowner.getName()})}"
+  <a th:href="@{/shipowners/one/{id}(id=${shipowner.getId()})}"
      th:text="${shipowner.getName()}">shipowner</a>
-
 </div>
-
-
-
-
-<a href="/country/all">Back</a>
-
+<br>
+<form th:method="GET" th:action="@{/countries}" >
+    <input type="submit" value="BACK TO COUNTRIES">
+</form>
+<br>
 </body>
 </html>

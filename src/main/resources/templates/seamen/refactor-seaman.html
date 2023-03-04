@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<br>
+<form th:method="PUT" th:action="@{/seaman/refactor/{id}(id=${seaman.getId()})}" th:object="${seaman}">
+    <label for="fullName">Enter new full name: </label>
+    <input type="text" th:field="*{fullName}" id="fullName">
+    <br/>
+    <label for="position">Enter new position: </label>
+    <input type="text" th:field="*{position}" id="position">
+    <br/>
+    <label for="birth">Enter new birthdate: </label>
+    <input type="text" th:field="*{birth}" id="birth">
+    <br/>
+    <label for="birthPlace">Enter new birthplace: </label>
+    <input type="text" th:field="*{birthPlace}" id="birthPlace">
+    <br/>
+    <label for="vessel">Choose vessel:
+        <select th:field="*{vessel}" id="vessel">
+            <option th:each="vessel : ${vessels}" th:value="${vessel.getId()}" th:text="${vessel.getName()}"></option>
+        </select>
+    </label>
+    <br/>
+    <input type="submit" value="Refactor!"/>
+</form>
+<br>
+<form th:method="DELETE" th:action="@{/seaman/delete/{id}(id=${seaman.getId()})}" >
+    <input type="submit" value="DELETE">
+</form>
+<br>
+<form th:method="GET" th:action="@{/vessels/all}" >
+    <input type="submit" value="BACK">
+</form>
+
+</body>
+</html>

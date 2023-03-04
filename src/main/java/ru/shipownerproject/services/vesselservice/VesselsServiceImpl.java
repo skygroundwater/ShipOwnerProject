@@ -6,10 +6,13 @@ import ru.shipownerproject.databases.shipownerdatabase.ShipOwnerRepository;
 import ru.shipownerproject.databases.vesselrepository.VesselRepository;
 import ru.shipownerproject.databases.vesselrepository.vesseltyperepository.VesselTypeRepository;
 import ru.shipownerproject.models.countries.Country;
+import ru.shipownerproject.models.seaman.Seaman;
 import ru.shipownerproject.models.shipowners.ShipOwner;
 import ru.shipownerproject.models.vessels.Vessel;
 import ru.shipownerproject.models.vessels.type.VesselType;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import static ru.shipownerproject.services.countryservice.CountriesServiceImpl.NC;
@@ -48,8 +51,29 @@ public class VesselsServiceImpl implements VesselsService {
         return shipOwnerRepository.findByName(shipOwnerName).stream().findAny().orElse(null);
     }
 
-    private VesselType findTypeById(Short typeId) {
+    private Vessel findById(Long id){
+        return vesselRepository.findById(id).stream().findAny().orElse(null);
+    }
+    private VesselType findTypeById(Byte typeId) {
         return vesselTypeRepository.findById(typeId).orElse(null);
+    }
+
+    @Override
+    public List<Country> allCountries(){
+        return countryRepository.findAll();
+    }
+    @Override
+    public List<ShipOwner> allShipOwners(){
+        return shipOwnerRepository.findAll();
+    }
+    @Override
+    public List<Vessel> allVessels(){
+        return vesselRepository.findAll();
+    }
+
+    @Override
+    public Vessel vessel(Long id){
+        return vesselRepository.findById(id).get();
     }
 
     @Override
@@ -60,8 +84,13 @@ public class VesselsServiceImpl implements VesselsService {
     }
 
     @Override
+    public void addNewVessel(Vessel vessel){
+        vesselRepository.save(vessel);
+    }
+
+    @Override
     public String addNewVessel(String vesselName, String countryName, String shipOwnerName,
-                               String IMO, Short typeId) {
+                               String IMO, Byte typeId) {
         ShipOwner shipOwner = findShipOwnerByName(shipOwnerName);
         Vessel vessel = findVesselByImo(IMO);
         VesselType vesselType = findTypeById(typeId);
@@ -83,6 +112,11 @@ public class VesselsServiceImpl implements VesselsService {
     }
 
     @Override
+    public List<Seaman> crew(Long id){
+        return vesselRepository.findById(id).get().getSeamen();
+    }
+
+    @Override
     public String getInfoAboutCrew(String IMO) {
         Vessel vessel = findVesselByImo(IMO);
         if (vessel == null) return NV;
@@ -92,8 +126,24 @@ public class VesselsServiceImpl implements VesselsService {
     }
 
     @Override
+    public void removeVesselFromBase(Vessel vessel){
+        vesselRepository.delete(vessel);
+    }
+
+    @Override
+    public void refactorVesselInBase(Vessel vessel, Long id){
+        vesselRepository.save(Stream.of(findById(id))
+                .toList().stream().peek(v->{
+            v.setVesselType(vessel.getVesselType());
+            v.setCountry(vessel.getCountry());
+            v.setName(vessel.getName());
+            v.setShipOwner(vessel.getShipOwner());
+        }).findAny().get());
+    }
+
+    @Override
     public String refactorVesselInBase(String IMO, String newName, String newCountry,
-                                       Short newVesselTypeId, String newShipOwnerName) {
+                                       Byte newVesselTypeId, String newShipOwnerName) {
         Vessel foundedVessel = findVesselByImo(IMO);
         Country country = findCountryByName(newCountry);
         VesselType vesselType = findTypeById(newVesselTypeId);
@@ -113,7 +163,7 @@ public class VesselsServiceImpl implements VesselsService {
     }
 
     @Override
-    public String allVesselsByType(Short id){
+    public String allVesselsByType(Byte id){
         StringBuilder stringBuilder = new StringBuilder();
         try{
             findTypeById(id).getVesselsOfThisType().forEach(

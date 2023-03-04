@@ -83,7 +83,7 @@ public class VesselType {
     @Id
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Short id;
+    private Byte id;
 
     @Column(name="type")
     private String type;

@@ -7,6 +7,6 @@ import ru.shipownerproject.models.countries.Country;
 import java.util.List;
 
 @Repository
-public interface CountryRepository extends JpaRepository<Country, Integer> {
+public interface CountryRepository extends JpaRepository<Country, Short> {
     List<Country> findByName(String name);
 }

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ship Owners Project</title>
+</head>
+<body>
+<p th:text="${country.getName()}"></p>
+<br>
+<form th:method="GET" th:action="@{/countries/vessels/{id}(id=${country.getId()})}" >
+    <input type="submit" value="Vessels">
+</form>
+<br>
+<form th:method="GET" th:action="@{/countries/shipowners/{id}(id=${country.getId()})}">
+    <input type="submit" value="Ship Owners">
+</form>
+<br>
+<form th:method="GET" th:action="@{/countries}" >
+    <input type="submit" value="BACK">
+</form>
+</body>
+</html>

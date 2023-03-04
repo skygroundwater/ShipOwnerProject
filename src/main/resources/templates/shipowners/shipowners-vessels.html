@@ -5,12 +5,11 @@
     <title>Ship Owners</title>
 </head>
 <body>
+<br>
 <div th:each="vessel: ${vessels}">
-
-  <a th:text="${vessel.toString()}">vessel</a>
-
-
+    <a th:href="@{/vessels/one/{id}(id=${vessel.getId()})}" th:text="${vessel.toString()}">vessel</a>
+    <a th:href="@{/vessels/ref/{id}(id=${vessel.getId()})}" th:text="Refactor"></a>
 </div>
-
+<br>
 </body>
 </html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<br>
+<form th:method="POST" th:action="@{/vessels}" th:object="${vessel}">
+    <label for="name">Enter name: </label>
+    <input type="text" th:field="*{name}" id="name">
+    <br/>
+    <label for="IMO">Enter IMO number: </label>
+    <input type="text" th:field="*{IMO}" id="IMO">
+    <br/>
+    <label for="country">Choose country of registration:
+        <select th:field="*{country}" id="country">
+            <option th:each="country : ${countries}" th:value="${country.getId()}" th:text="${country.getName()}"></option>
+        </select>
+    </label>
+    <br/>
+    <label for="shipOwner">Choose Ship Owner:
+        <select th:field="*{shipOwner}" id="shipOwner">
+            <option th:each="shipowner : ${shipowners}" th:value="${shipowner.getId()}" th:text="${shipowner.getName()}"></option>
+        </select>
+    </label>
+    <br>
+    <label for="vesselType">Choose type of vessel:
+        <select th:field="*{vesselType}" id="vesselType">
+            <option th:each="type : ${types}" th:value="${type.getId()}" th:text="${type.getType()}"></option>
+        </select>
+    </label>
+    <br/>
+    <input type="submit" value="Create!"/>
+</form>
+</body>
+</html>

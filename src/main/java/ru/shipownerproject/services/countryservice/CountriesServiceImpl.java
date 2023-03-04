@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.shipownerproject.databases.countrybase.CountryRepository;
 import ru.shipownerproject.models.countries.Country;
 import ru.shipownerproject.models.shipowners.ShipOwner;
+import ru.shipownerproject.models.vessels.Vessel;
 
 import java.util.List;
 
@@ -19,52 +20,45 @@ public class CountriesServiceImpl implements CountriesService {
     public static final String NC = "This country is not available";
 
 
-    private Country findCountryByName(String countryName){
-        return countryRepository.findByName(countryName).stream().findAny().orElse(null);
+    private Country findCountryByName(String countryName) {
+        return countryRepository.findByName(countryName)
+                .stream().findAny().orElse(null);
+    }
+
+    private Country findById(Short id) {
+        return countryRepository.findById(id).orElse(null);
     }
 
     @Override
-    public List<Country> allCountries(){
+    public List<Country> allCountries() {
         return countryRepository.findAll();
     }
 
     @Override
-    public Country newCountry(Country country) {
-        if (findCountryByName(country.getName()) != null) return null;
-        return countryRepository.save(country);
+    public void newCountry(Country country) {
+        if (findCountryByName(country.getName()) != null) return;
+        countryRepository.save(country);
     }
 
     @Override
-    public String oneCountry(String countryName) {
-        Country country = findCountryByName(countryName);
-        if (country == null) return NC;
-        return "Country: " + country;
+    public Country oneCountry(Short id) {
+        return findById(id);
     }
 
     @Override
-    public List<ShipOwner> countryShipOwners(String countryName) {
-
-           return findCountryByName(countryName).getShipOwners();
+    public List<ShipOwner> countryShipOwners(Short id) {
+        return findById(id).getShipOwners();
     }
 
     @Override
-    public String countryVessels(String countryName) {
-        StringBuilder stringBuilder = new StringBuilder();
-        try {
-            findCountryByName(countryName).getVessels()
-                    .forEach(vessel -> stringBuilder.append(vessel).append("\n"));
-        }catch (NullPointerException e){
-            return NC;
-        }
-        return String.valueOf(stringBuilder);
+    public List<Vessel> countryVessels(Short id) {
+        return findById(id).getVessels();
     }
 
     @Override
-    public String refactorCountryName(String oldCountryName, String newCountryName) {
-        Country country = findCountryByName(oldCountryName);
-        if(country == null) return NC;
+    public void refactorCountryName(Short id, String newCountryName) {
+        Country country = findById(id);
         country.setName(newCountryName);
         countryRepository.save(country);
-        return "Name of this country has been refactored";
     }
 }

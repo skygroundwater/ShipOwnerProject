@@ -5,6 +5,7 @@ import ru.shipownerproject.databases.vesselrepository.vesseltyperepository.Vesse
 import ru.shipownerproject.models.vessels.type.VesselType;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class VesselTypesServiceImpl implements VesselTypesService {
@@ -23,5 +24,9 @@ public class VesselTypesServiceImpl implements VesselTypesService {
                 type -> vesselTypeRepository.save(new VesselType(
                         type.getType(), type.getDescription())));
         return "All types have been added to base";
+    }
+    @Override
+    public List<VesselType> allTypes(){
+        return vesselTypeRepository.findAll();
     }
 }

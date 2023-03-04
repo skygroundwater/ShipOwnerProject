@@ -18,7 +18,7 @@ public class Country {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Short id;
 
     @OneToMany(mappedBy = "country", cascade = CascadeType.ALL)
     private List<ShipOwner> shipOwners;

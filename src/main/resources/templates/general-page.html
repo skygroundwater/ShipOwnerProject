@@ -9,9 +9,17 @@
 
 
 
-<a href="/country/add">Add new country to base</a>
+<form th:method="GET" th:action="@{/countries}" >
+    <input type="submit" value="ALL COUNTRIES">
+</form>
 <br>
-<a href="/country/all">All countries in base</a>
-
+<form th:method="GET" th:action="@{/shipowners}" >
+    <input type="submit" value="ALL SHIPOWNERS">
+</form>
+<br>
+<form th:method="GET" th:action="@{/vessels/all}" >
+    <input type="submit" value="ALL VESSELS">
+</form>
+<br>
 </body>
 </html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<br>
+<form th:method="POST" th:action="@{/seaman}" th:object="${seaman}">
+    <label for="fullName">Enter full name: </label>
+    <input type="text" th:field="*{fullName}" id="fullName">
+    <br/>
+    <label for="position">Enter position: </label>
+    <input type="text" th:field="*{position}" id="position">
+    <br/>
+    <label for="birth">Enter birthdate: </label>
+    <input type="text" th:field="*{birth}" id="birth">
+    <br/>
+    <label for="birthPlace">Enter birthplace: </label>
+    <input type="text" th:field="*{birthPlace}" id="birthPlace">
+    <br/>
+    <br>
+    <label for="citizenship">Choose citizenship:
+        <select th:field="*{citizenship}" id="citizenship">
+            <option th:each="country : ${countries}" th:value="${country.getId()}" th:text="${country.getName()}"></option>
+        </select>
+    </label>
+    <br>
+    <label for="vessel">Choose vessel:
+        <select th:field="*{vessel}" id="vessel">
+            <option th:each="vessel : ${vessels}" th:value="${vessel.getId()}" th:text="${vessel.getName()}"></option>
+        </select>
+    </label>
+    <br/>
+    <input type="submit" value="Add"/>
+</form>
+
+<form th:method="GET" th:action="@{/vessels/all}" >
+    <input type="submit" value="BACK">
+</form>
+
+</body>
+</html>

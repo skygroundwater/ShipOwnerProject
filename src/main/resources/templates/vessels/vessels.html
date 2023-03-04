@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ship Owner Project</title>
+</head>
+<body>
+<br>
+<form th:method="GET" th:action="@{/vessels}">
+    <input type="submit" value="Add new vessel to base">
+</form>
+<br>
+<div th:each="vessel : ${vessels}">
+    <a th:href="@{/vessels/one/{id}(id=${vessel.getId()})}" th:text="${vessel.getName()}"></a>
+</div>
+<form th:method="GET" th:action="@{/general}" >
+    <input type="submit" value="BACK">
+</form>
+
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ship Owner Project</title>
+</head>
+<body>
+<p th:text="${vessel.getIMO()}"></p>
+<br>
+<form th:method="PUT" th:action="@{/vessels/refactor/{id}(id=${vessel.getId()})}" th:object="${vessel}">
+    <label for="name">Enter new name: </label>
+    <input type="text" th:field="*{name}" id="name">
+    <br/>
+    <label for="country">Choose country of registration:
+        <select th:field="*{country}" id="country">
+            <option th:each="country : ${countries}" th:value="${country.getId()}" th:text="${country.getName()}"></option>
+        </select>
+    </label>
+    <br/>
+    <label for="shipOwner">Choose country of registration:
+        <select th:field="*{shipOwner}" id="shipOwner">
+            <option th:each="shipowner : ${shipowners}" th:value="${shipowner.getId()}" th:text="${shipowner.getName()}"></option>
+        </select>
+    </label>
+    <br>
+    <label for="vesselType">Choose country of registration:
+        <select th:field="*{vesselType}" id="vesselType">
+            <option th:each="type : ${types}" th:value="${type.getId()}" th:text="${type.getType()}"></option>
+        </select>
+    </label>
+    <br/>
+    <input type="submit" value="Refactor!"/>
+</form>
+
+
+</body>
+</html>

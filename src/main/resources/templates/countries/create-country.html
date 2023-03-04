@@ -5,22 +5,15 @@
     <title>ship owner project</title>
 </head>
 <body>
-
-<form th:method="POST" th:action="@{/country}" th:object="${country}">
-
+<form th:method="POST" th:action="@{/countries}" th:object="${country}">
         <label for="name">Enter name for new country: </label>
-
         <input type="text" th:field="*{name}" id="name">
-
         <br/>
-
         <input type="submit" value="Add country to base"/>
-
 </form>
-
-<a href="/general">Back</a>
-
-
-
+<br>
+<form th:method="GET" th:action="@{/countries}" >
+    <input type="submit" value="BACK">
+</form>
 </body>
 </html>

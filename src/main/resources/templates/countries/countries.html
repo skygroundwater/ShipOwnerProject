@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ship owner project</title>
+</head>
+<body>
+<br>
+<p th:text="${header}"></p>
+<br>
+<form th:method="GET" th:action="@{/countries/add}">
+    <input type="submit" value="Add new country to base">
+</form>
+<br>
+<p>Countries : </p>
+<div th:each="country : ${countries}">
+    <a th:href="@{/countries/one/{id}(id=${country.getId()})}" th:text="${country.getName()}"></a>
+    <a th:href="@{/countries/ref/{id}(id=${country.getId()})}" th:text="Refactor"></a>
+</div>
+<br>
+<br>
+<form th:method="GET" th:action="@{/general}" >
+    <input type="submit" value="BACK">
+</form>
+</body>
+</html>

@@ -4,10 +4,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.shipownerproject.models.shipowners.ShipOwner;
 import ru.shipownerproject.services.shipsownerservice.ShipOwnersService;
 
 @Controller
-@RequestMapping("/shipowner")
+@RequestMapping("/shipowners")
 public class ShipOwnersController {
 
     private final ShipOwnersService shipOwnersService;
@@ -16,39 +17,61 @@ public class ShipOwnersController {
         this.shipOwnersService = shipOwnersService;
     }
 
-    @GetMapping("/get")
-    public ResponseEntity<String> shipOwner(@RequestParam String name, Model model) {
-        return ResponseEntity.ok(shipOwnersService.shipOwner(name));
-    }
-
-    @GetMapping("/get/vessels/{name}")
-    public String shipOwnerVessels(@PathVariable String name, Model model) {
-        model.addAttribute("vessels", shipOwnersService.shipOwnerVessels(name));
-        return "shipowners/shipowners-vessels";
+    @GetMapping("/add")
+    public String createShipOwnerPage(Model model){
+        model.addAttribute("shipowner", new ShipOwner());
+        model.addAttribute("countries", shipOwnersService.allCountries());
+        return "shipowners/create-shipowner";
     }
 
     @PostMapping
-    public ResponseEntity<String> addNewShipOwner(@RequestParam String countryName,
-                                                  @RequestParam String name,
-                                                  @RequestParam String description) {
-        return ResponseEntity.ok(shipOwnersService
-                .addNewShipOwner(countryName, name, description));
+    public String addNewShipOwner(@ModelAttribute("shipowner") ShipOwner shipOwner) {
+        shipOwnersService.addNewShipOwner(shipOwner);
+        return "redirect:/shipowners";
     }
 
-    @PutMapping("/refactor/country")
-    public ResponseEntity<String> refactorCountryForShipOwner(@RequestParam String shipOwner,
-                                                              @RequestParam String countryName) {
-        return ResponseEntity.ok(shipOwnersService.refactorCountryForShipOwner(shipOwner, countryName));
+    @GetMapping
+    public String allShipOwners(Model model){
+        model.addAttribute("shipowners", shipOwnersService.allShipOwners());
+        return "shipowners/shipowners";
     }
 
-    @PutMapping("/refactor/name")
-    public ResponseEntity<String> refactorNameForShipOwner(@RequestParam String oldShipOwnerName,
-                                                           @RequestParam String newShipOwnerName) {
-        return ResponseEntity.ok(shipOwnersService.setNameForShipOwner(oldShipOwnerName, newShipOwnerName));
+    @GetMapping("/one/{id}")
+    public String shipOwner(@PathVariable Long id, Model model) {
+        model.addAttribute("shipowner", shipOwnersService.shipOwner(id));
+        return "shipowners/shipowner";
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteShipOwnerFromBase(@RequestParam String name) {
-        return ResponseEntity.ok(shipOwnersService.removeFromBaseShipOwner(name));
+    @GetMapping("/vessels/{id}")
+    public String shipOwnerVessels(@PathVariable Long id, Model model) {
+        model.addAttribute("vessels", shipOwnersService.shipOwnerVessels(id));
+        return "shipowners/shipowners-vessels";
+    }
+
+    @GetMapping("/seamen/{id}")
+    public String shipOwnerSeamen(@PathVariable Long id, Model model){
+        model.addAttribute("seamen", shipOwnersService.shipOwnerSeamen(id));
+    return "shipowners/shipowner-seamen";
+    }
+
+    @GetMapping("/ref/{id}")
+    public String refShipOwner(@PathVariable Long id, Model model) {
+        model.addAttribute("shipowner", shipOwnersService.shipOwner(id));
+        model.addAttribute("countries", shipOwnersService.allCountries());
+        return "shipowners/refactor-shipowner";
+    }
+
+    @PutMapping("/refactor/{id}")
+    public String refactorShipOwner(@ModelAttribute("shipowner") ShipOwner shipOwner,
+                                    @PathVariable Long id) {
+        System.out.println(shipOwner.getCountry().getName());
+        shipOwnersService.refactorShipOwner(shipOwner, id);
+        return "redirect:/shipowners";
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public String deleteShipOwnerFromBase(@PathVariable Long id) {
+         shipOwnersService.removeFromBaseShipOwner(id);
+         return "redirect:/shipowners";
     }
 }

@@ -1,19 +1,21 @@
 package ru.shipownerproject.models.countries;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 import ru.shipownerproject.models.seaman.Seaman;
 import ru.shipownerproject.models.shipowners.ShipOwner;
 import ru.shipownerproject.models.vessels.Vessel;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "country")
 @Getter
 @Setter
-public class Country {
+public class Country implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +32,7 @@ public class Country {
     private List<Seaman> seamen;
 
     @Column(name = "name")
+    @NotEmpty(message = "Country cannot to be without name")
     private String name;
 
     public Country() {

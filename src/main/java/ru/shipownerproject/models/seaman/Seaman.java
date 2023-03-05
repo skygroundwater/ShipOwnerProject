@@ -1,6 +1,7 @@
 package ru.shipownerproject.models.seaman;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,12 +11,14 @@ import ru.shipownerproject.models.seaman.passport.SeamanPassport;
 import ru.shipownerproject.models.shipowners.ShipOwner;
 import ru.shipownerproject.models.vessels.Vessel;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "seamen")
 @AllArgsConstructor
 @Setter
 @Getter
-public class Seaman {
+public class Seaman implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,15 +38,19 @@ public class Seaman {
     private Vessel vessel;
 
     @Column(name = "fullname")
+    @NotEmpty(message = "Name for seaman should be entered")
     private String fullName;
 
     @Column(name = "position")
+    @NotEmpty(message = "Seaman cannot work on a vessel without position")
     private String position;
 
     @Column(name = "birthdate")
+    @NotEmpty(message = "Enter birth date")
     private String birth;
 
     @Column(name = "birthplace")
+    @NotEmpty(message = "Enter birth place")
     private String birthPlace;
 
     @OneToOne(mappedBy = "seaman")

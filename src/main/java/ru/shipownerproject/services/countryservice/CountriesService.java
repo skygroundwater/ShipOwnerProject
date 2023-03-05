@@ -2,20 +2,21 @@ package ru.shipownerproject.services.countryservice;
 
 import ru.shipownerproject.models.countries.Country;
 import ru.shipownerproject.models.shipowners.ShipOwner;
+import ru.shipownerproject.models.vessels.Vessel;
 
 import java.util.List;
 
 public interface CountriesService {
 
-    String allCountries();
+    List<Country> allCountries();
 
-    String newCountry(String name);
+    void newCountry(Country country);
 
-    String oneCountry(String name);
+    Country oneCountry(Integer id);
 
-    String countryShipOwners(String name);
+    List<ShipOwner> countryShipOwners(Integer id);
 
-    String countryVessels(String countryName);
+    List<Vessel> countryVessels(Integer id);
 
-    String refactorCountryName(String oldCountryName, String newCountryName);
+    void refactorCountryName(Integer id, Country country);
 }

@@ -1,17 +1,21 @@
 package ru.shipownerproject.services.vesselservice;
 
+import ru.shipownerproject.models.seaman.Seaman;
+import ru.shipownerproject.models.vessels.Vessel;
+
+import java.util.List;
+
 public interface VesselsService {
-    String vessel(String name);
 
-    String addNewVessel(String vesselName, String country, String shipOwnerName, String IMO, Short vesselType);
+    Vessel vessel(Long id);
 
-    String removeVesselFromBase(String IMO);
+    void addNewVessel(Vessel vessel, String IMO);
 
-    String getInfoAboutCrew(String IMO);
+    void removeVesselFromBase(Long id);
 
-    String refactorVesselInBase(String IMO, String newName,
-                                String newCountry, Short newVesselTypeId,
-                                String newShipOwnerName);
+    List<Seaman> getInfoAboutCrew(Long id);
 
-    String allVesselsByType(Short id);
+    void refactorVesselInBase(Long id, Vessel vessel);
+
+    List<Vessel> allVesselsByType(Short id);
 }

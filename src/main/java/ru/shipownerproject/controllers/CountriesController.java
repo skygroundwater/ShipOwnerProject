@@ -1,54 +1,80 @@
 package ru.shipownerproject.controllers;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.shipownerproject.models.countries.Country;
+import ru.shipownerproject.exceptions.AlreadyAddedToBaseException;
+import ru.shipownerproject.exceptions.ErrorResponse;
+import ru.shipownerproject.exceptions.NotFoundInBaseException;
+import ru.shipownerproject.models.$dto.CountryDTO;
+import ru.shipownerproject.models.$dto.ShipOwnerDTO;
+import ru.shipownerproject.models.$dto.VesselDTO;
 import ru.shipownerproject.services.countryservice.CountriesService;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
-@RequestMapping("/country")
+@RequestMapping("/countries")
 public class CountriesController {
 
     private final CountriesService countriesService;
 
-    public CountriesController(CountriesService countriesService) {
+    private final ModelMapper modelMapper;
+
+    public CountriesController(CountriesService countriesService, ModelMapper modelMapper) {
         this.countriesService = countriesService;
+        this.modelMapper = modelMapper;
     }
 
-
     @PostMapping
-    public ResponseEntity<String> addNewCountry(@RequestParam String name) {
-        return ResponseEntity.ok(countriesService.newCountry(name));
+    public ResponseEntity<HttpStatus> addNewCountry(@RequestBody CountryDTO countryDTO) {
+        countriesService.newCountry(CountryDTO.convertToCountry(countryDTO, modelMapper));
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/all")
-    public ResponseEntity<String> allCountries(){
-        return ResponseEntity.ok(countriesService.allCountries());
+    public ResponseEntity<Object> allCountries(){
+        return ResponseEntity.ok(countriesService.allCountries().stream()
+                .map(country -> CountryDTO.convertToCountryDTO(country, modelMapper))
+                .collect(Collectors.toList()));
     }
 
-
-    @GetMapping("/get")
-    public ResponseEntity<String> returnCountry(@RequestParam String name, Model model) {
-
-        return ResponseEntity.ok(countriesService.oneCountry(name));
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> returnCountry(@PathVariable Integer id) {
+        return ResponseEntity.ok(CountryDTO.convertToCountryDTO(
+                countriesService.oneCountry(id), modelMapper));
     }
 
-    @GetMapping("/get/shipowners/{name}")
-    public ResponseEntity<String> returnCountryShipOwners(@PathVariable String name, Model model) {
-
-        return ResponseEntity.ok(countriesService.countryShipOwners(name));
+    @GetMapping("/shipowners/{id}")
+    public ResponseEntity<Object> returnCountryShipOwners(@PathVariable Integer id) {
+        return ResponseEntity.ok(countriesService.countryShipOwners(id).stream()
+                .map(shipOwner -> ShipOwnerDTO.convertToShipOwnerDTO(shipOwner, modelMapper))
+                .collect(Collectors.toList()));
     }
 
-    @GetMapping("/get/vessels")
-    public ResponseEntity<String> returnCountryVessels(@RequestParam String name, Model model){
-        return ResponseEntity.ok(countriesService.countryVessels(name));
+    @GetMapping("/vessels/{id}")
+    public ResponseEntity<Object> returnCountryVessels(@PathVariable Integer id){
+        return ResponseEntity.ok(countriesService.countryVessels(id).stream()
+                .map(vessel -> VesselDTO.convertToVesselDTO(vessel, modelMapper))
+                .collect(Collectors.toList()));
     }
 
-    @PutMapping("/refactor/name")
-    public ResponseEntity<String> refactorCountryName(@RequestParam String oldCountryName,
-                                                      @RequestParam String newCountryName) {
-        return ResponseEntity.ok(countriesService.refactorCountryName(oldCountryName, newCountryName));
+    @PutMapping("/refactor/{id}")
+    public ResponseEntity<HttpStatus> refactorCountryName(@PathVariable Integer id,
+                                                          @RequestBody CountryDTO newCountryName) {
+        countriesService.refactorCountryName(id, CountryDTO.convertToCountry(newCountryName, modelMapper));
+        return ResponseEntity.ok().build();
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<ErrorResponse> handlerException(AlreadyAddedToBaseException e) {
+        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<ErrorResponse> handlerException(NotFoundInBaseException e) {
+        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
     }
 }

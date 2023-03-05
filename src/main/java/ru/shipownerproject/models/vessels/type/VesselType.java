@@ -1,16 +1,18 @@
 package ru.shipownerproject.models.vessels.type;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import ru.shipownerproject.models.vessels.Vessel;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name="vessel_type")
 @Getter
-public class VesselType {
+public class VesselType implements Serializable {
 
     @Getter
     @AllArgsConstructor
@@ -86,9 +88,11 @@ public class VesselType {
     private Short id;
 
     @Column(name="type")
+    @NotEmpty
     private String type;
 
     @Column(name="description")
+    @NotEmpty
     private String description;
 
     @OneToMany(mappedBy = "vesselType", cascade = CascadeType.ALL)
@@ -99,6 +103,10 @@ public class VesselType {
     public VesselType(String type, String description){
         this.type = type;
         this.description = description;
+    }
+
+    public VesselType(String type){
+        this.type = type;
     }
 
 }

@@ -1,15 +1,15 @@
 package ru.shipownerproject.services.seamanservice;
 
+import ru.shipownerproject.models.seaman.Seaman;
+
 public interface SeamenService {
 
 
-    String showInfoAboutSeaman(String fullName);
+    Seaman showInfoAboutSeaman(Long id);
 
-    String addNewSeamanToBase(String fullName, String passport, String position, String birthDate,
-                              String birthPlace, String citizenship, String IMO);
+    void addNewSeamanToBase(Seaman seaman);
 
-    String removeSeamanFromBaseByPassport(String passport);
+    void removeSeamanFromBase(Long id);
 
-    String refactorSeamanInBase(String passport, String newFullName, String newPosition, String newBirthDate,
-                                String newBirthPlace, String newCitizenship);
+    void refactorSeamanInBase(Long id, Seaman seaman);
 }

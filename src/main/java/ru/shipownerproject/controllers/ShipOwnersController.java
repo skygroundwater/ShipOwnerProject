@@ -28,7 +28,6 @@ public class ShipOwnersController {
 
     @PostMapping
     public ResponseEntity<HttpStatus> addNewShipOwner(@RequestBody ShipOwnerDTO shipOwnerDTO) {
-
             shipOwnersService.addNewShipOwner(ShipOwnerDTO.convertToShipowner(shipOwnerDTO, modelMapper));
             return ResponseEntity.ok().build();
     }
@@ -46,8 +45,7 @@ public class ShipOwnersController {
     }
 
     @PutMapping("/refactor/{id}")
-    public ResponseEntity<HttpStatus> refactorShipOwner(@PathVariable Long id,
-                                                        @RequestBody ShipOwnerDTO shipOwnerDTO) {
+    public ResponseEntity<HttpStatus> refactorShipOwner(@PathVariable Long id, @RequestBody ShipOwnerDTO shipOwnerDTO) {
         shipOwnersService.refactorShipOwner(id, ShipOwnerDTO.convertToShipowner(shipOwnerDTO, modelMapper));
         return ResponseEntity.ok().build();
     }
@@ -67,5 +65,4 @@ public class ShipOwnersController {
     private ResponseEntity<ErrorResponse> handlerException(NotFoundInBaseException e) {
         return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
     }
-
 }

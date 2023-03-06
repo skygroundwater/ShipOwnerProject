@@ -39,5 +39,4 @@ public class SeamanPassport implements Serializable {
         return "Passport: " + passport
                 + "\n Seaman: " + seaman.getInfo();
     }
-
 }

@@ -2,6 +2,7 @@ package ru.shipownerproject.models.vessels;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import ru.shipownerproject.models.countries.Country;
@@ -10,6 +11,8 @@ import ru.shipownerproject.models.shipowners.ShipOwner;
 import ru.shipownerproject.models.vessels.type.VesselType;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -42,9 +45,12 @@ public class Vessel implements Serializable {
     @NotEmpty(message = "IMO Number is required before building the vessel")
     private String IMO;
 
-    @ManyToOne
-    @JoinColumn(name = "type", referencedColumnName = "id")
+    @Enumerated(EnumType.STRING)
     private VesselType vesselType;
+
+    @Column(name = "building_date")
+    @NotNull(message = "Enter date of building")
+    private LocalDate dateOfBuild;
 
     @Override
     public String toString() {
@@ -62,11 +68,12 @@ public class Vessel implements Serializable {
         this.name = name;
     }
 
-    public Vessel(String name, String IMO, ShipOwner shipOwner, VesselType vesselType, Country country) {
+    public Vessel(String name, String IMO, ShipOwner shipOwner, VesselType vesselType, Country country, LocalDate buildingDate) {
         this.name = name;
         this.IMO = IMO;
         this.vesselType = vesselType;
         this.shipOwner = shipOwner;
         this.country = country;
+        this.dateOfBuild = buildingDate;
     }
 }

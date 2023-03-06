@@ -1,13 +1,15 @@
 package ru.shipownerproject.models.$dto;
 
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
 import ru.shipownerproject.models.seaman.Seaman;
+
+import java.util.Date;
 
 @Getter
 @Setter
@@ -27,9 +29,8 @@ public class SeamanDTO {
     @NotEmpty(message = "Seaman cannot work on a vessel without position")
     private String position;
 
-    @NotEmpty(message = "Enter birth date")
-    @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "Birth date should to match pattern")
-    private String birth;
+    @NotNull(message = "Enter birth date")
+    private Date birth;
 
     @NotEmpty(message = "Enter birth place")
     private String birthPlace;

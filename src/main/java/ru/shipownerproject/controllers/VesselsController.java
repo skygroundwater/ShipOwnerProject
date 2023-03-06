@@ -10,27 +10,22 @@ import ru.shipownerproject.exceptions.NotFoundInBaseException;
 import ru.shipownerproject.models.$dto.SeamanDTO;
 import ru.shipownerproject.models.$dto.VesselDTO;
 import ru.shipownerproject.services.vesselservice.VesselsService;
-import ru.shipownerproject.services.vesselservice.typeservice.VesselTypesService;
 
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/vessels")
 public class VesselsController {
+
     private final VesselsService vesselsService;
-    private final VesselTypesService vesselTypesService;
+
     private final ModelMapper modelMapper;
-    public VesselsController(VesselsService vesselsService, VesselTypesService vesselTypesService, ModelMapper modelMapper) {
+
+    public VesselsController(VesselsService vesselsService, ModelMapper modelMapper) {
         this.vesselsService = vesselsService;
-        this.vesselTypesService = vesselTypesService;
         this.modelMapper = modelMapper;
     }
 
-    @PostMapping("/addallvesseltypes")
-    public ResponseEntity<HttpStatus> addAllVesselTypes(){
-        vesselTypesService.addAllVesselTypeToBase();
-        return ResponseEntity.ok().build();
-    }
 
     @PostMapping
     public ResponseEntity<HttpStatus> addNewVessel(@RequestBody VesselDTO vesselDTO) {
@@ -50,16 +45,15 @@ public class VesselsController {
                 .collect(Collectors.toList()));
     }
 
-    @GetMapping("/type/{id}")
-    public ResponseEntity<Object> getVesselsByType(@PathVariable Short id){
-        return ResponseEntity.ok(vesselsService.allVesselsByType(id).stream()
+    @GetMapping("/type/{type}")
+    public ResponseEntity<Object> getVesselsByType(@PathVariable String type){
+        return ResponseEntity.ok(vesselsService.allVesselsByType(type).stream()
                 .map(vessel -> VesselDTO.convertToVesselDTO(vessel, modelMapper))
                 .collect(Collectors.toList()));
     }
 
     @PutMapping("/refactor/{id}")
-    public ResponseEntity<HttpStatus> refactorVesselInBase(@RequestBody VesselDTO vesselDTO,
-                                                       @PathVariable Long id){
+    public ResponseEntity<HttpStatus> refactorVesselInBase(@RequestBody VesselDTO vesselDTO, @PathVariable Long id){
         vesselsService.refactorVesselInBase(id, VesselDTO.convertToVessel(vesselDTO, modelMapper));
         return ResponseEntity.ok().build();
     }
@@ -79,5 +73,4 @@ public class VesselsController {
     private ResponseEntity<ErrorResponse> handlerException(NotFoundInBaseException e) {
         return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
     }
-
 }

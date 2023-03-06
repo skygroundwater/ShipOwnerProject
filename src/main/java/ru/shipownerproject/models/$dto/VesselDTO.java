@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
 import org.modelmapper.ModelMapper;
 import ru.shipownerproject.models.vessels.Vessel;
 import ru.shipownerproject.models.vessels.type.VesselType;
@@ -27,8 +28,9 @@ public class VesselDTO {
     @NotEmpty(message = "Vessel cannot to be without name")
     private String name;
 
-    @NotEmpty(message = "IMO Number is required before building the vessel")
-    private String IMO;
+    @NotNull
+    @Length(min = 7, max = 7, message = "IMO Number should have 7 numbers and to be unique for every vessel")
+    private Integer IMO;
 
     @NotEmpty(message = "Vesel cannot to be non type")
     private String type;

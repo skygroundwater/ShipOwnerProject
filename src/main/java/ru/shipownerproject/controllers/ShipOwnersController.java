@@ -3,15 +3,17 @@ package ru.shipownerproject.controllers;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.shipownerproject.exceptions.AlreadyAddedToBaseException;
-import ru.shipownerproject.exceptions.ErrorResponse;
-import ru.shipownerproject.exceptions.NotFoundInBaseException;
+import ru.shipownerproject.exceptions.*;
 import ru.shipownerproject.models.$dto.ShipOwnerDTO;
 import ru.shipownerproject.models.$dto.VesselDTO;
 import ru.shipownerproject.services.shipsownerservice.ShipOwnersService;
 
 import java.util.stream.Collectors;
+
+import static ru.shipownerproject.exceptions.ErrorResponse.notCreatedException;
+import static ru.shipownerproject.exceptions.ErrorResponse.notRefactoredException;
 
 @RestController
 @RequestMapping("/shipowners")
@@ -27,7 +29,9 @@ public class ShipOwnersController {
     }
 
     @PostMapping
-    public ResponseEntity<HttpStatus> addNewShipOwner(@RequestBody ShipOwnerDTO shipOwnerDTO) {
+    public ResponseEntity<HttpStatus> addNewShipOwner(@RequestBody ShipOwnerDTO shipOwnerDTO, BindingResult bindingResult,
+                                                      StringBuilder stringBuilder) {
+        notCreatedException(bindingResult, stringBuilder, ". Ship Owner");
             shipOwnersService.addNewShipOwner(ShipOwnerDTO.convertToShipowner(shipOwnerDTO, modelMapper));
             return ResponseEntity.ok().build();
     }
@@ -45,7 +49,9 @@ public class ShipOwnersController {
     }
 
     @PutMapping("/refactor/{id}")
-    public ResponseEntity<HttpStatus> refactorShipOwner(@PathVariable Long id, @RequestBody ShipOwnerDTO shipOwnerDTO) {
+    public ResponseEntity<HttpStatus> refactorShipOwner(@PathVariable Long id, @RequestBody ShipOwnerDTO shipOwnerDTO,  BindingResult bindingResult,
+                                                        StringBuilder stringBuilder) {
+        notRefactoredException(bindingResult, stringBuilder, " Ship Owner");
         shipOwnersService.refactorShipOwner(id, ShipOwnerDTO.convertToShipowner(shipOwnerDTO, modelMapper));
         return ResponseEntity.ok().build();
     }
@@ -63,6 +69,17 @@ public class ShipOwnersController {
 
     @ExceptionHandler
     private ResponseEntity<ErrorResponse> handlerException(NotFoundInBaseException e) {
+        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<ErrorResponse> handlerException(NotCreatedException e) {
         return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler
+    private ResponseEntity<ErrorResponse> handlerException(NotRefactoredException e) {
+        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
+    }
+
 }

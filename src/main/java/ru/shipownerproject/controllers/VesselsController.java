@@ -3,15 +3,17 @@ package ru.shipownerproject.controllers;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.shipownerproject.exceptions.AlreadyAddedToBaseException;
-import ru.shipownerproject.exceptions.ErrorResponse;
-import ru.shipownerproject.exceptions.NotFoundInBaseException;
+import ru.shipownerproject.exceptions.*;
 import ru.shipownerproject.models.$dto.SeamanDTO;
 import ru.shipownerproject.models.$dto.VesselDTO;
 import ru.shipownerproject.services.vesselservice.VesselsService;
 
 import java.util.stream.Collectors;
+
+import static ru.shipownerproject.exceptions.ErrorResponse.notCreatedException;
+import static ru.shipownerproject.exceptions.ErrorResponse.notRefactoredException;
 
 @RestController
 @RequestMapping("/vessels")
@@ -28,9 +30,11 @@ public class VesselsController {
 
 
     @PostMapping
-    public ResponseEntity<HttpStatus> addNewVessel(@RequestBody VesselDTO vesselDTO) {
+    public ResponseEntity<HttpStatus> addNewVessel(@RequestBody VesselDTO vesselDTO, BindingResult bindingResult,
+                                                   StringBuilder stringBuilder) {
+        notCreatedException(bindingResult, stringBuilder, ". Vessel");
         vesselsService.addNewVessel(VesselDTO.convertToVessel(vesselDTO, modelMapper), vesselDTO.getIMO());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -53,15 +57,18 @@ public class VesselsController {
     }
 
     @PutMapping("/refactor/{id}")
-    public ResponseEntity<HttpStatus> refactorVesselInBase(@RequestBody VesselDTO vesselDTO, @PathVariable Long id){
+    public ResponseEntity<HttpStatus> refactorVesselInBase(@RequestBody VesselDTO vesselDTO,
+                                                           @PathVariable Long id, BindingResult bindingResult,
+                                                           StringBuilder stringBuilder) {
+        notRefactoredException(bindingResult, stringBuilder, " Vessel");
         vesselsService.refactorVesselInBase(id, VesselDTO.convertToVessel(vesselDTO, modelMapper));
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @DeleteMapping("/remove/{id}")
     public ResponseEntity<HttpStatus> removeVesselFromBase(@PathVariable Long id) {
         vesselsService.removeVesselFromBase(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @ExceptionHandler
@@ -71,6 +78,16 @@ public class VesselsController {
 
     @ExceptionHandler
     private ResponseEntity<ErrorResponse> handlerException(NotFoundInBaseException e) {
+        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<ErrorResponse> handlerException(NotCreatedException e) {
+        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<ErrorResponse> handlerException(NotRefactoredException e) {
         return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
     }
 }

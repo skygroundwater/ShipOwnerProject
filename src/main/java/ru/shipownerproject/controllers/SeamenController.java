@@ -3,12 +3,14 @@ package ru.shipownerproject.controllers;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.shipownerproject.exceptions.AlreadyAddedToBaseException;
-import ru.shipownerproject.exceptions.ErrorResponse;
-import ru.shipownerproject.exceptions.NotFoundInBaseException;
+import ru.shipownerproject.exceptions.*;
 import ru.shipownerproject.models.$dto.SeamanDTO;
 import ru.shipownerproject.services.seamanservice.SeamenService;
+
+import static ru.shipownerproject.exceptions.ErrorResponse.notCreatedException;
+import static ru.shipownerproject.exceptions.ErrorResponse.notRefactoredException;
 
 @RestController
 @RequestMapping("/seamen")
@@ -25,9 +27,11 @@ public class SeamenController {
     }
 
     @PostMapping
-    public ResponseEntity<HttpStatus> addNewSeamanToBase(@RequestBody SeamanDTO seamanDTO) {
+    public ResponseEntity<HttpStatus> addNewSeamanToBase(@RequestBody SeamanDTO seamanDTO, BindingResult bindingResult,
+                                                         StringBuilder stringBuilder) {
+        notCreatedException(bindingResult, stringBuilder, ". Seaman");
         seamenService.addNewSeamanToBase(SeamanDTO.convertToSeaman(seamanDTO, modelMapper));
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -38,13 +42,15 @@ public class SeamenController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Object> removeSeamanFromBase(@PathVariable Long id){
         seamenService.removeSeamanFromBase(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @PutMapping("/refactor/{id}")
-    public ResponseEntity<HttpStatus> refactorSeamanInBase(@PathVariable Long id, @RequestBody SeamanDTO seamanDTO){
+    public ResponseEntity<HttpStatus> refactorSeamanInBase(@PathVariable Long id, @RequestBody SeamanDTO seamanDTO,
+                                                           BindingResult bindingResult, StringBuilder stringBuilder) {
+        notRefactoredException(bindingResult, stringBuilder, " Seaman");
         seamenService.refactorSeamanInBase(id, SeamanDTO.convertToSeaman(seamanDTO, modelMapper));
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @ExceptionHandler
@@ -54,6 +60,16 @@ public class SeamenController {
 
     @ExceptionHandler
     private ResponseEntity<ErrorResponse> handlerException(NotFoundInBaseException e) {
+        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<ErrorResponse> handlerException(NotCreatedException e) {
+        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<ErrorResponse> handlerException(NotRefactoredException e) {
         return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
     }
 }

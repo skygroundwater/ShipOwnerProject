@@ -3,16 +3,18 @@ package ru.shipownerproject.controllers;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.shipownerproject.exceptions.AlreadyAddedToBaseException;
-import ru.shipownerproject.exceptions.ErrorResponse;
-import ru.shipownerproject.exceptions.NotFoundInBaseException;
+import ru.shipownerproject.exceptions.*;
 import ru.shipownerproject.models.$dto.CountryDTO;
 import ru.shipownerproject.models.$dto.ShipOwnerDTO;
 import ru.shipownerproject.models.$dto.VesselDTO;
 import ru.shipownerproject.services.countryservice.CountriesService;
 
 import java.util.stream.Collectors;
+
+import static ru.shipownerproject.exceptions.ErrorResponse.notCreatedException;
+import static ru.shipownerproject.exceptions.ErrorResponse.notRefactoredException;
 
 @RestController
 @RequestMapping("/countries")
@@ -28,9 +30,11 @@ public class CountriesController {
     }
 
     @PostMapping
-    public ResponseEntity<HttpStatus> addNewCountry(@RequestBody CountryDTO countryDTO) {
+    public ResponseEntity<HttpStatus> addNewCountry(@RequestBody CountryDTO countryDTO, BindingResult bindingResult,
+                                                    StringBuilder stringBuilder) {
+        notCreatedException(bindingResult, stringBuilder, ". Country");
         countriesService.newCountry(CountryDTO.convertToCountry(countryDTO, modelMapper));
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @GetMapping("/all")
@@ -62,9 +66,11 @@ public class CountriesController {
 
     @PutMapping("/refactor/{id}")
     public ResponseEntity<HttpStatus> refactorCountryName(@PathVariable Integer id,
-                                                          @RequestBody CountryDTO newCountryName) {
+                                                          @RequestBody CountryDTO newCountryName,  BindingResult bindingResult,
+                                                          StringBuilder stringBuilder) {
+        notRefactoredException(bindingResult, stringBuilder, " Country");
         countriesService.refactorCountryName(id, CountryDTO.convertToCountry(newCountryName, modelMapper));
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @ExceptionHandler
@@ -74,6 +80,16 @@ public class CountriesController {
 
     @ExceptionHandler
     private ResponseEntity<ErrorResponse> handlerException(NotFoundInBaseException e) {
+        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<ErrorResponse> handlerException(NotCreatedException e) {
+        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<ErrorResponse> handlerException(NotRefactoredException e) {
         return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
     }
 }

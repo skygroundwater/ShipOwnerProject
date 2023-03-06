@@ -9,7 +9,7 @@ public interface VesselsService {
 
     Vessel vessel(Long id);
 
-    void addNewVessel(Vessel vessel, String IMO);
+    void addNewVessel(Vessel vessel, Integer IMO);
 
     void removeVesselFromBase(Long id);
 

@@ -12,6 +12,9 @@ import ru.shipownerproject.models.vessels.Vessel;
 
 import java.util.stream.Stream;
 
+import static ru.shipownerproject.services.countryservice.CountriesServiceImpl.NC;
+import static ru.shipownerproject.services.vesselservice.VesselsServiceImpl.NV;
+
 @Service
 public class SeamenServiceImpl implements SeamenService {
 
@@ -31,7 +34,7 @@ public class SeamenServiceImpl implements SeamenService {
 
     private Vessel findVesselByIMO(Seaman seaman){
         return vesselRepository.findByIMO(seaman.getVessel().getIMO())
-                .stream().findAny().orElse(null);
+                .stream().findAny().orElseThrow(() -> new NotFoundInBaseException(NV));
     }
 
     private Seaman findSeamanByPassportNumber(String passport){
@@ -42,7 +45,7 @@ public class SeamenServiceImpl implements SeamenService {
 
     private Country findCountryByCitizenship(Seaman seaman){
         return countryRepository.findByName(seaman.getCitizenship().getName()).stream()
-                .findAny().orElse(null);
+                .findAny().orElseThrow(() -> new NotFoundInBaseException(NC));
     }
 
     private Seaman findById(Long id){

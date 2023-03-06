@@ -38,7 +38,7 @@ public class VesselsServiceImpl implements VesselsService {
 
     public static final String NV = "This vessel is not available. ";
 
-    private Vessel findVesselByImo(String IMO) {
+    private Vessel findVesselByImo(Integer IMO) {
         return vesselRepository.findByIMO(IMO).stream().findAny().orElse(null);
     }
 
@@ -68,9 +68,10 @@ public class VesselsServiceImpl implements VesselsService {
     }
 
     @Override
-    public void addNewVessel(Vessel vessel, String IMO) {
+    public void addNewVessel(Vessel vessel, Integer IMO) {
         if (findVesselByImo(IMO) != null) throw new AlreadyAddedToBaseException("Vessel with same IMO number ");
-        vesselRepository.save(new Vessel(vessel.getName(), IMO, findShipOwnerByName(vessel), findByTypeName(vessel), findCountryByName(vessel), vessel.getDateOfBuild()));
+        vesselRepository.save(new Vessel(vessel.getName(), IMO, findShipOwnerByName(vessel),
+                findByTypeName(vessel), findCountryByName(vessel), vessel.getDateOfBuild()));
     }
 
     @Override

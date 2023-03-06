@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface VesselRepository extends JpaRepository<Vessel, Long> {
 
-    List<Vessel> findByIMO(String IMO);
+    List<Vessel> findByIMO(Integer IMO);
 
 }

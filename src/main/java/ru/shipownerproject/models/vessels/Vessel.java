@@ -1,10 +1,13 @@
 package ru.shipownerproject.models.vessels;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.beans.factory.annotation.Value;
 import ru.shipownerproject.models.countries.Country;
 import ru.shipownerproject.models.seaman.Seaman;
 import ru.shipownerproject.models.shipowners.ShipOwner;
@@ -42,8 +45,9 @@ public class Vessel implements Serializable {
     private String name;
 
     @Column(name = "IMO")
-    @NotEmpty(message = "IMO Number is required before building the vessel")
-    private String IMO;
+    @NotNull
+    @Length(min = 7, max = 7, message = "IMO Number should have 7 numbers and to be unique for every vessel")
+    private Integer IMO;
 
     @Enumerated(EnumType.STRING)
     private VesselType vesselType;
@@ -63,12 +67,12 @@ public class Vessel implements Serializable {
     public Vessel() {
     }
 
-    public Vessel(String IMO, String name){
+    public Vessel(Integer IMO, String name){
         this.IMO = IMO;
         this.name = name;
     }
 
-    public Vessel(String name, String IMO, ShipOwner shipOwner, VesselType vesselType, Country country, LocalDate buildingDate) {
+    public Vessel(String name, Integer IMO, ShipOwner shipOwner, VesselType vesselType, Country country, LocalDate buildingDate) {
         this.name = name;
         this.IMO = IMO;
         this.vesselType = vesselType;

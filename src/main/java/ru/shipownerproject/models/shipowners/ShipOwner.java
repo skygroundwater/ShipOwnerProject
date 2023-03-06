@@ -46,8 +46,7 @@ public class ShipOwner implements Serializable {
                 + description;
     }
 
-    public ShipOwner() {
-    }
+    public ShipOwner() {}
 
     public ShipOwner(String name){
         this.name = name;

@@ -2,6 +2,7 @@ package ru.shipownerproject.models.seaman;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,6 +13,7 @@ import ru.shipownerproject.models.shipowners.ShipOwner;
 import ru.shipownerproject.models.vessels.Vessel;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Table(name = "seamen")
@@ -46,8 +48,8 @@ public class Seaman implements Serializable {
     private String position;
 
     @Column(name = "birthdate")
-    @NotEmpty(message = "Enter birth date")
-    private String birth;
+    @NotNull(message = "Enter birth date")
+    private Date birth;
 
     @Column(name = "birthplace")
     @NotEmpty(message = "Enter birth place")
@@ -57,11 +59,10 @@ public class Seaman implements Serializable {
     @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private SeamanPassport seamanPassport;
 
-    public Seaman() {
-    }
+    public Seaman() {}
 
     public Seaman(String fullName, String position, Vessel vessel, Country citizenship,
-                  String birth, String birthPlace, ShipOwner shipOwner, String passport){
+                  Date birth, String birthPlace, ShipOwner shipOwner, String passport){
         this.fullName = fullName;
         this.position = position;
         this.vessel = vessel;

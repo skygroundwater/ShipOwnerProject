@@ -17,5 +17,5 @@ public interface VesselsService {
 
     void refactorVesselInBase(Long id, Vessel vessel);
 
-    List<Vessel> allVesselsByType(Short id);
+    List<Vessel> allVesselsByType(String type);
 }

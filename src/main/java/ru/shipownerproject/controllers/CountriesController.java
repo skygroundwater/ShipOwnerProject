@@ -12,7 +12,6 @@ import ru.shipownerproject.models.$dto.ShipOwnerDTO;
 import ru.shipownerproject.models.$dto.VesselDTO;
 import ru.shipownerproject.services.countryservice.CountriesService;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController

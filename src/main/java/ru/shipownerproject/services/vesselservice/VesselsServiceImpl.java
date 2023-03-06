@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import ru.shipownerproject.databases.countrybase.CountryRepository;
 import ru.shipownerproject.databases.shipownerdatabase.ShipOwnerRepository;
 import ru.shipownerproject.databases.vesselrepository.VesselRepository;
-import ru.shipownerproject.databases.vesselrepository.vesseltyperepository.VesselTypeRepository;
 import ru.shipownerproject.exceptions.AlreadyAddedToBaseException;
 import ru.shipownerproject.exceptions.NotFoundInBaseException;
 import ru.shipownerproject.models.countries.Country;
@@ -13,28 +12,27 @@ import ru.shipownerproject.models.shipowners.ShipOwner;
 import ru.shipownerproject.models.vessels.Vessel;
 import ru.shipownerproject.models.vessels.type.VesselType;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static ru.shipownerproject.models.vessels.type.VesselType.NVT;
 import static ru.shipownerproject.services.countryservice.CountriesServiceImpl.NC;
 import static ru.shipownerproject.services.shipsownerservice.ShipOwnersServiceImpl.NS;
-import static ru.shipownerproject.services.vesselservice.typeservice.VesselTypesServiceImpl.NVT;
 
 @Service
 public class VesselsServiceImpl implements VesselsService {
 
     private final VesselRepository vesselRepository;
     private final ShipOwnerRepository shipOwnerRepository;
-    private final VesselTypeRepository vesselTypeRepository;
     private final CountryRepository countryRepository;
 
     public VesselsServiceImpl(VesselRepository vesselRepository,
                               ShipOwnerRepository shipOwnerRepository,
-                              VesselTypeRepository vesselTypeRepository,
                               CountryRepository countryRepository) {
         this.vesselRepository = vesselRepository;
         this.shipOwnerRepository = shipOwnerRepository;
-        this.vesselTypeRepository = vesselTypeRepository;
         this.countryRepository = countryRepository;
     }
 
@@ -54,16 +52,14 @@ public class VesselsServiceImpl implements VesselsService {
                 .stream().findAny().orElseThrow(() -> new NotFoundInBaseException(NS));
     }
 
-    private Vessel findById(Long id){
+    private Vessel findById(Long id) {
         return vesselRepository.findById(id).orElseThrow(() -> new NotFoundInBaseException(NV));
     }
 
-    private VesselType findTypeById(Short typeId) {
-        return vesselTypeRepository.findById(typeId).orElseThrow(() -> new NotFoundInBaseException(NVT));
-    }
-
-    private VesselType findByTypeName(Vessel vessel){
-        return vesselTypeRepository.findByType(vessel.getVesselType().getType());
+    private VesselType findByTypeName(Vessel vessel) {
+        return Arrays.stream(VesselType.values()).filter(vesselType ->
+                        vesselType.getType().equals(vessel.getVesselType().getType()))
+                .findAny().orElseThrow(() -> new NotFoundInBaseException(NVT));
     }
 
     @Override
@@ -73,8 +69,8 @@ public class VesselsServiceImpl implements VesselsService {
 
     @Override
     public void addNewVessel(Vessel vessel, String IMO) {
-        if(findVesselByImo(IMO) != null) throw new AlreadyAddedToBaseException("Vessel with same IMO number ");
-        vesselRepository.save(new Vessel(vessel.getName(), IMO, findShipOwnerByName(vessel), findByTypeName(vessel), findCountryByName(vessel)));
+        if (findVesselByImo(IMO) != null) throw new AlreadyAddedToBaseException("Vessel with same IMO number ");
+        vesselRepository.save(new Vessel(vessel.getName(), IMO, findShipOwnerByName(vessel), findByTypeName(vessel), findCountryByName(vessel), vessel.getDateOfBuild()));
     }
 
     @Override
@@ -89,18 +85,20 @@ public class VesselsServiceImpl implements VesselsService {
 
     @Override
     public void refactorVesselInBase(Long id, Vessel vessel) {
-        if(findVesselByImo(vessel.getIMO()) != null) throw new AlreadyAddedToBaseException("Vessel with same IMO number ");
+        if (findVesselByImo(vessel.getIMO()) == null) throw new NotFoundInBaseException(NV);
         vesselRepository.save(Stream.of(findById(id)).peek(v -> {
             v.setName(vessel.getName());
             v.setIMO(vessel.getIMO());
             v.setCountry(findCountryByName(vessel));
             v.setShipOwner(findShipOwnerByName(vessel));
-            v.setVesselType(findByTypeName(vessel));
+            v.setVesselType(vessel.getVesselType());
+            v.setDateOfBuild(vessel.getDateOfBuild());
         }).findAny().get());
     }
 
     @Override
-    public List<Vessel> allVesselsByType(Short id){
-        return findTypeById(id).getVesselsOfThisType();
+    public List<Vessel> allVesselsByType(String type) {
+        return vesselRepository.findAll().stream().filter(vessel ->
+                vessel.getVesselType().getType().equals(type)).collect(Collectors.toList());
     }
 }

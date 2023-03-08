@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import ru.shipownerproject.models.seaman.Seaman;
 
 @Repository
-public interface SeamanRepository extends JpaRepository<Seaman, Long> {
+public interface SeamenRepository extends JpaRepository<Seaman, Long> {
 
 
 }

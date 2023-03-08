@@ -1,13 +1,12 @@
 package ru.shipownerproject.models.vessels;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
-import org.springframework.beans.factory.annotation.Value;
 import ru.shipownerproject.models.countries.Country;
 import ru.shipownerproject.models.seaman.Seaman;
 import ru.shipownerproject.models.shipowners.ShipOwner;
@@ -15,13 +14,13 @@ import ru.shipownerproject.models.vessels.type.VesselType;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "vessel")
 @Getter
 @Setter
+@Valid
 public class Vessel implements Serializable {
 
     @Id
@@ -50,6 +49,7 @@ public class Vessel implements Serializable {
     private Integer IMO;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "type")
     private VesselType vesselType;
 
     @Column(name = "building_date")

@@ -7,7 +7,7 @@ import ru.shipownerproject.models.shipowners.ShipOwner;
 import java.util.List;
 
 @Repository
-public interface ShipOwnerRepository extends JpaRepository<ShipOwner, Long> {
+public interface ShipOwnersRepository extends JpaRepository<ShipOwner, Long> {
     List<ShipOwner> findByName(String name);
 
 }

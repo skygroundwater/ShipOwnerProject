@@ -5,12 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.shipownerproject.exceptions.*;
-import ru.shipownerproject.models.$dto.SeamanDTO;
+import ru.shipownerproject.utils.$dto.SeamanDTO;
+import ru.shipownerproject.utils.$dto.validators.SeamanDTOValidator;
 import ru.shipownerproject.services.seamanservice.SeamenService;
+import ru.shipownerproject.utils.exceptions.*;
 
-import static ru.shipownerproject.exceptions.ErrorResponse.notCreatedException;
-import static ru.shipownerproject.exceptions.ErrorResponse.notRefactoredException;
+import static ru.shipownerproject.utils.exceptions.ErrorResponse.notCreatedException;
+import static ru.shipownerproject.utils.exceptions.ErrorResponse.notRefactoredException;
 
 @RestController
 @RequestMapping("/seamen")
@@ -18,25 +19,29 @@ public class SeamenController {
 
     private final SeamenService seamenService;
 
+    private final SeamanDTOValidator seamanDTOValidator;
+
     private final ModelMapper modelMapper;
 
     public SeamenController(SeamenService seamenService,
-                            ModelMapper modelMapper) {
+                            SeamanDTOValidator seamanDTOValidator, ModelMapper modelMapper) {
         this.seamenService = seamenService;
+        this.seamanDTOValidator = seamanDTOValidator;
         this.modelMapper = modelMapper;
     }
 
     @PostMapping
     public ResponseEntity<HttpStatus> addNewSeamanToBase(@RequestBody SeamanDTO seamanDTO, BindingResult bindingResult,
                                                          StringBuilder stringBuilder) {
-        notCreatedException(bindingResult, stringBuilder, ". Seaman");
+        notCreatedException(bindingResult, seamanDTOValidator, stringBuilder, seamanDTO);
         seamenService.addNewSeamanToBase(SeamanDTO.convertToSeaman(seamanDTO, modelMapper));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> showInfoAboutSeaman(@PathVariable Long id) {
-        return ResponseEntity.ok(SeamanDTO.convertToSeamanDTO(seamenService.showInfoAboutSeaman(id), modelMapper));
+        return ResponseEntity.ok(SeamanDTO.convertToSeamanDTO
+                (seamenService.showInfoAboutSeaman(id), modelMapper));
     }
 
     @DeleteMapping("/delete/{id}")
@@ -48,7 +53,7 @@ public class SeamenController {
     @PutMapping("/refactor/{id}")
     public ResponseEntity<HttpStatus> refactorSeamanInBase(@PathVariable Long id, @RequestBody SeamanDTO seamanDTO,
                                                            BindingResult bindingResult, StringBuilder stringBuilder) {
-        notRefactoredException(bindingResult, stringBuilder, " Seaman");
+        notRefactoredException(bindingResult, seamanDTOValidator, stringBuilder, seamanDTO);
         seamenService.refactorSeamanInBase(id, SeamanDTO.convertToSeaman(seamanDTO, modelMapper));
         return ResponseEntity.ok(HttpStatus.OK);
     }

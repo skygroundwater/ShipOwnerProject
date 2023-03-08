@@ -5,15 +5,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.shipownerproject.exceptions.*;
-import ru.shipownerproject.models.$dto.SeamanDTO;
-import ru.shipownerproject.models.$dto.VesselDTO;
 import ru.shipownerproject.services.vesselservice.VesselsService;
+import ru.shipownerproject.utils.$dto.SeamanDTO;
+import ru.shipownerproject.utils.$dto.VesselDTO;
+import ru.shipownerproject.utils.$dto.validators.VesselDTOValidator;
+import ru.shipownerproject.utils.exceptions.*;
 
 import java.util.stream.Collectors;
 
-import static ru.shipownerproject.exceptions.ErrorResponse.notCreatedException;
-import static ru.shipownerproject.exceptions.ErrorResponse.notRefactoredException;
+import static ru.shipownerproject.utils.exceptions.ErrorResponse.notCreatedException;
+import static ru.shipownerproject.utils.exceptions.ErrorResponse.notRefactoredException;
 
 @RestController
 @RequestMapping("/vessels")
@@ -22,18 +23,19 @@ public class VesselsController {
     private final VesselsService vesselsService;
 
     private final ModelMapper modelMapper;
+    private final VesselDTOValidator vesselDTOValidator;
 
-    public VesselsController(VesselsService vesselsService, ModelMapper modelMapper) {
+    public VesselsController(VesselsService vesselsService, ModelMapper modelMapper, VesselDTOValidator vesselDTOValidator) {
         this.vesselsService = vesselsService;
         this.modelMapper = modelMapper;
+        this.vesselDTOValidator = vesselDTOValidator;
     }
 
 
     @PostMapping
-    public ResponseEntity<HttpStatus> addNewVessel(@RequestBody VesselDTO vesselDTO, BindingResult bindingResult,
-                                                   StringBuilder stringBuilder) {
-        notCreatedException(bindingResult, stringBuilder, ". Vessel");
-        vesselsService.addNewVessel(VesselDTO.convertToVessel(vesselDTO, modelMapper), vesselDTO.getIMO());
+    public ResponseEntity<HttpStatus> addNewVessel(@RequestBody VesselDTO vesselDTO, BindingResult bindingResult) {
+        notCreatedException(bindingResult, vesselDTOValidator, new StringBuilder(), vesselDTO);
+        vesselsService.addNewVessel(VesselDTO.convertToVessel(vesselDTO, modelMapper));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -60,7 +62,7 @@ public class VesselsController {
     public ResponseEntity<HttpStatus> refactorVesselInBase(@RequestBody VesselDTO vesselDTO,
                                                            @PathVariable Long id, BindingResult bindingResult,
                                                            StringBuilder stringBuilder) {
-        notRefactoredException(bindingResult, stringBuilder, " Vessel");
+        notRefactoredException(bindingResult, vesselDTOValidator, stringBuilder, vesselDTO);
         vesselsService.refactorVesselInBase(id, VesselDTO.convertToVessel(vesselDTO, modelMapper));
         return ResponseEntity.ok(HttpStatus.OK);
     }

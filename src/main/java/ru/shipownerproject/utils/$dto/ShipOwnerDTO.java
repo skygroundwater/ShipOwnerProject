@@ -1,24 +1,19 @@
-package ru.shipownerproject.models.$dto;
+package ru.shipownerproject.utils.$dto;
 
-import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 import org.modelmapper.ModelMapper;
 import ru.shipownerproject.models.shipowners.ShipOwner;
 
 @Getter
 @Setter
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShipOwnerDTO {
+public class ShipOwnerDTO extends DTO{
 
-    @NotEmpty(message = "Ship owner cannot to be unregistered for any country")
     private CountryDTO country;
 
-    @NotEmpty(message = "The name of shipowner is required to fill")
     private String name;
 
-    @NotEmpty(message = "The description of shipowner is required to fill")
     private String description;
 
     public ShipOwnerDTO(String name){
@@ -33,4 +28,10 @@ public class ShipOwnerDTO {
         return new ShipOwnerDTO(CountryDTO.convertToCountryDTO(shipOwner.getCountry(), modelMapper),
                 shipOwner.getName(), shipOwner.getDescription());
     }
+
+    @Override
+    public String toString(){
+        return " Ship Owner";
+    }
+
 }

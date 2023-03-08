@@ -1,12 +1,9 @@
-package ru.shipownerproject.models.$dto;
+package ru.shipownerproject.utils.$dto;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 import org.modelmapper.ModelMapper;
 import ru.shipownerproject.models.vessels.Vessel;
 import ru.shipownerproject.models.vessels.type.VesselType;
@@ -17,25 +14,18 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class VesselDTO {
+public class VesselDTO extends DTO{
 
-    @NotEmpty(message = "Vessel cannot to be unregistered in any country")
     private CountryDTO country;
 
-    @NotEmpty(message = "Vessel cannot to be without ship owner")
     private ShipOwnerDTO shipOwner;
 
-    @NotEmpty(message = "Vessel cannot to be without name")
     private String name;
 
-    @NotNull
-    @Length(min = 7, max = 7, message = "IMO Number should have 7 numbers and to be unique for every vessel")
     private Integer IMO;
 
-    @NotEmpty(message = "Vesel cannot to be non type")
     private String type;
 
-    @NotNull(message = "Enter building date")
     private LocalDate buildingDate;
 
     public static Vessel convertToVessel(VesselDTO vesselDTO, ModelMapper modelMapper){
@@ -49,5 +39,10 @@ public class VesselDTO {
         return new VesselDTO(CountryDTO.convertToCountryDTO(vessel.getCountry(), modelMapper),
                 ShipOwnerDTO.convertToShipOwnerDTO(vessel.getShipOwner(), modelMapper),
                 vessel.getName(), vessel.getIMO(), vessel.getVesselType().getType(), vessel.getDateOfBuild());
+    }
+
+    @Override
+    public String toString(){
+        return " Vessel";
     }
 }

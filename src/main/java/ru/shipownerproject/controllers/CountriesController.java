@@ -5,16 +5,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.shipownerproject.exceptions.*;
-import ru.shipownerproject.models.$dto.CountryDTO;
-import ru.shipownerproject.models.$dto.ShipOwnerDTO;
-import ru.shipownerproject.models.$dto.VesselDTO;
+import ru.shipownerproject.utils.$dto.CountryDTO;
+import ru.shipownerproject.utils.$dto.ShipOwnerDTO;
+import ru.shipownerproject.utils.$dto.VesselDTO;
+import ru.shipownerproject.utils.$dto.validators.CountryDTOValidator;
 import ru.shipownerproject.services.countryservice.CountriesService;
+import ru.shipownerproject.utils.exceptions.*;
 
 import java.util.stream.Collectors;
 
-import static ru.shipownerproject.exceptions.ErrorResponse.notCreatedException;
-import static ru.shipownerproject.exceptions.ErrorResponse.notRefactoredException;
+import static ru.shipownerproject.utils.exceptions.ErrorResponse.notCreatedException;
+import static ru.shipownerproject.utils.exceptions.ErrorResponse.notRefactoredException;
 
 @RestController
 @RequestMapping("/countries")
@@ -22,17 +23,21 @@ public class CountriesController {
 
     private final CountriesService countriesService;
 
+    private final CountryDTOValidator countryDTOValidator;
+
     private final ModelMapper modelMapper;
 
-    public CountriesController(CountriesService countriesService, ModelMapper modelMapper) {
+    public CountriesController(CountriesService countriesService, ModelMapper modelMapper,
+                               CountryDTOValidator countryDTOValidator) {
         this.countriesService = countriesService;
         this.modelMapper = modelMapper;
+        this.countryDTOValidator = countryDTOValidator;
     }
 
     @PostMapping
-    public ResponseEntity<HttpStatus> addNewCountry(@RequestBody CountryDTO countryDTO, BindingResult bindingResult,
-                                                    StringBuilder stringBuilder) {
-        notCreatedException(bindingResult, stringBuilder, ". Country");
+    public ResponseEntity<HttpStatus> addNewCountry(@RequestBody CountryDTO countryDTO, BindingResult bindingResult) {
+
+        notCreatedException(bindingResult, countryDTOValidator, new StringBuilder(), countryDTO);
         countriesService.newCountry(CountryDTO.convertToCountry(countryDTO, modelMapper));
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -66,10 +71,10 @@ public class CountriesController {
 
     @PutMapping("/refactor/{id}")
     public ResponseEntity<HttpStatus> refactorCountryName(@PathVariable Integer id,
-                                                          @RequestBody CountryDTO newCountryName,  BindingResult bindingResult,
+                                                          @RequestBody CountryDTO countryDTO,  BindingResult bindingResult,
                                                           StringBuilder stringBuilder) {
-        notRefactoredException(bindingResult, stringBuilder, " Country");
-        countriesService.refactorCountryName(id, CountryDTO.convertToCountry(newCountryName, modelMapper));
+        notRefactoredException(bindingResult, countryDTOValidator, stringBuilder, countryDTO);
+        countriesService.refactorCountryName(id, CountryDTO.convertToCountry(countryDTO, modelMapper));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

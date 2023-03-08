@@ -1,4 +1,4 @@
-package ru.shipownerproject.exceptions;
+package ru.shipownerproject.utils.exceptions;
 
 public class NotRefactoredException extends RuntimeException{
 

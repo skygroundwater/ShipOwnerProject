@@ -1,32 +1,40 @@
 package ru.shipownerproject.services.countryservice;
 
 import org.springframework.stereotype.Service;
-import ru.shipownerproject.databases.countrybase.CountryRepository;
-import ru.shipownerproject.exceptions.NotFoundInBaseException;
+import ru.shipownerproject.databases.countrybase.CountriesRepository;
+import ru.shipownerproject.utils.exceptions.AlreadyAddedToBaseException;
+import ru.shipownerproject.utils.exceptions.NotFoundInBaseException;
 import ru.shipownerproject.models.countries.Country;
 import ru.shipownerproject.models.shipowners.ShipOwner;
 import ru.shipownerproject.models.vessels.Vessel;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
 public class CountriesServiceImpl implements CountriesService {
 
-    private final CountryRepository countryRepository;
+    private final CountriesRepository countriesRepository;
 
-    public CountriesServiceImpl(CountryRepository countryRepository) {
-        this.countryRepository = countryRepository;
+    public CountriesServiceImpl(CountriesRepository countriesRepository) {
+        this.countriesRepository = countriesRepository;
     }
 
     public static final String NC = "This country is not available.";
+    public static final String SAME_COUNTRY = "That country";
 
     private List<Country> findAll(){
-        return countryRepository.findAll();
+        return countriesRepository.findAll();
     }
 
     private Country findById(Integer id){
-        return countryRepository.findById(id).orElseThrow(() -> new NotFoundInBaseException(NC));
+        return countriesRepository.findById(id).orElseThrow(() -> new NotFoundInBaseException(NC));
+    }
+
+    private void checkCountryByName(Country country){
+        if(countriesRepository.findByName(country.getName()).stream().findAny().isPresent())
+            throw new AlreadyAddedToBaseException(SAME_COUNTRY);
     }
 
     @Override
@@ -36,7 +44,8 @@ public class CountriesServiceImpl implements CountriesService {
 
     @Override
     public void newCountry(Country country) {
-        countryRepository.save(country);
+        checkCountryByName(country);
+        countriesRepository.save(country);
     }
 
     @Override
@@ -56,8 +65,8 @@ public class CountriesServiceImpl implements CountriesService {
 
     @Override
     public void refactorCountryName(Integer id, Country newCountry) {
-        countryRepository.save(
-                Stream.of(findById(id)).peek(
+        checkCountryByName(newCountry);
+        countriesRepository.save(Stream.of(findById(id)).peek(
                         country -> country.setName(newCountry.getName())).findAny().get());
     }
 }

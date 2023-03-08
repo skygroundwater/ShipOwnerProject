@@ -1,6 +1,5 @@
-package ru.shipownerproject.models.$dto;
+package ru.shipownerproject.utils.$dto;
 
-import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,9 +11,8 @@ import ru.shipownerproject.models.countries.Country;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CountryDTO {
+public class CountryDTO extends DTO{
 
-    @NotEmpty(message = "Country cannot to be without name")
     private String name;
 
     public static Country convertToCountry(CountryDTO countryDTO, ModelMapper modelMapper){
@@ -24,4 +22,10 @@ public class CountryDTO {
     public static CountryDTO convertToCountryDTO(Country country, ModelMapper modelMapper){
         return modelMapper.map(country, CountryDTO.class);
     }
+
+    @Override
+    public String toString(){
+        return "Country ";
+    }
+
 }

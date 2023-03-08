@@ -1,7 +1,7 @@
 package ru.shipownerproject.models.vessels.type;
 
 import lombok.Getter;
-import ru.shipownerproject.exceptions.NotFoundInBaseException;
+import ru.shipownerproject.utils.exceptions.NotFoundInBaseException;
 
 import java.io.Serializable;
 import java.util.Arrays;

@@ -1,7 +1,5 @@
-package ru.shipownerproject.models.$dto;
+package ru.shipownerproject.utils.$dto;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,27 +13,20 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SeamanDTO {
+public class SeamanDTO extends DTO{
 
-    @NotEmpty(message = "seaman cannot to be without citizenship")
     private CountryDTO citizenship;
 
-    @NotEmpty(message = "Seaman cannot to be without vessel")
     private VesselDTO vessel;
 
-    @NotEmpty(message = "Name for seaman should be entered")
     private String fullName;
 
-    @NotEmpty(message = "Seaman cannot work on a vessel without position")
     private String position;
 
-    @NotNull(message = "Enter birth date")
     private Date birth;
 
-    @NotEmpty(message = "Enter birth place")
     private String birthPlace;
 
-    @NotEmpty(message = "Seaman cannot to be without passport")
     private String passport;
 
     public static Seaman convertToSeaman(SeamanDTO seamanDTO, ModelMapper modelMapper){
@@ -46,5 +37,10 @@ public class SeamanDTO {
                 VesselDTO.convertToVesselDTO(seaman.getVessel(), modelMapper),
                 seaman.getFullName(), seaman.getPosition(), seaman.getBirth(), seaman.getBirthPlace(),
                 seaman.getSeamanPassport().getPassport());
+    }
+
+    @Override
+    public String toString(){
+        return " Seaman";
     }
 }

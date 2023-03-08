@@ -7,8 +7,9 @@ import ru.shipownerproject.models.vessels.Vessel;
 import java.util.List;
 
 @Repository
-public interface VesselRepository extends JpaRepository<Vessel, Long> {
+public interface VesselsRepository extends JpaRepository<Vessel, Long> {
 
     List<Vessel> findByIMO(Integer IMO);
+
 
 }

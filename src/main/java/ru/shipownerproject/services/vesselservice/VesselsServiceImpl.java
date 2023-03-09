@@ -36,7 +36,7 @@ public class VesselsServiceImpl implements VesselsService {
         this.countriesRepository = countriesRepository;
     }
 
-    public static final String NV = "This vessel is not available. ";
+    public static final String NV = "This vessel is not available.";
 
     public static final String SAME_VESSEL = "Vessel with same IMO number ";
 

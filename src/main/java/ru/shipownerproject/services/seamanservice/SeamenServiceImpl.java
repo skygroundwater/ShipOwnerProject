@@ -60,7 +60,8 @@ public class SeamenServiceImpl implements SeamenService {
     public void addNewSeamanToBase(Seaman seaman) {
         seamenRepository.save(new Seaman(seaman.getFullName(), seaman.getPosition(),
                 findVesselByIMO(seaman), findCountryByCitizenship(seaman), seaman.getBirth(),
-                seaman.getBirthPlace(), findVesselByIMO(seaman).getShipOwner(), seaman.getSeamanPassport().getPassport()));
+                seaman.getBirthPlace(), findVesselByIMO(seaman).getShipOwner(),
+                seaman.getSeamanPassport().getPassport()));
     }
 
     @Override

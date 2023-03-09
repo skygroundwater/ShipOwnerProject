@@ -1,10 +1,13 @@
 package ru.shipownerproject.controllers;
 
+import org.hibernate.mapping.Collection;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.shipownerproject.models.countries.Country;
 import ru.shipownerproject.utils.$dto.CountryDTO;
 import ru.shipownerproject.utils.$dto.ShipOwnerDTO;
 import ru.shipownerproject.utils.$dto.VesselDTO;
@@ -12,6 +15,8 @@ import ru.shipownerproject.utils.$dto.validators.CountryDTOValidator;
 import ru.shipownerproject.services.countryservice.CountriesService;
 import ru.shipownerproject.utils.exceptions.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.shipownerproject.utils.exceptions.ErrorResponse.notCreatedException;
@@ -44,6 +49,11 @@ public class CountriesController {
 
     @GetMapping("/all")
     public ResponseEntity<Object> allCountries(){
+        new ArrayList<>(List.of(("Antigua and Barbuda,Bahamas,Barbados,Belize,Bermuda,Bolivia,Vanuatu,Gibraltar,Honduras," +
+                "Georgia,Dominica,Cayman Islands,Cambodia,Cyprus,Comoros,Liberia,Lebanon,Mauritius,Malta,Marshall Islands," +
+                "Moldova,Mongolia,Myanmar,Netherlands Antilles,Cook Islands, Panama,Papua New Guinea,Sao Tome and Principe," +
+                "Saint Vincent and the Grenadines,Tonga,Tuvalu,Sri Lanka,Equatorial Guinea,Jamaica")
+                .split(","))).forEach(s -> countriesService.newCountry(new Country(s)));
         return ResponseEntity.ok(countriesService.allCountries().stream()
                 .map(country -> CountryDTO.convertToCountryDTO(country, modelMapper))
                 .collect(Collectors.toList()));

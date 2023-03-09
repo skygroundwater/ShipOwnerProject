@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import ru.shipownerproject.models.countries.Country;
+import ru.shipownerproject.models.countries.ports.Port;
 import ru.shipownerproject.models.seaman.Seaman;
 import ru.shipownerproject.models.shipowners.ShipOwner;
 import ru.shipownerproject.models.vessels.type.VesselType;
@@ -55,6 +56,11 @@ public class Vessel implements Serializable {
     @Column(name = "building_date")
     @NotNull(message = "Enter date of building")
     private LocalDate dateOfBuild;
+
+    @NotNull(message = "Vessel cannot to be without port of registration")
+    @JoinColumn(name = "port_of_registration")
+    @ManyToOne
+    private Port port;
 
     @Override
     public String toString() {

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
+import ru.shipownerproject.models.countries.ports.Port;
 import ru.shipownerproject.models.seaman.Seaman;
 import ru.shipownerproject.models.shipowners.ShipOwner;
 import ru.shipownerproject.models.vessels.Vessel;
@@ -30,6 +31,9 @@ public class Country implements Serializable {
 
     @OneToMany(mappedBy = "citizenship", cascade = CascadeType.ALL)
     private List<Seaman> seamen;
+
+    @OneToMany(mappedBy = "country", cascade = CascadeType.ALL)
+    private List<Port> portsOfCall;
 
     @Column(name = "name")
     @NotEmpty(message = "Country cannot to be without name")

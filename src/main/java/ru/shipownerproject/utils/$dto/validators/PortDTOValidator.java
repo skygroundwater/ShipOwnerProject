@@ -24,7 +24,6 @@ public class PortDTOValidator implements Validator {
                 -> new NotFoundInBaseException(NC));
     }
 
-
     @Override
     public boolean supports(Class<?> clazz) {
         return Port.class.equals(clazz);

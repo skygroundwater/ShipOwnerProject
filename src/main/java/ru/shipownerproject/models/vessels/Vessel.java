@@ -78,12 +78,13 @@ public class Vessel implements Serializable {
         this.name = name;
     }
 
-    public Vessel(String name, Integer IMO, ShipOwner shipOwner, VesselType vesselType, Country country, LocalDate buildingDate) {
+    public Vessel(String name, Integer IMO, ShipOwner shipOwner, VesselType vesselType, Country country, Port port, LocalDate buildingDate) {
         this.name = name;
         this.IMO = IMO;
         this.vesselType = vesselType;
         this.shipOwner = shipOwner;
         this.country = country;
+        this.port = port;
         this.dateOfBuild = buildingDate;
     }
 }

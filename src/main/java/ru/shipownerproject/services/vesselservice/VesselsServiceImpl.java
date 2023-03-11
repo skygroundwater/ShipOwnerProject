@@ -2,8 +2,10 @@ package ru.shipownerproject.services.vesselservice;
 
 import org.springframework.stereotype.Service;
 import ru.shipownerproject.databases.countrybase.CountriesRepository;
+import ru.shipownerproject.databases.countrybase.portsdatabase.PortsRepository;
 import ru.shipownerproject.databases.shipownerdatabase.ShipOwnersRepository;
 import ru.shipownerproject.databases.vesselrepository.VesselsRepository;
+import ru.shipownerproject.models.countries.ports.Port;
 import ru.shipownerproject.utils.exceptions.AlreadyAddedToBaseException;
 import ru.shipownerproject.utils.exceptions.NotFoundInBaseException;
 import ru.shipownerproject.models.countries.Country;
@@ -19,6 +21,7 @@ import java.util.stream.Stream;
 
 import static ru.shipownerproject.models.vessels.type.VesselType.NVT;
 import static ru.shipownerproject.services.countryservice.CountriesServiceImpl.NC;
+import static ru.shipownerproject.services.countryservice.portservice.PortsServiceImpl.NP;
 import static ru.shipownerproject.services.shipsownerservice.ShipOwnersServiceImpl.NS;
 
 @Service
@@ -27,13 +30,15 @@ public class VesselsServiceImpl implements VesselsService {
     private final VesselsRepository vesselsRepository;
     private final ShipOwnersRepository shipOwnersRepository;
     private final CountriesRepository countriesRepository;
+    private final PortsRepository portsRepository;
 
     public VesselsServiceImpl(VesselsRepository vesselsRepository,
                               ShipOwnersRepository shipOwnersRepository,
-                              CountriesRepository countriesRepository) {
+                              CountriesRepository countriesRepository, PortsRepository portsRepository) {
         this.vesselsRepository = vesselsRepository;
         this.shipOwnersRepository = shipOwnersRepository;
         this.countriesRepository = countriesRepository;
+        this.portsRepository = portsRepository;
     }
 
     public static final String NV = "This vessel is not available.";
@@ -48,6 +53,11 @@ public class VesselsServiceImpl implements VesselsService {
     private ShipOwner findShipOwnerByName(Vessel vessel) {
         return shipOwnersRepository.findByName(vessel.getShipOwner().getName())
                 .stream().findAny().orElseThrow(() -> new NotFoundInBaseException(NS));
+    }
+
+    private Port findPortByNameInDB(Vessel vessel){
+        return portsRepository.findByName(vessel.getCountry().getName()).stream()
+                .findAny().orElseThrow(() -> new NotFoundInBaseException(NP));
     }
 
     private Vessel findById(Long id) {
@@ -74,7 +84,7 @@ public class VesselsServiceImpl implements VesselsService {
     public void addNewVessel(Vessel vessel) {
         checkVesselByIMO(vessel);
         vesselsRepository.save(new Vessel(vessel.getName(), vessel.getIMO(), findShipOwnerByName(vessel),
-                findByTypeName(vessel), findCountryByName(vessel), vessel.getDateOfBuild()));
+                findByTypeName(vessel), findCountryByName(vessel), findPortByNameInDB(vessel),  vessel.getDateOfBuild()));
     }
 
     @Override
@@ -96,6 +106,7 @@ public class VesselsServiceImpl implements VesselsService {
             v.setCountry(findCountryByName(vessel));
             v.setShipOwner(findShipOwnerByName(vessel));
             v.setVesselType(vessel.getVesselType());
+            v.setPort(findPortByNameInDB(vessel));
             v.setDateOfBuild(vessel.getDateOfBuild());
         }).findAny().get());
     }

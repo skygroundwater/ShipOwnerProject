@@ -10,7 +10,7 @@ public interface CountriesService {
 
     List<Country> allCountries();
 
-    void newCountry(Country country);
+    Country newCountry(Country country);
 
     Country oneCountry(Integer id);
 

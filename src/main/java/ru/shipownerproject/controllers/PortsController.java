@@ -63,6 +63,11 @@ public class PortsController {
     }
 
     @ExceptionHandler
+    private ResponseEntity<ErrorResponse> handlerException(ListIsEmptyException e) {
+        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
     private ResponseEntity<ErrorResponse> handlerException(NotFoundInBaseException e) {
         return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
     }

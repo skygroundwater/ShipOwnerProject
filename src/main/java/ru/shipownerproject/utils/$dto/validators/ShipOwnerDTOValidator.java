@@ -4,24 +4,20 @@ package ru.shipownerproject.utils.$dto.validators;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import ru.shipownerproject.databases.countrybase.CountriesRepository;
+import ru.shipownerproject.services.countryservice.CountriesService;
 import ru.shipownerproject.utils.$dto.ShipOwnerDTO;
-import ru.shipownerproject.utils.exceptions.NotFoundInBaseException;
-
-import static ru.shipownerproject.services.countryservice.CountriesServiceImpl.NC;
 
 @Component
 public class ShipOwnerDTOValidator implements Validator {
 
-    private final CountriesRepository countriesRepository;
+    private final CountriesService countriesService;
 
-    public ShipOwnerDTOValidator(CountriesRepository countriesRepository) {
-        this.countriesRepository = countriesRepository;
+    public ShipOwnerDTOValidator(CountriesService countriesService) {
+        this.countriesService = countriesService;
     }
 
     private void checkCountryByName(String countryName) {
-        countriesRepository.findByName(countryName).stream().findAny().orElseThrow(()
-                -> new NotFoundInBaseException(NC));
+        countriesService.findCountryByName(countryName);
     }
 
     @Override

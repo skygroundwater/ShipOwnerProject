@@ -11,6 +11,8 @@ import ru.shipownerproject.utils.exceptions.NotFoundInBaseException;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static ru.shipownerproject.utils.exceptions.ErrorResponse.whatIfEmpty;
+
 @Service
 public class CountriesServiceImpl implements CountriesService {
 
@@ -37,8 +39,14 @@ public class CountriesServiceImpl implements CountriesService {
     }
 
     @Override
+    public Country findCountryByName(String name) {
+        return countriesRepository.findByName(name).stream()
+                .findAny().orElseThrow(() -> new NotFoundInBaseException(NC));
+    }
+
+    @Override
     public List<Country> allCountries() {
-        return findAll();
+        return (List<Country>) whatIfEmpty(findAll(), "of countries for that project");
     }
 
     @Override
@@ -54,13 +62,12 @@ public class CountriesServiceImpl implements CountriesService {
 
     @Override
     public List<ShipOwner> countryShipOwners(Integer id) {
-        return findById(id).getShipOwners();
+        return (List<ShipOwner>) whatIfEmpty(findById(id).getShipOwners(), "that country's ship owners");
     }
 
     @Override
     public List<Vessel> countryVessels(Integer id) {
-        return findById(id).getVessels();
-    }
+        return (List<Vessel>) whatIfEmpty(findById(id).getVessels(), "that country's vessels");    }
 
     @Override
     public void refactorCountryName(Integer id, Country newCountry) {

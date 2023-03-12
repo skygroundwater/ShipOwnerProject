@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface CountriesService {
 
+    Country findCountryByName(String name);
+
     List<Country> allCountries();
 
     Country newCountry(Country country);

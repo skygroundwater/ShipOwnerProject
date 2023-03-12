@@ -5,6 +5,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import ru.shipownerproject.databases.countrybase.CountriesRepository;
 import ru.shipownerproject.models.countries.ports.Port;
+import ru.shipownerproject.services.countryservice.CountriesService;
 import ru.shipownerproject.utils.$dto.PortDTO;
 import ru.shipownerproject.utils.exceptions.NotFoundInBaseException;
 
@@ -13,15 +14,14 @@ import static ru.shipownerproject.services.countryservice.CountriesServiceImpl.N
 @Component
 public class PortDTOValidator implements Validator {
 
-    private final CountriesRepository countriesRepository;
+    private final CountriesService countriesService;
 
-    public PortDTOValidator(CountriesRepository countriesRepository) {
-        this.countriesRepository = countriesRepository;
+    public PortDTOValidator(CountriesService countriesService) {
+        this.countriesService = countriesService;
     }
 
     private void checkCountryByName(PortDTO portDTO) {
-        countriesRepository.findByName(portDTO.getCountry().getName()).stream().findAny().orElseThrow(()
-                -> new NotFoundInBaseException(NC));
+        countriesService.findCountryByName(portDTO.getCountry().getName());
     }
 
     @Override

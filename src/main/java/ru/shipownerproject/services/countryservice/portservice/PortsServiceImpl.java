@@ -1,35 +1,33 @@
 package ru.shipownerproject.services.countryservice.portservice;
 
 import org.springframework.stereotype.Service;
-import ru.shipownerproject.databases.countrybase.CountriesRepository;
 import ru.shipownerproject.databases.countrybase.portsdatabase.PortsRepository;
 import ru.shipownerproject.models.countries.Country;
 import ru.shipownerproject.models.countries.ports.Port;
+import ru.shipownerproject.services.countryservice.CountriesService;
 import ru.shipownerproject.utils.exceptions.AlreadyAddedToBaseException;
 import ru.shipownerproject.utils.exceptions.NotFoundInBaseException;
 
 import java.util.stream.Stream;
-
-import static ru.shipownerproject.services.countryservice.CountriesServiceImpl.NC;
 
 @Service
 public class PortsServiceImpl implements PortsService {
 
     private final PortsRepository portsRepository;
 
-    private final CountriesRepository countriesRepository;
+    private final CountriesService countriesService;
 
     public static final String NP = "This port is not available.";
 
     public static final String SAME_PORT = "Port with the same name ";
 
-    public PortsServiceImpl(PortsRepository portsRepository, CountriesRepository countriesRepository) {
+    public PortsServiceImpl(PortsRepository portsRepository, CountriesService countriesService) {
         this.portsRepository = portsRepository;
-        this.countriesRepository = countriesRepository;
+        this.countriesService = countriesService;
     }
 
     private void checkPortInDB(Port port) {
-        if(portsRepository.findByName(port.getName()).stream().findAny()
+        if (portsRepository.findByName(port.getName()).stream().findAny()
                 .isPresent()) throw new AlreadyAddedToBaseException(SAME_PORT);
     }
 
@@ -37,19 +35,25 @@ public class PortsServiceImpl implements PortsService {
         return portsRepository.findById(id).orElseThrow(() -> new NotFoundInBaseException(NP));
     }
 
-    private Country findCountryByName(Port port){
-        return countriesRepository.findByName(port.getCountry().getName()).stream()
-                .findAny().orElseThrow(() -> new NotFoundInBaseException(NC));
+    private Country findCountryByName(Port port) {
+        return countriesService.findCountryByName(port.getCountry().getName());
+    }
+
+    @Override
+    public Port findPortByName(String name) {
+        return portsRepository.findByName(name).stream().findAny()
+                .orElseThrow(() -> new NotFoundInBaseException(NP));
     }
 
     @Override
     public Port addNewPort(Port port) {
         checkPortInDB(port);
-        return portsRepository.save(new Port(port.getName(), findCountryByName(port), port.getNav_description()));
+        return portsRepository.save(new Port(port.getName(),
+                findCountryByName(port), port.getNav_description()));
     }
 
     @Override
-    public Port getPortFromDB(Integer id){
+    public Port getPortFromDB(Integer id) {
         return findById(id);
     }
 
@@ -64,7 +68,7 @@ public class PortsServiceImpl implements PortsService {
     }
 
     @Override
-    public void deletePortFromDB(Integer id){
+    public void deletePortFromDB(Integer id) {
         portsRepository.delete(findById(id));
     }
 }

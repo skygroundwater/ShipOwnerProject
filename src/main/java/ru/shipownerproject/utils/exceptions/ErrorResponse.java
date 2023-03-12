@@ -8,6 +8,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 import ru.shipownerproject.utils.$dto.DTO;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -37,5 +39,10 @@ public class ErrorResponse {
             throw new NotRefactoredException(stringBuilder.append(".")
                     .append("Intermediate object for ").append(dto).toString());
         }
+    }
+
+    public static List<?> whatIfEmpty(List<?> objects, String desc){
+        if(objects == null || objects.isEmpty()) throw new ListIsEmptyException(desc);
+        else return objects;
     }
 }

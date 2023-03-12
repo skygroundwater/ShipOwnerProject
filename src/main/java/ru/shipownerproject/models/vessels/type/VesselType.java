@@ -80,6 +80,8 @@ public enum VesselType implements Serializable {
     }
 
     public static VesselType getVesselType(String type) {
-        return Arrays.stream(values()).filter(vesselType -> vesselType.getType().equals(type)).findAny().orElseThrow(() -> new NotFoundInBaseException(NVT));
+        return Arrays.stream(values()).filter(vesselType ->
+                vesselType.getType().equals(type)).findAny()
+                .orElseThrow(() -> new NotFoundInBaseException(NVT));
     }
 }

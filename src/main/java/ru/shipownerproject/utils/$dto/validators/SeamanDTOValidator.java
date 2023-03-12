@@ -3,35 +3,31 @@ package ru.shipownerproject.utils.$dto.validators;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import ru.shipownerproject.databases.countrybase.CountriesRepository;
-import ru.shipownerproject.databases.vesselrepository.VesselsRepository;
-import ru.shipownerproject.utils.exceptions.NotFoundInBaseException;
+import ru.shipownerproject.services.countryservice.CountriesService;
+import ru.shipownerproject.services.vesselservice.VesselsService;
 import ru.shipownerproject.utils.$dto.SeamanDTO;
 
-import static ru.shipownerproject.services.countryservice.CountriesServiceImpl.NC;
 import static ru.shipownerproject.services.vesselservice.VesselsServiceImpl.NV;
 
 @Component
 public class SeamanDTOValidator implements Validator {
 
-    private final VesselsRepository vesselsRepository;
+    private final VesselsService vesselsService;
 
-    private final CountriesRepository countriesRepository;
+    private final CountriesService countriesService;
 
-    public SeamanDTOValidator(VesselsRepository vesselsRepository,
-                              CountriesRepository countriesRepository) {
-        this.vesselsRepository = vesselsRepository;
-        this.countriesRepository = countriesRepository;
+    public SeamanDTOValidator(VesselsService vesselsService,
+                              CountriesService countriesService) {
+        this.vesselsService = vesselsService;
+        this.countriesService = countriesService;
     }
 
     private void checkVesselByIMO(Integer IMO) {
-        vesselsRepository.findByIMO(IMO).stream().findAny().orElseThrow(()
-                -> new NotFoundInBaseException(NV));
+        vesselsService.findVesselByIMO(IMO);
     }
 
     private void checkCountryByName(String countryName) {
-        countriesRepository.findByName(countryName).stream().findAny().orElseThrow(()
-                -> new NotFoundInBaseException(NC));
+        countriesService.findCountryByName(countryName);
     }
 
     @Override

@@ -4,8 +4,8 @@ package ru.shipownerproject.utils.$dto.validators;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import ru.shipownerproject.databases.countrybase.CountriesRepository;
-import ru.shipownerproject.databases.shipownerdatabase.ShipOwnersRepository;
+import ru.shipownerproject.services.countryservice.CountriesService;
+import ru.shipownerproject.services.shipsownerservice.ShipOwnersService;
 import ru.shipownerproject.utils.$dto.VesselDTO;
 import ru.shipownerproject.utils.exceptions.NotFoundInBaseException;
 
@@ -15,24 +15,22 @@ import static ru.shipownerproject.services.shipsownerservice.ShipOwnersServiceIm
 @Component
 public class VesselDTOValidator implements Validator {
 
-    private final ShipOwnersRepository shipOwnersRepository;
+    private final ShipOwnersService shipOwnersService;
 
-    private final CountriesRepository countriesRepository;
+    private final CountriesService countriesService;
 
-    public VesselDTOValidator(ShipOwnersRepository shipOwnersRepository,
-                              CountriesRepository countriesRepository) {
-        this.shipOwnersRepository = shipOwnersRepository;
-        this.countriesRepository = countriesRepository;
+    public VesselDTOValidator(ShipOwnersService shipOwnersService, CountriesService countriesService) {
+        this.shipOwnersService = shipOwnersService;
+        this.countriesService = countriesService;
     }
 
+
     private void checkShipOwnerByName(String shipOwnerName) {
-        shipOwnersRepository.findByName(shipOwnerName).stream().findAny().orElseThrow(()
-                -> new NotFoundInBaseException(NS));
+        shipOwnersService.findShipOwnerByName(shipOwnerName);
     }
 
     private void checkCountryByName(String countryName){
-        countriesRepository.findByName(countryName).stream().findAny().orElseThrow(()
-                -> new NotFoundInBaseException(NC));
+        countriesService.findCountryByName(countryName);
     }
 
     @Override

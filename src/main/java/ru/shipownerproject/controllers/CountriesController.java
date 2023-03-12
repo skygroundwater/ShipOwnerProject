@@ -41,19 +41,13 @@ public class CountriesController {
 
     @PostMapping
     public ResponseEntity<HttpStatus> addNewCountry(@RequestBody CountryDTO countryDTO, BindingResult bindingResult) {
-
         notCreatedException(bindingResult, countryDTOValidator, new StringBuilder(), countryDTO);
         countriesService.newCountry(CountryDTO.convertToCountry(countryDTO, modelMapper));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Object> allCountries(){
-        new ArrayList<>(List.of(("Antigua and Barbuda,Bahamas,Barbados,Belize,Bermuda,Bolivia,Vanuatu,Gibraltar,Honduras," +
-                "Georgia,Dominica,Cayman Islands,Cambodia,Cyprus,Comoros,Liberia,Lebanon,Mauritius,Malta,Marshall Islands," +
-                "Moldova,Mongolia,Myanmar,Netherlands Antilles,Cook Islands, Panama,Papua New Guinea,Sao Tome and Principe," +
-                "Saint Vincent and the Grenadines,Tonga,Tuvalu,Sri Lanka,Equatorial Guinea,Jamaica")
-                .split(","))).forEach(s -> countriesService.newCountry(new Country(s)));
+    public ResponseEntity<Object> allCountries() {
         return ResponseEntity.ok(countriesService.allCountries().stream()
                 .map(country -> CountryDTO.convertToCountryDTO(country, modelMapper))
                 .collect(Collectors.toList()));
@@ -73,7 +67,7 @@ public class CountriesController {
     }
 
     @GetMapping("/vessels/{id}")
-    public ResponseEntity<Object> returnCountryVessels(@PathVariable Integer id){
+    public ResponseEntity<Object> returnCountryVessels(@PathVariable Integer id) {
         return ResponseEntity.ok(countriesService.countryVessels(id).stream()
                 .map(vessel -> VesselDTO.convertToVesselDTO(vessel, modelMapper))
                 .collect(Collectors.toList()));
@@ -81,7 +75,7 @@ public class CountriesController {
 
     @PutMapping("/refactor/{id}")
     public ResponseEntity<HttpStatus> refactorCountryName(@PathVariable Integer id,
-                                                          @RequestBody CountryDTO countryDTO,  BindingResult bindingResult,
+                                                          @RequestBody CountryDTO countryDTO, BindingResult bindingResult,
                                                           StringBuilder stringBuilder) {
         notRefactoredException(bindingResult, countryDTOValidator, stringBuilder, countryDTO);
         countriesService.refactorCountryName(id, CountryDTO.convertToCountry(countryDTO, modelMapper));

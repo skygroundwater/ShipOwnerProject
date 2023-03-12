@@ -26,7 +26,7 @@ public class ShipOwner implements Serializable {
     @NotEmpty(message = "The name of shipowner is required to fill")
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "country", referencedColumnName = "id")
     private Country country;
 

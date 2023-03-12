@@ -8,9 +8,11 @@ import java.util.List;
 
 public interface CountriesService {
 
+    Country findCountryByName(String name);
+
     List<Country> allCountries();
 
-    void newCountry(Country country);
+    Country newCountry(Country country);
 
     Country oneCountry(Integer id);
 

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
 import org.hibernate.validator.constraints.Length;
 import ru.shipownerproject.models.countries.Country;
 import ru.shipownerproject.models.countries.ports.Port;
@@ -29,11 +30,11 @@ public class Vessel implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "country", referencedColumnName = "id")
     private Country country;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shipowner", referencedColumnName = "id")
     private ShipOwner shipOwner;
 
@@ -59,7 +60,7 @@ public class Vessel implements Serializable {
 
     @NotNull(message = "Vessel cannot to be without port of registration")
     @JoinColumn(name = "port_of_registration")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Port port;
 
     @Override
@@ -78,12 +79,13 @@ public class Vessel implements Serializable {
         this.name = name;
     }
 
-    public Vessel(String name, Integer IMO, ShipOwner shipOwner, VesselType vesselType, Country country, LocalDate buildingDate) {
+    public Vessel(String name, Integer IMO, ShipOwner shipOwner, VesselType vesselType, Country country, Port port, LocalDate buildingDate) {
         this.name = name;
         this.IMO = IMO;
         this.vesselType = vesselType;
         this.shipOwner = shipOwner;
         this.country = country;
+        this.port = port;
         this.dateOfBuild = buildingDate;
     }
 }

@@ -2,15 +2,16 @@ package ru.shipownerproject.services.countryservice;
 
 import org.springframework.stereotype.Service;
 import ru.shipownerproject.databases.countrybase.CountriesRepository;
-import ru.shipownerproject.utils.exceptions.AlreadyAddedToBaseException;
-import ru.shipownerproject.utils.exceptions.NotFoundInBaseException;
 import ru.shipownerproject.models.countries.Country;
 import ru.shipownerproject.models.shipowners.ShipOwner;
 import ru.shipownerproject.models.vessels.Vessel;
+import ru.shipownerproject.utils.exceptions.AlreadyAddedToBaseException;
+import ru.shipownerproject.utils.exceptions.NotFoundInBaseException;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
+
+import static ru.shipownerproject.utils.exceptions.ErrorResponse.whatIfEmpty;
 
 @Service
 public class CountriesServiceImpl implements CountriesService {
@@ -24,28 +25,34 @@ public class CountriesServiceImpl implements CountriesService {
     public static final String NC = "This country is not available.";
     public static final String SAME_COUNTRY = "That country";
 
-    private List<Country> findAll(){
+    private List<Country> findAll() {
         return countriesRepository.findAll();
     }
 
-    private Country findById(Integer id){
+    private Country findById(Integer id) {
         return countriesRepository.findById(id).orElseThrow(() -> new NotFoundInBaseException(NC));
     }
 
-    private void checkCountryByName(Country country){
-        if(countriesRepository.findByName(country.getName()).stream().findAny().isPresent())
+    private void checkCountryByName(Country country) {
+        if (countriesRepository.findByName(country.getName()).stream().findAny().isPresent())
             throw new AlreadyAddedToBaseException(SAME_COUNTRY);
     }
 
     @Override
-    public List<Country> allCountries(){
-        return findAll();
+    public Country findCountryByName(String name) {
+        return countriesRepository.findByName(name).stream()
+                .findAny().orElseThrow(() -> new NotFoundInBaseException(NC));
     }
 
     @Override
-    public void newCountry(Country country) {
+    public List<Country> allCountries() {
+        return (List<Country>) whatIfEmpty(findAll(), "of countries for that project");
+    }
+
+    @Override
+    public Country newCountry(Country country) {
         checkCountryByName(country);
-        countriesRepository.save(country);
+        return countriesRepository.save(country);
     }
 
     @Override
@@ -55,18 +62,17 @@ public class CountriesServiceImpl implements CountriesService {
 
     @Override
     public List<ShipOwner> countryShipOwners(Integer id) {
-        return findById(id).getShipOwners();
+        return (List<ShipOwner>) whatIfEmpty(findById(id).getShipOwners(), "that country's ship owners");
     }
 
     @Override
     public List<Vessel> countryVessels(Integer id) {
-        return findById(id).getVessels();
-    }
+        return (List<Vessel>) whatIfEmpty(findById(id).getVessels(), "that country's vessels");    }
 
     @Override
     public void refactorCountryName(Integer id, Country newCountry) {
         checkCountryByName(newCountry);
         countriesRepository.save(Stream.of(findById(id)).peek(
-                        country -> country.setName(newCountry.getName())).findAny().get());
+                country -> country.setName(newCountry.getName())).findAny().get());
     }
 }

@@ -7,10 +7,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.shipownerproject.services.vesselservice.VesselsService;
 import ru.shipownerproject.utils.$dto.SeamanDTO;
+import ru.shipownerproject.utils.$dto.ShipOwnerDTO;
 import ru.shipownerproject.utils.$dto.VesselDTO;
 import ru.shipownerproject.utils.$dto.validators.VesselDTOValidator;
 import ru.shipownerproject.utils.exceptions.*;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.shipownerproject.utils.exceptions.ErrorResponse.notCreatedException;
@@ -40,19 +42,25 @@ public class VesselsController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getVessel(@PathVariable Long id) {
+    public ResponseEntity<VesselDTO> getVessel(@PathVariable Long id) {
         return ResponseEntity.ok(VesselDTO.convertToVesselDTO(vesselsService.vessel(id), modelMapper));
     }
 
     @GetMapping("/crew/{id}")
-    public ResponseEntity<Object> getCrew(@PathVariable Long id){
+    public ResponseEntity<List<SeamanDTO>> getCrew(@PathVariable Long id){
         return  ResponseEntity.ok(vesselsService.getInfoAboutCrew(id).stream()
                 .map(seaman -> SeamanDTO.convertToSeamanDTO(seaman, modelMapper))
                 .collect(Collectors.toList()));
     }
 
+    @GetMapping("/shipowner/{id}")
+    public ResponseEntity<ShipOwnerDTO> getVeselShipOwner(@PathVariable Long id){
+        return ResponseEntity.ok(ShipOwnerDTO.convertToShipOwnerDTO
+                (vesselsService.getVesselShipOwner(id), modelMapper));
+    }
+
     @GetMapping("/type/{type}")
-    public ResponseEntity<Object> getVesselsByType(@PathVariable String type){
+    public ResponseEntity<List<VesselDTO>> getVesselsByType(@PathVariable String type){
         return ResponseEntity.ok(vesselsService.allVesselsByType(type).stream()
                 .map(vessel -> VesselDTO.convertToVesselDTO(vessel, modelMapper))
                 .collect(Collectors.toList()));

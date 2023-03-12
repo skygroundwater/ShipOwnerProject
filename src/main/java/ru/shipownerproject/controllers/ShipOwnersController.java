@@ -6,11 +6,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.shipownerproject.services.shipsownerservice.ShipOwnersService;
+import ru.shipownerproject.utils.$dto.SeamanDTO;
 import ru.shipownerproject.utils.$dto.ShipOwnerDTO;
 import ru.shipownerproject.utils.$dto.VesselDTO;
 import ru.shipownerproject.utils.$dto.validators.ShipOwnerDTOValidator;
 import ru.shipownerproject.utils.exceptions.*;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.shipownerproject.utils.exceptions.ErrorResponse.notCreatedException;
@@ -41,14 +43,21 @@ public class ShipOwnersController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> shipOwner(@PathVariable Long id) {
+    public ResponseEntity<ShipOwnerDTO> shipOwner(@PathVariable Long id) {
         return ResponseEntity.ok(ShipOwnerDTO.convertToShipOwnerDTO(shipOwnersService.shipOwner(id), modelMapper));
     }
 
     @GetMapping("/vessels/{id}")
-    public ResponseEntity<Object> shipOwnerVessels(@PathVariable Long id) {
+    public ResponseEntity<List<VesselDTO>> shipOwnerVessels(@PathVariable Long id) {
         return ResponseEntity.ok(shipOwnersService.shipOwnerVessels(id).stream()
                 .map(vessel -> VesselDTO.convertToVesselDTO(vessel, modelMapper))
+                .collect(Collectors.toList()));
+    }
+
+    @GetMapping("/seamen/{id}")
+    public ResponseEntity<List<SeamanDTO>> shipOwnerSeamen(@PathVariable Long id){
+        return ResponseEntity.ok(shipOwnersService.shipOwnerSeamen(id).stream()
+                .map(seaman -> SeamanDTO.convertToSeamanDTO(seaman, modelMapper))
                 .collect(Collectors.toList()));
     }
 
@@ -63,11 +72,16 @@ public class ShipOwnersController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<HttpStatus> deleteShipOwnerFromBase(@PathVariable Long id) {
         shipOwnersService.removeFromBaseShipOwner(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @ExceptionHandler
     private ResponseEntity<ErrorResponse> handlerException(AlreadyAddedToBaseException e) {
+        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<ErrorResponse> handlerException(ListIsEmptyException e) {
         return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
     }
 

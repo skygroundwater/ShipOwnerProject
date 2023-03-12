@@ -24,8 +24,6 @@ public class Port {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
-    @NotEmpty(message = "Port cannot to be without name")
     @Column(name = "name")
     private String name;
 
@@ -33,14 +31,16 @@ public class Port {
     @Column(name = "nav_description")
     private String nav_description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "country_id")
     private Country country;
 
     @OneToMany(mappedBy = "port", cascade = CascadeType.ALL)
     private List<Vessel> regVessels;
 
-
+    public Port(String name){
+        this.name = name;
+    }
 
     public Port(String name, Country country, String nav_description){
         this.name = name;

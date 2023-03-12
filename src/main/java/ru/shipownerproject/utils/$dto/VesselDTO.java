@@ -26,19 +26,24 @@ public class VesselDTO extends DTO{
 
     private String type;
 
+    private PortDTO port;
+
     private LocalDate buildingDate;
 
     public static Vessel convertToVessel(VesselDTO vesselDTO, ModelMapper modelMapper){
         return new Vessel(vesselDTO.getName(), vesselDTO.getIMO(),
                 ShipOwnerDTO.convertToShipowner(vesselDTO.getShipOwner(), modelMapper),
                 VesselType.getVesselType(vesselDTO.getType()),
-                CountryDTO.convertToCountry(vesselDTO.getCountry(), modelMapper), vesselDTO.getBuildingDate());
+                CountryDTO.convertToCountry(vesselDTO.getCountry(), modelMapper),
+                PortDTO.convertToPort(vesselDTO.getPort(), modelMapper),
+                vesselDTO.getBuildingDate());
     }
 
     public static VesselDTO convertToVesselDTO(Vessel vessel, ModelMapper modelMapper){
         return new VesselDTO(CountryDTO.convertToCountryDTO(vessel.getCountry(), modelMapper),
                 ShipOwnerDTO.convertToShipOwnerDTO(vessel.getShipOwner(), modelMapper),
-                vessel.getName(), vessel.getIMO(), vessel.getVesselType().getType(), vessel.getDateOfBuild());
+                vessel.getName(), vessel.getIMO(), vessel.getVesselType().getType(),
+                PortDTO.convertToPortDTO(vessel.getPort(), modelMapper) ,vessel.getDateOfBuild());
     }
 
     @Override

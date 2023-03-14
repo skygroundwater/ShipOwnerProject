@@ -8,8 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.management.relation.Role;
-
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,20 +29,21 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
 
-    @Column(name = "nonExpired")
+    @Column(name = "non_expired")
     private boolean nonExpired;
 
-    @Column(name = "nonLocked")
+    @Column(name = "non_locked")
     private boolean nonLocked;
 
-    @Column(name = "nonCredentialsExpired")
+    @Column(name = "non_credentials_expired")
     private boolean nonCredentialsExpired;
 
-    @Column(name = "nonEnabled")
-    private boolean nonEnabled;
+    @Column(name = "is_enabled")
+    private boolean isEnabled;
 
     @Override
     public String toString(){

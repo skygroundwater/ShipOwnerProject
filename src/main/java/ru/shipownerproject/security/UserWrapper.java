@@ -1,22 +1,20 @@
 package ru.shipownerproject.security;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import ru.shipownerproject.models.user.Role;
 import ru.shipownerproject.models.user.User;
 
 import java.util.Collection;
+import java.util.Collections;
 
-public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
-
-    private final User user;
-
-    public UserDetails(User user) {
-        this.user = user;
-    }
-
+public record UserWrapper(User user) implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return Collections.singletonList(
+                new SimpleGrantedAuthority(user.getRole().toString()));
     }
 
     @Override
@@ -31,21 +29,21 @@ public class UserDetails implements org.springframework.security.core.userdetail
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return user.isNonExpired();
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return user.isNonLocked();
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return user.isNonCredentialsExpired();
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return user.isEnabled();
     }
 }

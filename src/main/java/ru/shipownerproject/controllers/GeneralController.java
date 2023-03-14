@@ -6,9 +6,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
-public class AuthorizationController {
+@RequestMapping("/hello")
+public class GeneralController {
 
-
+    @GetMapping
+    public String hello(){
+        return "Hello, This is project for communication between shipowners";
+    }
 
 }

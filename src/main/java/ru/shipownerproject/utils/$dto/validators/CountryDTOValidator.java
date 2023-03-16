@@ -19,7 +19,7 @@ public class CountryDTOValidator implements Validator {
     public void validate(Object target, Errors errors) {
         CountryDTO country = (CountryDTO) target;
 
-        if(country.getName() == null || country.getName().isEmpty()){
+        if (country.getName() == null || country.getName().isEmpty()) {
             errors.rejectValue("name", HttpStatus.BAD_REQUEST.toString(), "Country cannot to be without name");
         }
     }

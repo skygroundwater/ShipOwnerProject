@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class VesselDTO extends DTO{
+public class VesselDTO extends DTO {
 
     private CountryDTO country;
 
@@ -30,24 +30,24 @@ public class VesselDTO extends DTO{
 
     private LocalDate buildingDate;
 
-    public static Vessel convertToVessel(VesselDTO vesselDTO, ModelMapper modelMapper){
+    public static Vessel convertToVessel(VesselDTO vesselDTO, ModelMapper modelMapper) {
         return new Vessel(vesselDTO.getName(), vesselDTO.getIMO(),
                 ShipOwnerDTO.convertToShipowner(vesselDTO.getShipOwner(), modelMapper),
                 VesselType.getVesselType(vesselDTO.getType()),
                 CountryDTO.convertToCountry(vesselDTO.getCountry(), modelMapper),
-                PortDTO.convertToPort(vesselDTO.getPort(), modelMapper),
+                PortDTO.convertToPort2(vesselDTO.getPort(), modelMapper),
                 vesselDTO.getBuildingDate());
     }
 
-    public static VesselDTO convertToVesselDTO(Vessel vessel, ModelMapper modelMapper){
+    public static VesselDTO convertToVesselDTO(Vessel vessel, ModelMapper modelMapper) {
         return new VesselDTO(CountryDTO.convertToCountryDTO(vessel.getCountry(), modelMapper),
                 ShipOwnerDTO.convertToShipOwnerDTO(vessel.getShipOwner(), modelMapper),
                 vessel.getName(), vessel.getIMO(), vessel.getVesselType().getType(),
-                PortDTO.convertToPortDTO(vessel.getPort(), modelMapper) ,vessel.getDateOfBuild());
+                PortDTO.convertToPortDTO(vessel.getPort(), modelMapper), vessel.getDateOfBuild());
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return " Vessel";
     }
 }

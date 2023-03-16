@@ -11,20 +11,20 @@ import ru.shipownerproject.models.countries.Country;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CountryDTO extends DTO{
+public class CountryDTO extends DTO {
 
     private String name;
 
-    public static Country convertToCountry(CountryDTO countryDTO, ModelMapper modelMapper){
+    public static Country convertToCountry(CountryDTO countryDTO, ModelMapper modelMapper) {
         return modelMapper.map(countryDTO, Country.class);
     }
 
-    public static CountryDTO convertToCountryDTO(Country country, ModelMapper modelMapper){
+    public static CountryDTO convertToCountryDTO(Country country, ModelMapper modelMapper) {
         return modelMapper.map(country, CountryDTO.class);
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Country ";
     }
 

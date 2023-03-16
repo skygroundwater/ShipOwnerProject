@@ -13,7 +13,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class SeamanDTO extends DTO{
+public class SeamanDTO extends DTO {
 
     private CountryDTO citizenship;
 
@@ -29,10 +29,11 @@ public class SeamanDTO extends DTO{
 
     private String passport;
 
-    public static Seaman convertToSeaman(SeamanDTO seamanDTO, ModelMapper modelMapper){
+    public static Seaman convertToSeaman(SeamanDTO seamanDTO, ModelMapper modelMapper) {
         return modelMapper.map(seamanDTO, Seaman.class);
     }
-    public static SeamanDTO convertToSeamanDTO(Seaman seaman, ModelMapper modelMapper){
+
+    public static SeamanDTO convertToSeamanDTO(Seaman seaman, ModelMapper modelMapper) {
         return new SeamanDTO(CountryDTO.convertToCountryDTO(seaman.getCitizenship(), modelMapper),
                 VesselDTO.convertToVesselDTO(seaman.getVessel(), modelMapper),
                 seaman.getFullName(), seaman.getPosition(), seaman.getBirth(), seaman.getBirthPlace(),
@@ -40,7 +41,7 @@ public class SeamanDTO extends DTO{
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return " Seaman";
     }
 }

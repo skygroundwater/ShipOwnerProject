@@ -29,10 +29,6 @@ public class CountriesServiceImpl implements CountriesService {
         return countriesRepository.findAll();
     }
 
-    private Country findById(Integer id) {
-        return countriesRepository.findById(id).orElseThrow(() -> new NotFoundInBaseException(NC));
-    }
-
     private void checkCountryByName(Country country) {
         if (countriesRepository.findByName(country.getName()).stream().findAny().isPresent())
             throw new AlreadyAddedToBaseException(SAME_COUNTRY);
@@ -56,23 +52,21 @@ public class CountriesServiceImpl implements CountriesService {
     }
 
     @Override
-    public Country oneCountry(Integer id) {
-        return findById(id);
+    public List<ShipOwner> countryShipOwners(String name) {
+        return (List<ShipOwner>) whatIfEmpty(findCountryByName(name).getShipOwners(),
+                "that country's ship owners");
     }
 
     @Override
-    public List<ShipOwner> countryShipOwners(Integer id) {
-        return (List<ShipOwner>) whatIfEmpty(findById(id).getShipOwners(), "that country's ship owners");
+    public List<Vessel> countryVessels(String name) {
+        return (List<Vessel>) whatIfEmpty(findCountryByName(name).getVessels(),
+                "that country's vessels");
     }
 
     @Override
-    public List<Vessel> countryVessels(Integer id) {
-        return (List<Vessel>) whatIfEmpty(findById(id).getVessels(), "that country's vessels");    }
-
-    @Override
-    public void refactorCountryName(Integer id, Country newCountry) {
+    public void refactorCountryName(String name, Country newCountry) {
         checkCountryByName(newCountry);
-        countriesRepository.save(Stream.of(findById(id)).peek(
+        countriesRepository.save(Stream.of(findCountryByName(name)).peek(
                 country -> country.setName(newCountry.getName())).findAny().get());
     }
 }

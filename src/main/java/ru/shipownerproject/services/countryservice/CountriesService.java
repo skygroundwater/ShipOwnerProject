@@ -14,11 +14,9 @@ public interface CountriesService {
 
     Country newCountry(Country country);
 
-    Country oneCountry(Integer id);
+    List<ShipOwner> countryShipOwners(String name);
 
-    List<ShipOwner> countryShipOwners(Integer id);
+    List<Vessel> countryVessels(String name);
 
-    List<Vessel> countryVessels(Integer id);
-
-    void refactorCountryName(Integer id, Country country);
+    void refactorCountryName(String name, Country country);
 }

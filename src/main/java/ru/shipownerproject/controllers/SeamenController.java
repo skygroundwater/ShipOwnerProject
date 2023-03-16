@@ -31,9 +31,9 @@ public class SeamenController {
     }
 
     @PostMapping
-    public ResponseEntity<HttpStatus> addNewSeamanToBase(@RequestBody SeamanDTO seamanDTO, BindingResult bindingResult,
-                                                         StringBuilder stringBuilder) {
-        notCreatedException(bindingResult, seamanDTOValidator, stringBuilder, seamanDTO);
+    public ResponseEntity<HttpStatus> addNewSeamanToBase(@RequestBody SeamanDTO seamanDTO,
+                                                         BindingResult bindingResult) {
+        notCreatedException(bindingResult, seamanDTOValidator,  seamanDTO);
         seamenService.addNewSeamanToBase(SeamanDTO.convertToSeaman(seamanDTO, modelMapper));
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -51,9 +51,10 @@ public class SeamenController {
     }
 
     @PutMapping("/refactor/{id}")
-    public ResponseEntity<HttpStatus> refactorSeamanInBase(@PathVariable Long id, @RequestBody SeamanDTO seamanDTO,
-                                                           BindingResult bindingResult, StringBuilder stringBuilder) {
-        notRefactoredException(bindingResult, seamanDTOValidator, stringBuilder, seamanDTO);
+    public ResponseEntity<HttpStatus> refactorSeamanInBase(@PathVariable Long id,
+                                                           @RequestBody SeamanDTO seamanDTO,
+                                                           BindingResult bindingResult) {
+        notRefactoredException(bindingResult, seamanDTOValidator, seamanDTO);
         seamenService.refactorSeamanInBase(id, SeamanDTO.convertToSeaman(seamanDTO, modelMapper));
         return ResponseEntity.ok(HttpStatus.OK);
     }

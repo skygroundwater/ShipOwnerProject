@@ -8,7 +8,7 @@ import ru.shipownerproject.models.countries.ports.Port;
 import java.util.List;
 
 @Repository
-public interface PortsRepository extends JpaRepository<Port, Integer> {
+public interface PortsRepository extends JpaRepository<Port, String> {
 
     List<Port> findByName(String name);
 

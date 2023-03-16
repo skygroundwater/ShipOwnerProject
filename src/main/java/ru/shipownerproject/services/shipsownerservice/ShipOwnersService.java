@@ -8,18 +8,15 @@ import java.util.List;
 
 public interface ShipOwnersService {
 
-
     ShipOwner findShipOwnerByName(String name);
 
-    ShipOwner shipOwner(Long id);
+    List<Vessel> shipOwnerVessels(String name);
 
-    List<Vessel> shipOwnerVessels(Long id);
-
-    List<Seaman> shipOwnerSeamen(Long id);
+    List<Seaman> shipOwnerSeamen(String name);
 
     void addNewShipOwner(ShipOwner shipOwner);
 
-    void refactorShipOwner(Long id, ShipOwner shipOwner);
+    void refactorShipOwner(String name, ShipOwner shipOwner);
 
-    void removeFromBaseShipOwner(Long id);
+    void removeFromBaseShipOwner(String name);
 }

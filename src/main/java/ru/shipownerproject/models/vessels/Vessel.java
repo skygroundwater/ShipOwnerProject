@@ -2,12 +2,12 @@ package ru.shipownerproject.models.vessels;
 
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.validator.constraints.Length;
 import ru.shipownerproject.models.countries.Country;
 import ru.shipownerproject.models.countries.ports.Port;
 import ru.shipownerproject.models.seaman.Seaman;
@@ -19,23 +19,25 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "vessel")
+@Table(name = "vessels")
 @Getter
 @Setter
 @Valid
 public class Vessel implements Serializable {
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "IMO")
+    @NotNull
+    @Min(1111111)
+    @Max(9999999)
+    private Integer IMO;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "country", referencedColumnName = "id")
+    @JoinColumn(name = "country", referencedColumnName = "name")
     private Country country;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shipowner", referencedColumnName = "id")
+    @JoinColumn(name = "shipowner", referencedColumnName = "name")
     private ShipOwner shipOwner;
 
     @OneToMany(mappedBy = "vessel", cascade = CascadeType.ALL)
@@ -44,11 +46,6 @@ public class Vessel implements Serializable {
     @Column(name = "name")
     @NotEmpty(message = "Vessel cannot to be without name")
     private String name;
-
-    @Column(name = "IMO")
-    @NotNull
-    @Length(min = 7, max = 7, message = "IMO Number should have 7 numbers and to be unique for every vessel")
-    private Integer IMO;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type")
@@ -74,7 +71,7 @@ public class Vessel implements Serializable {
     public Vessel() {
     }
 
-    public Vessel(Integer IMO, String name){
+    public Vessel(Integer IMO, String name) {
         this.IMO = IMO;
         this.name = name;
     }

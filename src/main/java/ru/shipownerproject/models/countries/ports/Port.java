@@ -20,10 +20,7 @@ import java.util.List;
 public class Port {
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
+    @NotEmpty(message = "Port cannot to be without name")
     @Column(name = "name")
     private String name;
 
@@ -32,7 +29,7 @@ public class Port {
     private String nav_description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "country_id")
+    @JoinColumn(name = "country")
     private Country country;
 
     @OneToMany(mappedBy = "port", cascade = CascadeType.ALL)

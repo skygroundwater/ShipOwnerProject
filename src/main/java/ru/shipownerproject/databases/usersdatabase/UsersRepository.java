@@ -5,8 +5,9 @@ import org.springframework.stereotype.Repository;
 import ru.shipownerproject.models.user.User;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface UsersRepository extends JpaRepository<User, Long> {
-    List<User> findByUsername(String username);
+public interface UsersRepository extends JpaRepository<User, String> {
+    Optional<User> findByUsername(String username);
 }

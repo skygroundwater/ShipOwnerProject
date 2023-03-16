@@ -1,22 +1,17 @@
 package ru.shipownerproject.controllers;
 
-import org.hibernate.mapping.Collection;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.shipownerproject.models.countries.Country;
+import ru.shipownerproject.services.countryservice.CountriesService;
 import ru.shipownerproject.utils.$dto.CountryDTO;
 import ru.shipownerproject.utils.$dto.ShipOwnerDTO;
 import ru.shipownerproject.utils.$dto.VesselDTO;
 import ru.shipownerproject.utils.$dto.validators.CountryDTOValidator;
-import ru.shipownerproject.services.countryservice.CountriesService;
 import ru.shipownerproject.utils.exceptions.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.shipownerproject.utils.exceptions.ErrorResponse.notCreatedException;
@@ -41,7 +36,7 @@ public class CountriesController {
 
     @PostMapping
     public ResponseEntity<HttpStatus> addNewCountry(@RequestBody CountryDTO countryDTO, BindingResult bindingResult) {
-        notCreatedException(bindingResult, countryDTOValidator, new StringBuilder(), countryDTO);
+        notCreatedException(bindingResult, countryDTOValidator, countryDTO);
         countriesService.newCountry(CountryDTO.convertToCountry(countryDTO, modelMapper));
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -53,32 +48,32 @@ public class CountriesController {
                 .collect(Collectors.toList()));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> returnCountry(@PathVariable Integer id) {
+    @GetMapping("/{name}")
+    public ResponseEntity<Object> returnCountry(@PathVariable String name) {
         return ResponseEntity.ok(CountryDTO.convertToCountryDTO(
-                countriesService.oneCountry(id), modelMapper));
+                countriesService.findCountryByName(name), modelMapper));
     }
 
-    @GetMapping("/shipowners/{id}")
-    public ResponseEntity<Object> returnCountryShipOwners(@PathVariable Integer id) {
-        return ResponseEntity.ok(countriesService.countryShipOwners(id).stream()
+    @GetMapping("/shipowners/{name}")
+    public ResponseEntity<Object> returnCountryShipOwners(@PathVariable String name) {
+        return ResponseEntity.ok(countriesService.countryShipOwners(name).stream()
                 .map(shipOwner -> ShipOwnerDTO.convertToShipOwnerDTO(shipOwner, modelMapper))
                 .collect(Collectors.toList()));
     }
 
-    @GetMapping("/vessels/{id}")
-    public ResponseEntity<Object> returnCountryVessels(@PathVariable Integer id) {
-        return ResponseEntity.ok(countriesService.countryVessels(id).stream()
+    @GetMapping("/vessels/{name}")
+    public ResponseEntity<Object> returnCountryVessels(@PathVariable String name) {
+        return ResponseEntity.ok(countriesService.countryVessels(name).stream()
                 .map(vessel -> VesselDTO.convertToVesselDTO(vessel, modelMapper))
                 .collect(Collectors.toList()));
     }
 
-    @PutMapping("/refactor/{id}")
-    public ResponseEntity<HttpStatus> refactorCountryName(@PathVariable Integer id,
-                                                          @RequestBody CountryDTO countryDTO, BindingResult bindingResult,
-                                                          StringBuilder stringBuilder) {
-        notRefactoredException(bindingResult, countryDTOValidator, stringBuilder, countryDTO);
-        countriesService.refactorCountryName(id, CountryDTO.convertToCountry(countryDTO, modelMapper));
+    @PutMapping("/refactor/{name}")
+    public ResponseEntity<HttpStatus> refactorCountryName(@PathVariable String name,
+                                                          @RequestBody CountryDTO countryDTO,
+                                                          BindingResult bindingResult) {
+        notRefactoredException(bindingResult, countryDTOValidator, countryDTO);
+        countriesService.refactorCountryName(name, CountryDTO.convertToCountry(countryDTO, modelMapper));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

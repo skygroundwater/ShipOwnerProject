@@ -12,21 +12,19 @@ public interface VesselsService {
 
     Vessel findVesselByIMO(Integer IMO);
 
-    Vessel vessel(Long id);
-
     void addNewVessel(Vessel vessel);
 
-    void removeVesselFromBase(Long id);
+    void removeVesselFromBase(Integer IMO);
 
-    List<Seaman> getInfoAboutCrew(Long id);
+    List<Seaman> getInfoAboutCrew(Integer IMO);
 
-    Port getPortOfRegistration(Long id);
+    Port getPortOfRegistration(Integer IMO);
 
-    ShipOwner getVesselShipOwner(Long id);
+    ShipOwner getVesselShipOwner(Integer IMO);
 
-    Country getCountryOfRegistration(Long id);
+    Country getCountryOfRegistration(Integer IMO);
 
-    void refactorVesselInBase(Long id, Vessel vessel);
+    void refactorVesselInBase(Integer IMO, Vessel vessel);
 
     List<Vessel> allVesselsByType(String type);
 }

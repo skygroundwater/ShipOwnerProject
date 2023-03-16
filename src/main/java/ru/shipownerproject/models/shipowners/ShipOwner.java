@@ -12,22 +12,22 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Table(name = "shipowner")
+@Table(name = "shipowners")
 @Getter
 @Setter
 public class ShipOwner implements Serializable {
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(name = "name")
     @NotEmpty(message = "The name of shipowner is required to fill")
     private String name;
 
+    @Column(name = "description")
+    @NotEmpty(message = "The description of shipowner is required to fill")
+    private String description;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "country", referencedColumnName = "id")
+    @JoinColumn(name = "country", referencedColumnName = "name")
     private Country country;
 
     @OneToMany(mappedBy = "shipOwner", cascade = CascadeType.ALL)
@@ -35,10 +35,6 @@ public class ShipOwner implements Serializable {
 
     @OneToMany(mappedBy = "shipowner", cascade = CascadeType.ALL)
     private List<Seaman> seamen;
-
-    @Column(name = "description")
-    @NotEmpty(message = "The description of shipowner is required to fill")
-    private String description;
 
     @Override
     public String toString() {

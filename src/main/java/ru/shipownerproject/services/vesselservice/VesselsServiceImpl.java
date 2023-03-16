@@ -44,24 +44,20 @@ public class VesselsServiceImpl implements VesselsService {
 
     public static final String SAME_VESSEL = "Vessel with same IMO number ";
 
-    private Vessel findById(Long id) {
-        return vesselsRepository.findById(id).orElseThrow(() -> new NotFoundInBaseException(NV));
-    }
-
-    private void checkVesselByIMO(Vessel vessel){
-        if(vesselsRepository.findByIMO(vessel.getIMO()).stream().findAny().isPresent())
+    private void checkVesselByIMO(Vessel vessel) {
+        if (vesselsRepository.findByIMO(vessel.getIMO()).stream().findAny().isPresent())
             throw new AlreadyAddedToBaseException(SAME_VESSEL);
     }
 
-    private Country findCountryByName(Vessel vessel){
+    private Country findCountryByName(Vessel vessel) {
         return countriesService.findCountryByName(vessel.getCountry().getName());
     }
 
-    private ShipOwner findShipOwnerByName(Vessel vessel){
+    private ShipOwner findShipOwnerByName(Vessel vessel) {
         return shipOwnersService.findShipOwnerByName(vessel.getShipOwner().getName());
     }
 
-    private Port findPortByName(Vessel vessel){
+    private Port findPortByName(Vessel vessel) {
         return portsService.findPortByName(vessel.getPort().getName());
     }
 
@@ -72,14 +68,9 @@ public class VesselsServiceImpl implements VesselsService {
     }
 
     @Override
-    public Vessel findVesselByIMO(Integer IMO){
+    public Vessel findVesselByIMO(Integer IMO) {
         return vesselsRepository.findByIMO(IMO).stream().findAny()
                 .orElseThrow(() -> new NotFoundInBaseException(NV));
-    }
-
-    @Override
-    public Vessel vessel(Long id) {
-        return findById(id);
     }
 
     @Override
@@ -88,37 +79,38 @@ public class VesselsServiceImpl implements VesselsService {
         vesselsRepository.save(new Vessel(vessel.getName(),
                 vessel.getIMO(), findShipOwnerByName(vessel),
                 findTypeByName(vessel), findCountryByName(vessel),
-                findPortByName(vessel),  vessel.getDateOfBuild()));
+                findPortByName(vessel), vessel.getDateOfBuild()));
     }
 
     @Override
-    public void removeVesselFromBase(Long id) {
-        vesselsRepository.delete(findById(id));
+    public void removeVesselFromBase(Integer IMO) {
+        vesselsRepository.delete(findVesselByIMO(IMO));
     }
 
     @Override
-    public List<Seaman> getInfoAboutCrew(Long id) {
-        return (List<Seaman>) whatIfEmpty(findById(id).getSeamen(), "that vessel's crew");
+    public List<Seaman> getInfoAboutCrew(Integer IMO) {
+        return (List<Seaman>) whatIfEmpty(findVesselByIMO(IMO).getSeamen(),
+                "that vessel's crew");
     }
 
     @Override
-    public Port getPortOfRegistration(Long id){
-        return findById(id).getPort();
+    public Port getPortOfRegistration(Integer IMO) {
+        return findVesselByIMO(IMO).getPort();
     }
 
     @Override
-    public ShipOwner getVesselShipOwner(Long id){
-        return findById(id).getShipOwner();
+    public ShipOwner getVesselShipOwner(Integer IMO) {
+        return findVesselByIMO(IMO).getShipOwner();
     }
 
     @Override
-    public Country getCountryOfRegistration(Long id){
-        return findById(id).getCountry();
+    public Country getCountryOfRegistration(Integer IMO) {
+        return findVesselByIMO(IMO).getCountry();
     }
 
     @Override
-    public void refactorVesselInBase(Long id, Vessel vessel) {
-        vesselsRepository.save(Stream.of(findById(id)).peek(v -> {
+    public void refactorVesselInBase(Integer IMO, Vessel vessel) {
+        vesselsRepository.save(Stream.of(findVesselByIMO(IMO)).peek(v -> {
             v.setName(vessel.getName());
             v.setCountry(findCountryByName(vessel));
             v.setShipOwner(findShipOwnerByName(vessel));

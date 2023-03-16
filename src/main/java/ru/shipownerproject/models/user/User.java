@@ -3,24 +3,16 @@ package ru.shipownerproject.models.user;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 @Table(name ="users")
 public class User {
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long user_id;
-
     @NotEmpty(message = "Username should be filled")
     @Column(name = "username")
     private String username;
@@ -44,6 +36,21 @@ public class User {
 
     @Column(name = "is_enabled")
     private boolean isEnabled;
+
+    public User(){}
+
+    public User(String username, String password, Role role){
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
+    public void setAllBooleansFieldsToTrue(){
+        this.setEnabled(true);
+        this.setNonLocked(true);
+        this.setNonCredentialsExpired(true);
+        this.setNonExpired(true);
+    }
 
     @Override
     public String toString(){

@@ -8,9 +8,7 @@ import org.springframework.stereotype.Service;
 import ru.shipownerproject.databases.usersdatabase.UsersRepository;
 import ru.shipownerproject.models.user.User;
 import ru.shipownerproject.security.UserWrapper;
-
-import java.util.ArrayList;
-import java.util.List;
+import ru.shipownerproject.utils.exceptions.NotFoundInBaseException;
 
 @Service
 public class UsersServiceImpl implements UserDetailsService {
@@ -24,15 +22,9 @@ public class UsersServiceImpl implements UserDetailsService {
         this.usersRepository = usersRepository;
     }
 
-    private User checkByUsername(String username) {
-        return usersRepository.findByUsername(username).stream().findAny()
-                .orElseThrow(() -> new UsernameNotFoundException(NU));
-    }
-
-    public List<UserWrapper> allUsersFromDB() {
-        List<UserWrapper> userWrappers = new ArrayList<>();
-        usersRepository.findAll().forEach(user -> userWrappers.add(new UserWrapper(user)));
-        return userWrappers;
+    public User checkByUsername(String username) {
+        return usersRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundInBaseException(NU));
     }
 
     @Override

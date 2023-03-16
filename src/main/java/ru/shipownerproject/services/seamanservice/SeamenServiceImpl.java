@@ -34,7 +34,7 @@ public class SeamenServiceImpl implements SeamenService {
         return vesselsService.findVesselByIMO(seaman.getVessel().getIMO());
     }
 
-    private Country findCountryByName(Seaman seaman){
+    private Country findCountryByName(Seaman seaman) {
         return countriesService.findCountryByName(seaman.getCitizenship().getName());
     }
 

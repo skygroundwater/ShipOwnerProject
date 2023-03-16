@@ -5,10 +5,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.Validator;
 import ru.shipownerproject.utils.$dto.DTO;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,30 +21,28 @@ public class ErrorResponse {
     private String message;
     private long timestamp;
 
-    public static void notCreatedException(BindingResult bindingResult, Validator validator,
-                                           StringBuilder stringBuilder, DTO dto) {
+    public static void notCreatedException(BindingResult bindingResult, Validator validator, DTO dto) {
         validator.validate(dto, bindingResult);
         if (bindingResult.hasErrors()) {
-            bindingResult.getFieldErrors().forEach(error -> stringBuilder.append(error.getField())
-                    .append(" : ").append(error.getDefaultMessage()).append(";  "));
-            throw new NotCreatedException(stringBuilder.append(".")
-                    .append("Intermediate object for ").append(dto).toString());
+            throw new NotCreatedException(
+                    bindingResult.getFieldErrors().stream()
+                            .map(FieldError::getDefaultMessage)
+                            .collect(Collectors.joining("; ")));
         }
     }
 
-    public static void notRefactoredException(BindingResult bindingResult, Validator validator,
-                                              StringBuilder stringBuilder, DTO dto) {
+    public static void notRefactoredException(BindingResult bindingResult, Validator validator, DTO dto) {
         validator.validate(dto, bindingResult);
         if (bindingResult.hasErrors()) {
-            bindingResult.getFieldErrors().forEach(error -> stringBuilder.append(error.getField())
-                    .append(" : ").append(error.getDefaultMessage()).append(";  "));
-            throw new NotRefactoredException(stringBuilder.append(".")
-                    .append("Intermediate object for ").append(dto).toString());
+            throw new NotRefactoredException(
+                    bindingResult.getFieldErrors().stream()
+                            .map(FieldError::getDefaultMessage)
+                            .collect(Collectors.joining("; ")));
         }
     }
 
-    public static List<?> whatIfEmpty(List<?> objects, String desc){
-        if(objects == null || objects.isEmpty()) throw new ListIsEmptyException(desc);
+    public static List<?> whatIfEmpty(List<?> objects, String desc) {
+        if (objects == null || objects.isEmpty()) throw new ListIsEmptyException(desc);
         else return objects;
     }
 }

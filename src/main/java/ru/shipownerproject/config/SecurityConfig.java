@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.PasswordManagementConfigurer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -16,7 +19,6 @@ import ru.shipownerproject.services.usersservice.UsersServiceImpl;
 @EnableWebSecurity
 public class SecurityConfig {
 
-
     private final UsersServiceImpl usersService;
 
     @Autowired
@@ -24,9 +26,31 @@ public class SecurityConfig {
         this.usersService = usersService;
     }
 
+    private static final String DRT = "/director";
+
+    private static final String CNT = "/countries";
+
+    private static final String SWR = "/shipowners";
+
+    private static final String SMN = "/seamen";
+
+    private static final String VSL = "/vessels";
+
+    private static final String PRT = "/ports";
+
+    private static final String IMO = "/{IMO}";
+
+    private static final String name = "/{name}";
+
+    private static final String dlt = "/delete";
+
+    private static final String rfc = "/refactor";
+
+    private static final String id = "/{id}";
+
     @Bean
-    public PasswordEncoder getPasswordEncoder(){
-        return NoOpPasswordEncoder.getInstance();
+    public PasswordEncoder getPasswordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -35,10 +59,43 @@ public class SecurityConfig {
                 .userDetailsService(usersService)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> {
-                    //countries
-                    auth.requestMatchers("/countries/all", "/countries/{id}").hasAnyRole("USER", "ADMIN");
-                    auth.requestMatchers("/countries").hasRole("ADMIN");
-                    auth.anyRequest().hasAnyRole("USER", "ADMIN");
+
+                    //director
+                    auth.requestMatchers(
+                            DRT + "/user",
+                            DRT + "/admin",
+                            DRT + DRT,
+                            DRT + dlt + "/{username}").hasRole("DIRECTOR");
+
+                    //admin, director
+                    auth.requestMatchers(
+                            //countries
+                            CNT,
+                            CNT + rfc + name,
+
+                            //shipowners
+                            SWR,
+                            SWR + dlt + name,
+                            SWR + rfc + name,
+
+                            //ports
+                            PRT,
+                            PRT + dlt + name,
+                            PRT + rfc + name,
+
+                            //seamen
+                            SMN,
+                            SMN + dlt + id,
+                            SMN + rfc + id,
+
+                            //vessels
+                            VSL,
+                            VSL + rfc + IMO,
+                            VSL + dlt + IMO
+                    ).hasAnyRole("ADMIN", "DIRECTOR");
+
+                    //user, admin, director
+                    auth.anyRequest().hasAnyRole("USER", "ADMIN", "DIRECTOR");
                 })
                 .httpBasic(Customizer.withDefaults())
                 .build();

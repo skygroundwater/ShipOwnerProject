@@ -6,54 +6,56 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.shipownerproject.services.countryservice.portservice.PortsService;
-import ru.shipownerproject.utils.$dto.PortDTO;
-import ru.shipownerproject.utils.$dto.validators.PortDTOValidator;
+import ru.shipownerproject.services.usersservice.DirectorService;
+import ru.shipownerproject.services.usersservice.DirectorServiceImpl;
+import ru.shipownerproject.utils.$dto.UserDTO;
+import ru.shipownerproject.utils.$dto.validators.UserDTOValidator;
 import ru.shipownerproject.utils.exceptions.*;
 
 import static ru.shipownerproject.utils.exceptions.ErrorResponse.notCreatedException;
-import static ru.shipownerproject.utils.exceptions.ErrorResponse.notRefactoredException;
 
 @RestController
-@RequestMapping("/ports")
-public class PortsController {
-
-    private final PortsService portsService;
+@RequestMapping("/director")
+public class ControllerForDirector {
 
     private final ModelMapper modelMapper;
 
-    private final PortDTOValidator portDTOValidator;
+    private final DirectorService directorService;
 
+    private final UserDTOValidator userDTOValidator;
 
-    public PortsController(PortsService portsService, ModelMapper modelMapper, PortDTOValidator portDTOValidator) {
-        this.portsService = portsService;
+    public ControllerForDirector(ModelMapper modelMapper,
+                                 DirectorService directorService,
+                                 UserDTOValidator userDTOValidator) {
         this.modelMapper = modelMapper;
-        this.portDTOValidator = portDTOValidator;
+        this.directorService = directorService;
+        this.userDTOValidator = userDTOValidator;
     }
 
-    @PostMapping
-    public ResponseEntity<HttpStatus> addNewPort(@RequestBody PortDTO portDTO, BindingResult bindingResult) {
-        notCreatedException(bindingResult, portDTOValidator, portDTO);
-        portsService.addNewPort(PortDTO.convertToPort(portDTO, modelMapper));
+    @PostMapping("/admin")
+    public ResponseEntity<HttpStatus> addNewAdminToDB(@RequestBody UserDTO userDTO, BindingResult bindingResult){
+        notCreatedException(bindingResult, userDTOValidator, userDTO);
+        directorService.registerNewAdmin(UserDTO.convertToUser(userDTO, modelMapper));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @GetMapping("/{name}")
-    public ResponseEntity<PortDTO> getPortFromDB(@PathVariable String name) {
-        return ResponseEntity.ok(PortDTO.convertToPortDTO(portsService.findPortByName(name), modelMapper));
-    }
-
-    @PutMapping("/refactor/{name}")
-    public ResponseEntity<HttpStatus> refactorPort(@PathVariable String name, @RequestBody PortDTO portDTO,
-                                                   BindingResult bindingResult) {
-        notRefactoredException(bindingResult, portDTOValidator, portDTO);
-        portsService.refactorPort(name, PortDTO.convertToPort(portDTO, modelMapper));
+    @PostMapping("/director")
+    public ResponseEntity<HttpStatus> addNewDirector(@RequestBody UserDTO userDTO, BindingResult bindingResult){
+        notCreatedException(bindingResult, userDTOValidator, userDTO);
+        directorService.registerNewDirector(UserDTO.convertToUser(userDTO, modelMapper));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{name}")
-    public ResponseEntity<HttpStatus> deletePortFromDB(@PathVariable String name) {
-        portsService.deletePortFromDB(name);
+    @PostMapping("/user")
+    public ResponseEntity<HttpStatus> addNewUser(@RequestBody UserDTO userDTO, BindingResult bindingResult){
+        notCreatedException(bindingResult, userDTOValidator, userDTO);
+        directorService.registerNewUser(UserDTO.convertToUser(userDTO, modelMapper));
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/{username}")
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable String username){
+        directorService.deleteUser(username);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -81,4 +83,5 @@ public class PortsController {
     private ResponseEntity<ErrorResponse> handlerException(NotRefactoredException e) {
         return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
     }
+
 }

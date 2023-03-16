@@ -8,7 +8,7 @@ import ru.shipownerproject.models.shipowners.ShipOwner;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShipOwnerDTO extends DTO{
+public class ShipOwnerDTO extends DTO {
 
     private CountryDTO country;
 
@@ -16,21 +16,21 @@ public class ShipOwnerDTO extends DTO{
 
     private String description;
 
-    public ShipOwnerDTO(String name){
+    public ShipOwnerDTO(String name) {
         this.name = name;
     }
 
-    public static ShipOwner convertToShipowner(ShipOwnerDTO shipOwnerDTO, ModelMapper modelMapper){
+    public static ShipOwner convertToShipowner(ShipOwnerDTO shipOwnerDTO, ModelMapper modelMapper) {
         return modelMapper.map(shipOwnerDTO, ShipOwner.class);
     }
 
-    public static ShipOwnerDTO convertToShipOwnerDTO(ShipOwner shipOwner, ModelMapper modelMapper){
+    public static ShipOwnerDTO convertToShipOwnerDTO(ShipOwner shipOwner, ModelMapper modelMapper) {
         return new ShipOwnerDTO(CountryDTO.convertToCountryDTO(shipOwner.getCountry(), modelMapper),
                 shipOwner.getName(), shipOwner.getDescription());
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return " Ship Owner";
     }
 

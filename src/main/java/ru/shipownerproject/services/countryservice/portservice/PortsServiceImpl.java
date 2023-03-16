@@ -31,10 +31,6 @@ public class PortsServiceImpl implements PortsService {
                 .isPresent()) throw new AlreadyAddedToBaseException(SAME_PORT);
     }
 
-    private Port findById(Integer id) {
-        return portsRepository.findById(id).orElseThrow(() -> new NotFoundInBaseException(NP));
-    }
-
     private Country findCountryByName(Port port) {
         return countriesService.findCountryByName(port.getCountry().getName());
     }
@@ -53,14 +49,9 @@ public class PortsServiceImpl implements PortsService {
     }
 
     @Override
-    public Port getPortFromDB(Integer id) {
-        return findById(id);
-    }
-
-    @Override
-    public Port refactorPort(Integer id, Port port) {
+    public Port refactorPort(String name, Port port) {
         return portsRepository.save(
-                Stream.of(findById(id)).peek(p -> {
+                Stream.of(findPortByName(name)).peek(p -> {
                     p.setNav_description(port.getNav_description());
                     p.setName(port.getName());
                 }).findAny().get()
@@ -68,7 +59,7 @@ public class PortsServiceImpl implements PortsService {
     }
 
     @Override
-    public void deletePortFromDB(Integer id) {
-        portsRepository.delete(findById(id));
+    public void deletePortFromDB(String name) {
+        portsRepository.delete(findPortByName(name));
     }
 }

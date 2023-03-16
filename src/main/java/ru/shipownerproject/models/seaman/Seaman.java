@@ -28,15 +28,15 @@ public class Seaman implements Serializable {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shipowner", referencedColumnName = "id")
+    @JoinColumn(name = "shipowner", referencedColumnName = "name")
     private ShipOwner shipowner;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "citizenship", referencedColumnName = "id")
+    @JoinColumn(name = "citizenship", referencedColumnName = "name")
     private Country citizenship;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vessel", referencedColumnName = "id")
+    @JoinColumn(name = "vessel", referencedColumnName = "IMO")
     private Vessel vessel;
 
     @Column(name = "fullname")

@@ -35,43 +35,46 @@ public class ShipOwnersController {
     }
 
     @PostMapping
-    public ResponseEntity<HttpStatus> addNewShipOwner(@RequestBody ShipOwnerDTO shipOwnerDTO, BindingResult bindingResult,
-                                                      StringBuilder stringBuilder) {
-        notCreatedException(bindingResult, shipOwnerDTOValidator, stringBuilder, shipOwnerDTO);
+    public ResponseEntity<HttpStatus> addNewShipOwner(@RequestBody ShipOwnerDTO shipOwnerDTO,
+                                                      BindingResult bindingResult) {
+        notCreatedException(bindingResult, shipOwnerDTOValidator,  shipOwnerDTO);
         shipOwnersService.addNewShipOwner(ShipOwnerDTO.convertToShipowner(shipOwnerDTO, modelMapper));
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ShipOwnerDTO> shipOwner(@PathVariable Long id) {
-        return ResponseEntity.ok(ShipOwnerDTO.convertToShipOwnerDTO(shipOwnersService.shipOwner(id), modelMapper));
+    @GetMapping("/{name}")
+    public ResponseEntity<ShipOwnerDTO> shipOwner(@PathVariable String name) {
+        return ResponseEntity.ok(
+                ShipOwnerDTO.convertToShipOwnerDTO(
+                        shipOwnersService.findShipOwnerByName(name), modelMapper));
     }
 
-    @GetMapping("/vessels/{id}")
-    public ResponseEntity<List<VesselDTO>> shipOwnerVessels(@PathVariable Long id) {
-        return ResponseEntity.ok(shipOwnersService.shipOwnerVessels(id).stream()
+    @GetMapping("/vessels/{name}")
+    public ResponseEntity<List<VesselDTO>> shipOwnerVessels(@PathVariable String name) {
+        return ResponseEntity.ok(shipOwnersService.shipOwnerVessels(name).stream()
                 .map(vessel -> VesselDTO.convertToVesselDTO(vessel, modelMapper))
                 .collect(Collectors.toList()));
     }
 
-    @GetMapping("/seamen/{id}")
-    public ResponseEntity<List<SeamanDTO>> shipOwnerSeamen(@PathVariable Long id){
-        return ResponseEntity.ok(shipOwnersService.shipOwnerSeamen(id).stream()
+    @GetMapping("/seamen/{name}")
+    public ResponseEntity<List<SeamanDTO>> shipOwnerSeamen(@PathVariable String name){
+        return ResponseEntity.ok(shipOwnersService.shipOwnerSeamen(name).stream()
                 .map(seaman -> SeamanDTO.convertToSeamanDTO(seaman, modelMapper))
                 .collect(Collectors.toList()));
     }
 
-    @PutMapping("/refactor/{id}")
-    public ResponseEntity<HttpStatus> refactorShipOwner(@PathVariable Long id, @RequestBody ShipOwnerDTO shipOwnerDTO, BindingResult bindingResult,
-                                                        StringBuilder stringBuilder) {
-        notRefactoredException(bindingResult, shipOwnerDTOValidator, stringBuilder, shipOwnerDTO);
-        shipOwnersService.refactorShipOwner(id, ShipOwnerDTO.convertToShipowner(shipOwnerDTO, modelMapper));
+    @PutMapping("/refactor/{name}")
+    public ResponseEntity<HttpStatus> refactorShipOwner(@PathVariable String name,
+                                                        @RequestBody ShipOwnerDTO shipOwnerDTO,
+                                                        BindingResult bindingResult) {
+        notRefactoredException(bindingResult, shipOwnerDTOValidator, shipOwnerDTO);
+        shipOwnersService.refactorShipOwner(name, ShipOwnerDTO.convertToShipowner(shipOwnerDTO, modelMapper));
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<HttpStatus> deleteShipOwnerFromBase(@PathVariable Long id) {
-        shipOwnersService.removeFromBaseShipOwner(id);
+    @DeleteMapping("/delete/{name}")
+    public ResponseEntity<HttpStatus> deleteShipOwnerFromBase(@PathVariable String name) {
+        shipOwnersService.removeFromBaseShipOwner(name);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

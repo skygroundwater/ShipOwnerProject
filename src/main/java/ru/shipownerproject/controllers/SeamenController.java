@@ -33,29 +33,28 @@ public class SeamenController {
     @PostMapping
     public ResponseEntity<HttpStatus> addNewSeamanToBase(@RequestBody SeamanDTO seamanDTO,
                                                          BindingResult bindingResult) {
-        notCreatedException(bindingResult, seamanDTOValidator,  seamanDTO);
+        notCreatedException(bindingResult, seamanDTOValidator, seamanDTO);
         seamenService.addNewSeamanToBase(SeamanDTO.convertToSeaman(seamanDTO, modelMapper));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> showInfoAboutSeaman(@PathVariable Long id) {
+    @GetMapping("/{passportNumber}")
+    public ResponseEntity<Object> showInfoAboutSeaman(@PathVariable Integer passportNumber) {
         return ResponseEntity.ok(SeamanDTO.convertToSeamanDTO
-                (seamenService.showInfoAboutSeaman(id), modelMapper));
+                (seamenService.showInfoAboutSeaman(passportNumber), modelMapper));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Object> removeSeamanFromBase(@PathVariable Long id){
-        seamenService.removeSeamanFromBase(id);
+    @DeleteMapping("/delete/{passportNumber}")
+    public ResponseEntity<Object> removeSeamanFromBase(@PathVariable Integer passportNumber) {
+        seamenService.removeSeamanFromBase(passportNumber);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @PutMapping("/refactor/{id}")
-    public ResponseEntity<HttpStatus> refactorSeamanInBase(@PathVariable Long id,
-                                                           @RequestBody SeamanDTO seamanDTO,
+    @PutMapping("/refactor")
+    public ResponseEntity<HttpStatus> refactorSeamanInBase(@RequestBody SeamanDTO seamanDTO,
                                                            BindingResult bindingResult) {
         notRefactoredException(bindingResult, seamanDTOValidator, seamanDTO);
-        seamenService.refactorSeamanInBase(id, SeamanDTO.convertToSeaman(seamanDTO, modelMapper));
+        seamenService.refactorSeamanInBase(SeamanDTO.convertToSeaman(seamanDTO, modelMapper));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

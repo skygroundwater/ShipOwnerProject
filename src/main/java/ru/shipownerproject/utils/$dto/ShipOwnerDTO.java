@@ -16,10 +16,6 @@ public class ShipOwnerDTO extends DTO {
 
     private String description;
 
-    public ShipOwnerDTO(String name) {
-        this.name = name;
-    }
-
     public static ShipOwner convertToShipowner(ShipOwnerDTO shipOwnerDTO, ModelMapper modelMapper) {
         return modelMapper.map(shipOwnerDTO, ShipOwner.class);
     }
@@ -33,5 +29,4 @@ public class ShipOwnerDTO extends DTO {
     public String toString() {
         return " Ship Owner";
     }
-
 }

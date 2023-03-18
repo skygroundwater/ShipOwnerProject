@@ -4,12 +4,11 @@ import ru.shipownerproject.models.seaman.Seaman;
 
 public interface SeamenService {
 
-
-    Seaman showInfoAboutSeaman(Long id);
+    Seaman showInfoAboutSeaman(Integer passportNumber);
 
     void addNewSeamanToBase(Seaman seaman);
 
-    void removeSeamanFromBase(Long id);
+    void removeSeamanFromBase(Integer passportNumber);
 
-    void refactorSeamanInBase(Long id, Seaman seaman);
+    void refactorSeamanInBase(Seaman seaman);
 }

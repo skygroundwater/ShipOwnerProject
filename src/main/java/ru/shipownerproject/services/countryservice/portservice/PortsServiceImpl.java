@@ -49,9 +49,10 @@ public class PortsServiceImpl implements PortsService {
     }
 
     @Override
-    public Port refactorPort(String name, Port port) {
+    public Port refactorPort(Port port) {
         return portsRepository.save(
-                Stream.of(findPortByName(name)).peek(p -> {
+                Stream.of(findPortByName(port.getName())).peek(p -> {
+                    p.setCountry(findCountryByName(port));
                     p.setNav_description(port.getNav_description());
                     p.setName(port.getName());
                 }).findAny().get()

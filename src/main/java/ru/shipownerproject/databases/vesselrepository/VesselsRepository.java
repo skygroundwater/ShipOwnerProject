@@ -11,5 +11,4 @@ public interface VesselsRepository extends JpaRepository<Vessel, Integer> {
 
     List<Vessel> findByIMO(Integer IMO);
 
-
 }

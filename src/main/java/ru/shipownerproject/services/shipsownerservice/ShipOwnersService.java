@@ -16,7 +16,7 @@ public interface ShipOwnersService {
 
     void addNewShipOwner(ShipOwner shipOwner);
 
-    void refactorShipOwner(String name, ShipOwner shipOwner);
+    void refactorShipOwner(ShipOwner shipOwner);
 
     void removeFromBaseShipOwner(String name);
 }

@@ -19,18 +19,9 @@ public class PortDTO extends DTO {
 
     private String nav_description;
 
-    public PortDTO(String name) {
-        this.name = name;
-    }
-
     public static Port convertToPort(PortDTO portDTO, ModelMapper modelMapper) {
         return new Port(portDTO.getName(), CountryDTO.convertToCountry(portDTO.getCountry(), modelMapper), portDTO.getNav_description());
     }
-
-    public static Port convertToPort2(PortDTO portDTO, ModelMapper modelMapper) {
-        return new Port(portDTO.getName());
-    }
-
 
     public static PortDTO convertToPortDTO(Port port, ModelMapper modelMapper) {
         return new PortDTO(CountryDTO.convertToCountryDTO(port.getCountry(), modelMapper),
@@ -41,5 +32,4 @@ public class PortDTO extends DTO {
     public String toString() {
         return " Port";
     }
-
 }

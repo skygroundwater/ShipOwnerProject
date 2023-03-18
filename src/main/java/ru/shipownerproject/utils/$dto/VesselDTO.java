@@ -35,7 +35,7 @@ public class VesselDTO extends DTO {
                 ShipOwnerDTO.convertToShipowner(vesselDTO.getShipOwner(), modelMapper),
                 VesselType.getVesselType(vesselDTO.getType()),
                 CountryDTO.convertToCountry(vesselDTO.getCountry(), modelMapper),
-                PortDTO.convertToPort2(vesselDTO.getPort(), modelMapper),
+                PortDTO.convertToPort(vesselDTO.getPort(), modelMapper),
                 vesselDTO.getBuildingDate());
     }
 

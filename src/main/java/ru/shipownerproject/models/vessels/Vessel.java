@@ -2,8 +2,6 @@ package ru.shipownerproject.models.vessels;
 
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -28,8 +26,6 @@ public class Vessel implements Serializable {
     @Id
     @Column(name = "IMO")
     @NotNull
-    @Min(1111111)
-    @Max(9999999)
     private Integer IMO;
 
     @ManyToOne(fetch = FetchType.LAZY)

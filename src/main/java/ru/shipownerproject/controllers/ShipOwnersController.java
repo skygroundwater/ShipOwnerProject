@@ -37,9 +37,9 @@ public class ShipOwnersController {
     @PostMapping
     public ResponseEntity<HttpStatus> addNewShipOwner(@RequestBody ShipOwnerDTO shipOwnerDTO,
                                                       BindingResult bindingResult) {
-        notCreatedException(bindingResult, shipOwnerDTOValidator,  shipOwnerDTO);
+        notCreatedException(bindingResult, shipOwnerDTOValidator, shipOwnerDTO);
         shipOwnersService.addNewShipOwner(ShipOwnerDTO.convertToShipowner(shipOwnerDTO, modelMapper));
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @GetMapping("/{name}")
@@ -57,19 +57,18 @@ public class ShipOwnersController {
     }
 
     @GetMapping("/seamen/{name}")
-    public ResponseEntity<List<SeamanDTO>> shipOwnerSeamen(@PathVariable String name){
+    public ResponseEntity<List<SeamanDTO>> shipOwnerSeamen(@PathVariable String name) {
         return ResponseEntity.ok(shipOwnersService.shipOwnerSeamen(name).stream()
                 .map(seaman -> SeamanDTO.convertToSeamanDTO(seaman, modelMapper))
                 .collect(Collectors.toList()));
     }
 
-    @PutMapping("/refactor/{name}")
-    public ResponseEntity<HttpStatus> refactorShipOwner(@PathVariable String name,
-                                                        @RequestBody ShipOwnerDTO shipOwnerDTO,
+    @PutMapping("/refactor")
+    public ResponseEntity<HttpStatus> refactorShipOwner(@RequestBody ShipOwnerDTO shipOwnerDTO,
                                                         BindingResult bindingResult) {
         notRefactoredException(bindingResult, shipOwnerDTOValidator, shipOwnerDTO);
-        shipOwnersService.refactorShipOwner(name, ShipOwnerDTO.convertToShipowner(shipOwnerDTO, modelMapper));
-        return ResponseEntity.ok().build();
+        shipOwnersService.refactorShipOwner(ShipOwnerDTO.convertToShipowner(shipOwnerDTO, modelMapper));
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{name}")

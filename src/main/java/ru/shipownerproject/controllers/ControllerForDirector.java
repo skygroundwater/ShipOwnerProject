@@ -6,11 +6,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.shipownerproject.services.usersservice.DirectorService;
 import ru.shipownerproject.services.usersservice.DirectorServiceImpl;
 import ru.shipownerproject.utils.$dto.UserDTO;
 import ru.shipownerproject.utils.$dto.validators.UserDTOValidator;
 import ru.shipownerproject.utils.exceptions.*;
+
+import java.io.IOException;
 
 import static ru.shipownerproject.utils.exceptions.ErrorResponse.notCreatedException;
 
@@ -33,30 +36,35 @@ public class ControllerForDirector {
     }
 
     @PostMapping("/admin")
-    public ResponseEntity<HttpStatus> addNewAdminToDB(@RequestBody UserDTO userDTO, BindingResult bindingResult){
+    public ResponseEntity<HttpStatus> addNewAdminToDB(@RequestBody UserDTO userDTO, BindingResult bindingResult) {
         notCreatedException(bindingResult, userDTOValidator, userDTO);
         directorService.registerNewAdmin(UserDTO.convertToUser(userDTO, modelMapper));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @PostMapping("/director")
-    public ResponseEntity<HttpStatus> addNewDirector(@RequestBody UserDTO userDTO, BindingResult bindingResult){
+    public ResponseEntity<HttpStatus> addNewDirector(@RequestBody UserDTO userDTO, BindingResult bindingResult) {
         notCreatedException(bindingResult, userDTOValidator, userDTO);
         directorService.registerNewDirector(UserDTO.convertToUser(userDTO, modelMapper));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @PostMapping("/user")
-    public ResponseEntity<HttpStatus> addNewUser(@RequestBody UserDTO userDTO, BindingResult bindingResult){
+    public ResponseEntity<HttpStatus> addNewUser(@RequestBody UserDTO userDTO, BindingResult bindingResult) {
         notCreatedException(bindingResult, userDTOValidator, userDTO);
         directorService.registerNewUser(UserDTO.convertToUser(userDTO, modelMapper));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{username}")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable String username){
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable String username) {
         directorService.deleteUser(username);
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<ErrorResponse> handlerException(IOException e) {
+        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler

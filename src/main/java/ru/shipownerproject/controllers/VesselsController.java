@@ -48,31 +48,30 @@ public class VesselsController {
     }
 
     @GetMapping("/crew/{IMO}")
-    public ResponseEntity<List<SeamanDTO>> getCrew(@PathVariable Integer IMO){
-        return  ResponseEntity.ok(vesselsService.getInfoAboutCrew(IMO).stream()
+    public ResponseEntity<List<SeamanDTO>> getCrew(@PathVariable Integer IMO) {
+        return ResponseEntity.ok(vesselsService.getInfoAboutCrew(IMO).stream()
                 .map(seaman -> SeamanDTO.convertToSeamanDTO(seaman, modelMapper))
                 .collect(Collectors.toList()));
     }
 
     @GetMapping("/shipowner/{IMO}")
-    public ResponseEntity<ShipOwnerDTO> getVeselShipOwner(@PathVariable Integer IMO){
+    public ResponseEntity<ShipOwnerDTO> getVeselShipOwner(@PathVariable Integer IMO) {
         return ResponseEntity.ok(ShipOwnerDTO.convertToShipOwnerDTO
                 (vesselsService.getVesselShipOwner(IMO), modelMapper));
     }
 
     @GetMapping("/type/{type}")
-    public ResponseEntity<List<VesselDTO>> getVesselsByType(@PathVariable String type){
+    public ResponseEntity<List<VesselDTO>> getVesselsByType(@PathVariable String type) {
         return ResponseEntity.ok(vesselsService.allVesselsByType(type).stream()
                 .map(vessel -> VesselDTO.convertToVesselDTO(vessel, modelMapper))
                 .collect(Collectors.toList()));
     }
 
-    @PutMapping("/refactor/{IMO}")
+    @PutMapping("/refactor")
     public ResponseEntity<HttpStatus> refactorVesselInBase(@RequestBody VesselDTO vesselDTO,
-                                                           @PathVariable Integer IMO,
                                                            BindingResult bindingResult) {
         notRefactoredException(bindingResult, vesselDTOValidator, vesselDTO);
-        vesselsService.refactorVesselInBase(IMO, VesselDTO.convertToVessel(vesselDTO, modelMapper));
+        vesselsService.refactorVesselInBase(VesselDTO.convertToVessel(vesselDTO, modelMapper));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

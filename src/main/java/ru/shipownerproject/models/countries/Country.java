@@ -33,7 +33,7 @@ public class Country implements Serializable {
     private List<Seaman> seamen;
 
     @OneToMany(mappedBy = "country", cascade = CascadeType.ALL)
-    private List<Port> portsOfCall;
+    private List<Port> ports;
 
     public Country() {
     }

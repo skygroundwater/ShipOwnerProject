@@ -12,11 +12,12 @@ public interface CountriesService {
 
     List<Country> allCountries();
 
-    Country newCountry(Country country);
+    void newCountry(Country country);
 
     List<ShipOwner> countryShipOwners(String name);
 
+    void deleteCountry(String name);
+
     List<Vessel> countryVessels(String name);
 
-    void refactorCountryName(String name, Country country);
 }

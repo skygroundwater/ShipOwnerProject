@@ -11,9 +11,7 @@ public enum VesselType implements Serializable {
 
     SALVAGE_AND_RESCUE("Salvage and rescue", "Render assistance to disabled ships, provide towing, salvage, diving," +
             "\n firefighting and heavy lift capabilities to the fleet."),
-
     BULK_CARRIER("Bulk carrier", "Merchant ship specially designed to transport unpackaged bulk cargo"),
-
     BARGE("Barge", "A roomy usually flat-bottomed boat used chiefly for the transport of \n " +
             "goods on inland waterways and usually propelled by towing"),
     TUG("Tug boat", "A boat or ship that maneuvers vessels by pushing or towing them"),
@@ -81,7 +79,7 @@ public enum VesselType implements Serializable {
 
     public static VesselType getVesselType(String type) {
         return Arrays.stream(values()).filter(vesselType ->
-                vesselType.getType().equals(type)).findAny()
+                        vesselType.getType().equals(type)).findAny()
                 .orElseThrow(() -> new NotFoundInBaseException(NVT));
     }
 }

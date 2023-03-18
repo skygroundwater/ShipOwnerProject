@@ -24,7 +24,7 @@ public interface VesselsService {
 
     Country getCountryOfRegistration(Integer IMO);
 
-    void refactorVesselInBase(Integer IMO, Vessel vessel);
+    void refactorVesselInBase(Vessel vessel);
 
     List<Vessel> allVesselsByType(String type);
 }

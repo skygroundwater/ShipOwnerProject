@@ -64,8 +64,8 @@ public class ShipOwnersServiceImpl implements ShipOwnersService {
     }
 
     @Override
-    public void refactorShipOwner(String name, ShipOwner shipOwner) {
-        shipOwnersRepository.save(Stream.of(findShipOwnerByName(name)).peek(sw -> {
+    public void refactorShipOwner(ShipOwner shipOwner) {
+        shipOwnersRepository.save(Stream.of(findShipOwnerByName(shipOwner.getName())).peek(sw -> {
             sw.setName(shipOwner.getName());
             sw.setCountry(findCountryByName(shipOwner));
             sw.setDescription(shipOwner.getDescription());

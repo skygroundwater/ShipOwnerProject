@@ -1,15 +1,14 @@
 package ru.shipownerproject.models.user;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
+@Table(name ="users")
 @Getter
 @Setter
-@Table(name ="users")
 public class User {
 
     @Id
@@ -56,5 +55,4 @@ public class User {
     public String toString(){
         return username + " password : " + password + " role: " + role;
     }
-
 }

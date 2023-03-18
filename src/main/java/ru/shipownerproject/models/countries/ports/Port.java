@@ -35,14 +35,9 @@ public class Port {
     @OneToMany(mappedBy = "port", cascade = CascadeType.ALL)
     private List<Vessel> regVessels;
 
-    public Port(String name){
-        this.name = name;
-    }
-
-    public Port(String name, Country country, String nav_description){
+    public Port(String name, Country country, String nav_description) {
         this.name = name;
         this.country = country;
         this.nav_description = nav_description;
     }
-
 }

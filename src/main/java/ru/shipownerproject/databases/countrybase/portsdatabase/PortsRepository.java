@@ -12,6 +12,4 @@ public interface PortsRepository extends JpaRepository<Port, String> {
 
     List<Port> findByName(String name);
 
-
-
 }

@@ -27,7 +27,7 @@ public class SeamanDTO extends DTO {
 
     private String birthPlace;
 
-    private String passport;
+    private Integer passportNumber;
 
     public static Seaman convertToSeaman(SeamanDTO seamanDTO, ModelMapper modelMapper) {
         return modelMapper.map(seamanDTO, Seaman.class);
@@ -37,7 +37,7 @@ public class SeamanDTO extends DTO {
         return new SeamanDTO(CountryDTO.convertToCountryDTO(seaman.getCitizenship(), modelMapper),
                 VesselDTO.convertToVesselDTO(seaman.getVessel(), modelMapper),
                 seaman.getFullName(), seaman.getPosition(), seaman.getBirth(), seaman.getBirthPlace(),
-                seaman.getSeamanPassport().getPassport());
+                seaman.getPassportNumber());
     }
 
     @Override

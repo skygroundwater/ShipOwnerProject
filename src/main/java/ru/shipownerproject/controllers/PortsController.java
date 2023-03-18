@@ -43,11 +43,11 @@ public class PortsController {
         return ResponseEntity.ok(PortDTO.convertToPortDTO(portsService.findPortByName(name), modelMapper));
     }
 
-    @PutMapping("/refactor/{name}")
-    public ResponseEntity<HttpStatus> refactorPort(@PathVariable String name, @RequestBody PortDTO portDTO,
+    @PutMapping("/refactor")
+    public ResponseEntity<HttpStatus> refactorPort(@RequestBody PortDTO portDTO,
                                                    BindingResult bindingResult) {
         notRefactoredException(bindingResult, portDTOValidator, portDTO);
-        portsService.refactorPort(name, PortDTO.convertToPort(portDTO, modelMapper));
+        portsService.refactorPort(PortDTO.convertToPort(portDTO, modelMapper));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

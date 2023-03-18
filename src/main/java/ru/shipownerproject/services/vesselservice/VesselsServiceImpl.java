@@ -109,8 +109,8 @@ public class VesselsServiceImpl implements VesselsService {
     }
 
     @Override
-    public void refactorVesselInBase(Integer IMO, Vessel vessel) {
-        vesselsRepository.save(Stream.of(findVesselByIMO(IMO)).peek(v -> {
+    public void refactorVesselInBase(Vessel vessel) {
+        vesselsRepository.save(Stream.of(findVesselByIMO(vessel.getIMO())).peek(v -> {
             v.setName(vessel.getName());
             v.setCountry(findCountryByName(vessel));
             v.setShipOwner(findShipOwnerByName(vessel));
@@ -122,7 +122,7 @@ public class VesselsServiceImpl implements VesselsService {
 
     @Override
     public List<Vessel> allVesselsByType(String type) {
-        return vesselsRepository.findAll().stream().filter(vessel ->
-                vessel.getVesselType().getType().equals(type)).collect(Collectors.toList());
+        return (List<Vessel>) whatIfEmpty(vesselsRepository.findAll().stream().filter(vessel ->
+                vessel.getVesselType().getType().equals(type)).collect(Collectors.toList()), "that type of vessels");
     }
 }

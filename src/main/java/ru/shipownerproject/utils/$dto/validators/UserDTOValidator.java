@@ -22,6 +22,5 @@ public class UserDTOValidator implements Validator {
 
         if (userDTO.getPassword().isEmpty() || userDTO.getPassword() == null)
             errors.rejectValue("password", "Password for user cannot to be empty or null");
-
     }
 }

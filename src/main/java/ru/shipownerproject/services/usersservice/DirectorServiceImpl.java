@@ -45,12 +45,12 @@ public class DirectorServiceImpl implements DirectorService {
     }
 
     @Override
-    public void registerNewAdmin(User user) {
+    public void registerNewAdmin(User user){
         usersRepository.save(processingForUser(user, Role.ROLE_ADMIN));
     }
 
     @Override
-    public void registerNewUser(User user) {
+    public void registerNewUser(User user){
         usersRepository.save(processingForUser(user, Role.ROLE_USER));
     }
 

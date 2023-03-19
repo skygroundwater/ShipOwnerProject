@@ -1,12 +1,18 @@
 package ru.shipownerproject.databases.countrybase;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Query;
 import ru.shipownerproject.models.countries.Country;
 
 import java.util.List;
 
-@Repository
 public interface CountriesRepository extends JpaRepository<Country, String> {
     List<Country> findByName(String name);
+
+    @Query("select c from Country c join fetch c.shipOwners where c.name =:name")
+    List<Country> findByNameWithShipOwners(String name);
+
+    @Query("select c from Country c join fetch c.vessels v join fetch v.shipOwner join fetch v.port where c.name =:name")
+    List<Country> findByNameWithVessels(String name);
+
 }

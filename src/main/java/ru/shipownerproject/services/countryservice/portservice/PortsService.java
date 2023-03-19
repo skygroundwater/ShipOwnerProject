@@ -1,15 +1,20 @@
 package ru.shipownerproject.services.countryservice.portservice;
 
 import ru.shipownerproject.models.countries.ports.Port;
+import ru.shipownerproject.models.vessels.Vessel;
+
+import java.util.List;
 
 public interface PortsService {
 
 
     Port findPortByName(String name);
 
-    Port addNewPort(Port port);
+    void addNewPort(Port port);
 
-    Port refactorPort(Port port);
+    void refactorPort(Port port);
+
+    List<Vessel> vesselRegisteredThisPort(String name);
 
     void deletePortFromDB(String name);
 }

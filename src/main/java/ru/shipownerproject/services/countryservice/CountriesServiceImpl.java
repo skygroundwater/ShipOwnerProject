@@ -40,6 +40,18 @@ public class CountriesServiceImpl implements CountriesService {
     }
 
     @Override
+    public Country findCountryByNameWithShipOwners(String name) {
+        return countriesRepository.findByNameWithShipOwners(name).stream()
+                .findAny().orElseThrow(() -> new NotFoundInBaseException(NC));
+    }
+
+    @Override
+    public Country findCountryByNameWithVessels(String name) {
+        return countriesRepository.findByNameWithVessels(name).stream()
+                .findAny().orElseThrow(() -> new NotFoundInBaseException(NC));
+    }
+
+    @Override
     public List<Country> allCountries() {
         return (List<Country>) whatIfEmpty(findAll(), "of countries for that project");
     }
@@ -52,7 +64,7 @@ public class CountriesServiceImpl implements CountriesService {
 
     @Override
     public List<ShipOwner> countryShipOwners(String name) {
-        return (List<ShipOwner>) whatIfEmpty(findCountryByName(name).getShipOwners(),
+        return (List<ShipOwner>) whatIfEmpty(findCountryByNameWithShipOwners(name).getShipOwners(),
                 "that country's ship owners");
     }
 
@@ -61,7 +73,7 @@ public class CountriesServiceImpl implements CountriesService {
         countriesRepository.delete(findCountryByName(name));
     }
     public List<Vessel> countryVessels(String name) {
-        return (List<Vessel>) whatIfEmpty(findCountryByName(name).getVessels(),
+        return (List<Vessel>) whatIfEmpty(findCountryByNameWithVessels(name).getVessels(),
                 "that country's vessels");
     }
 }

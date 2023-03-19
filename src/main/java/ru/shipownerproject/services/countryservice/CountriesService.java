@@ -10,6 +10,10 @@ public interface CountriesService {
 
     Country findCountryByName(String name);
 
+    Country findCountryByNameWithShipOwners(String name);
+
+    Country findCountryByNameWithVessels(String name);
+
     List<Country> allCountries();
 
     void newCountry(Country country);

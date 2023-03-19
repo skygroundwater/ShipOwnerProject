@@ -35,24 +35,34 @@ public class ShipOwnersServiceImpl implements ShipOwnersService {
     }
 
     private void checkShipOwnerIfPresent(ShipOwner shipOwner) {
-        if (shipOwnersRepository.findByName(shipOwner.getName()).stream().findAny().isPresent())
+        if (shipOwnersRepository.findByNameWithVessels(shipOwner.getName()).stream().findAny().isPresent())
             throw new AlreadyAddedToBaseException(SAME_SHIPOWNER);
     }
 
     @Override
-    public ShipOwner findShipOwnerByName(String name) {
-        return shipOwnersRepository.findByName(name).stream().findAny().orElseThrow(() -> new NotFoundInBaseException(NS));
+    public ShipOwner findShipOwnerByName(String name){
+        return shipOwnersRepository.findShipOwnerByName(name).stream().findAny().orElseThrow(() -> new NotFoundInBaseException(NS));
+    }
+
+    @Override
+    public ShipOwner findShipOwnerByNameWithVessels(String name) {
+        return shipOwnersRepository.findByNameWithVessels(name).stream().findAny().orElseThrow(() -> new NotFoundInBaseException(NS));
+    }
+
+    @Override
+    public ShipOwner findShipOwnerByNameWithSeamen(String name){
+        return shipOwnersRepository.findShipOwnerByNameWithSeamen(name).stream().findAny().orElseThrow(() -> new NotFoundInBaseException(NS));
     }
 
     @Override
     public List<Vessel> shipOwnerVessels(String name) {
-        return (List<Vessel>) whatIfEmpty(findShipOwnerByName(name).getVessels(),
+        return (List<Vessel>) whatIfEmpty(findShipOwnerByNameWithVessels(name).getVessels(),
                 "that ship owner's vessels");
     }
 
     @Override
     public List<Seaman> shipOwnerSeamen(String name) {
-        return (List<Seaman>) whatIfEmpty(findShipOwnerByName(name).getSeamen(),
+        return (List<Seaman>) whatIfEmpty(findShipOwnerByNameWithSeamen(name).getSeamen(),
                 "that shipowner's seamen");
     }
 
@@ -74,6 +84,6 @@ public class ShipOwnersServiceImpl implements ShipOwnersService {
 
     @Override
     public void removeFromBaseShipOwner(String name) {
-        shipOwnersRepository.delete(findShipOwnerByName(name));
+        shipOwnersRepository.delete(findShipOwnerByNameWithVessels(name));
     }
 }

@@ -3,7 +3,6 @@ package ru.shipownerproject.controllers;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.shipownerproject.services.countryservice.CountriesService;
@@ -17,7 +16,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.shipownerproject.utils.exceptions.ErrorResponse.notCreatedException;
-import static ru.shipownerproject.utils.exceptions.ErrorResponse.notRefactoredException;
 
 @RestController
 @RequestMapping("/countries")

@@ -8,8 +8,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.shipownerproject.services.countryservice.portservice.PortsService;
 import ru.shipownerproject.utils.$dto.PortDTO;
+import ru.shipownerproject.utils.$dto.VesselDTO;
 import ru.shipownerproject.utils.$dto.validators.PortDTOValidator;
 import ru.shipownerproject.utils.exceptions.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.shipownerproject.utils.exceptions.ErrorResponse.notCreatedException;
 import static ru.shipownerproject.utils.exceptions.ErrorResponse.notRefactoredException;
@@ -41,6 +45,12 @@ public class PortsController {
     @GetMapping("/{name}")
     public ResponseEntity<PortDTO> getPortFromDB(@PathVariable String name) {
         return ResponseEntity.ok(PortDTO.convertToPortDTO(portsService.findPortByName(name), modelMapper));
+    }
+    @GetMapping("/vessels/{name}")
+    public ResponseEntity<List<VesselDTO>> getRegisteredInPortVessels(@PathVariable String name){
+        return ResponseEntity.ok(portsService.vesselRegisteredThisPort(name)
+                .stream().map(vessel -> VesselDTO.convertToVesselDTO(vessel, modelMapper))
+                .collect(Collectors.toList()));
     }
 
     @PutMapping("/refactor")

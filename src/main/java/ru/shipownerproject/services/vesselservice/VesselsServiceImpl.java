@@ -16,7 +16,6 @@ import ru.shipownerproject.utils.exceptions.NotFoundInBaseException;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static ru.shipownerproject.models.vessels.type.VesselType.NVT;
@@ -54,7 +53,7 @@ public class VesselsServiceImpl implements VesselsService {
     }
 
     private ShipOwner findShipOwnerByName(Vessel vessel) {
-        return shipOwnersService.findShipOwnerByName(vessel.getShipOwner().getName());
+        return shipOwnersService.findShipOwnerByNameWithSeamen(vessel.getShipOwner().getName());
     }
 
     private Port findPortByName(Vessel vessel) {
@@ -122,7 +121,10 @@ public class VesselsServiceImpl implements VesselsService {
 
     @Override
     public List<Vessel> allVesselsByType(String type) {
-        return (List<Vessel>) whatIfEmpty(vesselsRepository.findAll().stream().filter(vessel ->
-                vessel.getVesselType().getType().equals(type)).collect(Collectors.toList()), "that type of vessels");
+        return (List<Vessel>) whatIfEmpty(vesselsRepository.findVesselByVesselType(
+                Arrays.stream(VesselType.values())
+                        .filter(vt -> vt.getType().equals(type)).findAny()
+                        .orElseThrow(() -> new NotFoundInBaseException(NVT))),
+                "that type of vessels");
     }
 }

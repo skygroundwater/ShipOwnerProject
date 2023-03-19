@@ -10,6 +10,10 @@ public interface ShipOwnersService {
 
     ShipOwner findShipOwnerByName(String name);
 
+    ShipOwner findShipOwnerByNameWithVessels(String name);
+
+    ShipOwner findShipOwnerByNameWithSeamen(String name);
+
     List<Vessel> shipOwnerVessels(String name);
 
     List<Seaman> shipOwnerSeamen(String name);

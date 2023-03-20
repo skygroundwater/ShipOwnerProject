@@ -6,9 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.shipownerproject.services.countryservice.CountriesService;
-import ru.shipownerproject.utils.$dto.CountryDTO;
-import ru.shipownerproject.utils.$dto.ShipOwnerDTO;
-import ru.shipownerproject.utils.$dto.VesselDTO;
+import ru.shipownerproject.utils.$dto.*;
 import ru.shipownerproject.utils.$dto.validators.CountryDTOValidator;
 import ru.shipownerproject.utils.exceptions.*;
 
@@ -55,16 +53,29 @@ public class CountriesController {
     }
 
     @GetMapping("/shipowners/{name}")
-    public ResponseEntity<List<ShipOwnerDTO>> returnCountryShipOwners(@PathVariable String name) {
-        return ResponseEntity.ok(countriesService.countryShipOwners(name).stream()
+    public ResponseEntity<List<ShipOwnerDTO>> returnShipOwnersRegisteredInCountry(@PathVariable String name) {
+        return ResponseEntity.ok(countriesService.returnShipOwnersRegisteredInCountry(name).stream()
                 .map(shipOwner -> ShipOwnerDTO.convertToShipOwnerDTO(shipOwner, modelMapper))
                 .collect(Collectors.toList()));
     }
 
     @GetMapping("/vessels/{name}")
-    public ResponseEntity<List<VesselDTO>> returnCountryVessels(@PathVariable String name){
-        return ResponseEntity.ok(countriesService.countryVessels(name).stream()
+    public ResponseEntity<List<VesselDTO>> returnVesselsRegisteredInCountry(@PathVariable String name){
+        return ResponseEntity.ok(countriesService.returnVesselsRegisteredInCountry(name).stream()
                 .map(vessel -> VesselDTO.convertToVesselDTO(vessel, modelMapper))
+                .collect(Collectors.toList()));
+    }
+
+    @GetMapping("/seamen/{name}")
+    public ResponseEntity<List<SeamanDTO>> returnSeamenWithCitizenshipOfCountry(@PathVariable String name){
+        return ResponseEntity.ok(countriesService.seamenWithCitizenShipOfCountry(name).stream()
+                .map(seaman -> SeamanDTO.convertToSeamanDTO(seaman, modelMapper))
+                .collect(Collectors.toList()));
+    }
+    @GetMapping("/ports/{name}")
+    public ResponseEntity<List<PortDTO>> returnPortsOfThisCountry(@PathVariable String name){
+        return ResponseEntity.ok(countriesService.portsInCountry(name).stream()
+                .map(port -> PortDTO.convertToPortDTO(port, modelMapper))
                 .collect(Collectors.toList()));
     }
 

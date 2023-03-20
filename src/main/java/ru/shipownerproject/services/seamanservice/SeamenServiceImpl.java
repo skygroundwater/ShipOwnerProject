@@ -42,11 +42,13 @@ public class SeamenServiceImpl implements SeamenService {
     }
 
     private Seaman findSeamanByPassportNumber(Integer passportNumber) {
-        return seamenRepository.findByPassportNumber(passportNumber).stream().findAny().orElseThrow(() -> new NotFoundInBaseException(NSM));
+        return seamenRepository.findByPassportNumber(passportNumber).stream().findAny()
+                .orElseThrow(() -> new NotFoundInBaseException(NSM));
     }
 
     private void checkSeamanInDataBase(Integer passportNumber){
-        if(seamenRepository.findByPassportNumber(passportNumber).stream().findAny().isPresent()) throw new AlreadyAddedToBaseException(THAT_SEAMAN);
+        if(seamenRepository.findByPassportNumber(passportNumber).stream().findAny().isPresent())
+            throw new AlreadyAddedToBaseException(THAT_SEAMAN);
     }
 
     @Override

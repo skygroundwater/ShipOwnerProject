@@ -8,12 +8,11 @@ import ru.shipownerproject.models.shipowners.ShipOwner;
 import ru.shipownerproject.models.vessels.Vessel;
 import ru.shipownerproject.services.countryservice.CountriesService;
 import ru.shipownerproject.utils.exceptions.AlreadyAddedToBaseException;
+import ru.shipownerproject.utils.exceptions.ListIsEmptyException;
 import ru.shipownerproject.utils.exceptions.NotFoundInBaseException;
 
 import java.util.List;
 import java.util.stream.Stream;
-
-import static ru.shipownerproject.utils.exceptions.ErrorResponse.whatIfEmpty;
 
 @Service
 public class ShipOwnersServiceImpl implements ShipOwnersService {
@@ -46,24 +45,23 @@ public class ShipOwnersServiceImpl implements ShipOwnersService {
 
     @Override
     public ShipOwner findShipOwnerByNameWithVessels(String name) {
-        return shipOwnersRepository.findByNameWithVessels(name).stream().findAny().orElseThrow(() -> new NotFoundInBaseException(NS));
+        return shipOwnersRepository.findByNameWithVessels(name).stream().findAny()
+                .orElseThrow(() -> new ListIsEmptyException("that ship owner's vessels"));
     }
 
     @Override
     public ShipOwner findShipOwnerByNameWithSeamen(String name){
-        return shipOwnersRepository.findShipOwnerByNameWithSeamen(name).stream().findAny().orElseThrow(() -> new NotFoundInBaseException(NS));
+        return shipOwnersRepository.findShipOwnerByNameWithSeamen(name).stream().findAny().orElseThrow(() -> new ListIsEmptyException("that ship owner's seamen"));
     }
 
     @Override
     public List<Vessel> shipOwnerVessels(String name) {
-        return (List<Vessel>) whatIfEmpty(findShipOwnerByNameWithVessels(name).getVessels(),
-                "that ship owner's vessels");
+        return findShipOwnerByNameWithVessels(name).getVessels();
     }
 
     @Override
     public List<Seaman> shipOwnerSeamen(String name) {
-        return (List<Seaman>) whatIfEmpty(findShipOwnerByNameWithSeamen(name).getSeamen(),
-                "that shipowner's seamen");
+        return findShipOwnerByNameWithSeamen(name).getSeamen();
     }
 
     @Override
@@ -84,6 +82,6 @@ public class ShipOwnersServiceImpl implements ShipOwnersService {
 
     @Override
     public void removeFromBaseShipOwner(String name) {
-        shipOwnersRepository.delete(findShipOwnerByNameWithVessels(name));
+        shipOwnersRepository.delete(findShipOwnerByName(name));
     }
 }

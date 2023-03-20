@@ -1,18 +1,17 @@
 package ru.shipownerproject.services.countryservice.portservice;
 
 import org.springframework.stereotype.Service;
-import ru.shipownerproject.databases.countrybase.portsdatabase.PortsRepository;
+import ru.shipownerproject.databases.portsdatabase.PortsRepository;
 import ru.shipownerproject.models.countries.Country;
 import ru.shipownerproject.models.countries.ports.Port;
 import ru.shipownerproject.models.vessels.Vessel;
 import ru.shipownerproject.services.countryservice.CountriesService;
 import ru.shipownerproject.utils.exceptions.AlreadyAddedToBaseException;
+import ru.shipownerproject.utils.exceptions.ListIsEmptyException;
 import ru.shipownerproject.utils.exceptions.NotFoundInBaseException;
 
 import java.util.List;
 import java.util.stream.Stream;
-
-import static ru.shipownerproject.utils.exceptions.ErrorResponse.whatIfEmpty;
 
 @Service
 public class PortsServiceImpl implements PortsService {
@@ -37,6 +36,11 @@ public class PortsServiceImpl implements PortsService {
 
     private Country findCountryByName(Port port) {
         return countriesService.findCountryByName(port.getCountry().getName());
+    }
+
+    private Port findPortByNameWithVessels(String name){
+        return portsRepository.findByNameWithVessels(name).stream().findAny()
+                .orElseThrow(() -> new ListIsEmptyException("that port's vessels"));
     }
 
     @Override
@@ -65,7 +69,7 @@ public class PortsServiceImpl implements PortsService {
 
     @Override
     public List<Vessel> vesselRegisteredThisPort(String name){
-        return (List<Vessel>) whatIfEmpty(findPortByName(name).getRegVessels(), "that port's vessels");
+        return findPortByNameWithVessels(name).getRegVessels();
     }
 
     @Override

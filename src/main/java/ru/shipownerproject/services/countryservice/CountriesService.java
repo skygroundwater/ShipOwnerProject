@@ -1,6 +1,8 @@
 package ru.shipownerproject.services.countryservice;
 
 import ru.shipownerproject.models.countries.Country;
+import ru.shipownerproject.models.countries.ports.Port;
+import ru.shipownerproject.models.seaman.Seaman;
 import ru.shipownerproject.models.shipowners.ShipOwner;
 import ru.shipownerproject.models.vessels.Vessel;
 
@@ -8,20 +10,19 @@ import java.util.List;
 
 public interface CountriesService {
 
-    Country findCountryByName(String name);
-
-    Country findCountryByNameWithShipOwners(String name);
-
-    Country findCountryByNameWithVessels(String name);
-
-    List<Country> allCountries();
-
     void newCountry(Country country);
-
-    List<ShipOwner> countryShipOwners(String name);
 
     void deleteCountry(String name);
 
-    List<Vessel> countryVessels(String name);
+    Country findCountryByName(String name);
 
+    List<Country> allCountries();
+
+    List<ShipOwner> returnShipOwnersRegisteredInCountry(String name);
+
+    List<Vessel> returnVesselsRegisteredInCountry(String name);
+
+    List<Seaman> seamenWithCitizenShipOfCountry(String name);
+
+    List<Port> portsInCountry(String name);
 }

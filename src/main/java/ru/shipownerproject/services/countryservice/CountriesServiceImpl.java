@@ -3,9 +3,12 @@ package ru.shipownerproject.services.countryservice;
 import org.springframework.stereotype.Service;
 import ru.shipownerproject.databases.countrybase.CountriesRepository;
 import ru.shipownerproject.models.countries.Country;
+import ru.shipownerproject.models.countries.ports.Port;
+import ru.shipownerproject.models.seaman.Seaman;
 import ru.shipownerproject.models.shipowners.ShipOwner;
 import ru.shipownerproject.models.vessels.Vessel;
 import ru.shipownerproject.utils.exceptions.AlreadyAddedToBaseException;
+import ru.shipownerproject.utils.exceptions.ListIsEmptyException;
 import ru.shipownerproject.utils.exceptions.NotFoundInBaseException;
 
 import java.util.List;
@@ -22,6 +25,7 @@ public class CountriesServiceImpl implements CountriesService {
     }
 
     public static final String NC = "This country is not available.";
+
     public static final String THAT_COUNTRY = "That country";
 
     private List<Country> findAll() {
@@ -33,21 +37,29 @@ public class CountriesServiceImpl implements CountriesService {
             throw new AlreadyAddedToBaseException(THAT_COUNTRY);
     }
 
+    private Country findCountryByNameWithShipOwners(String name) {
+        return countriesRepository.findByNameWithShipOwners(name).stream()
+                .findAny().orElseThrow(() -> new ListIsEmptyException(THAT_COUNTRY));
+    }
+
+    private Country findCountryByNameWithVessels(String name) {
+        return countriesRepository.findByNameWithVessels(name).stream()
+                .findAny().orElseThrow(() -> new ListIsEmptyException(THAT_COUNTRY));
+    }
+
+    private Country findCountryByNameWithSeamen(String name) {
+        return countriesRepository.findByNameWithSeamen(name).stream()
+                .findAny().orElseThrow(() -> new ListIsEmptyException(THAT_COUNTRY));
+    }
+
+    private Country findCountryByNameWithPorts(String name) {
+        return countriesRepository.findByNameWithPorts(name).stream()
+                .findAny().orElseThrow(() -> new ListIsEmptyException(THAT_COUNTRY));
+    }
+
     @Override
     public Country findCountryByName(String name) {
         return countriesRepository.findByName(name).stream()
-                .findAny().orElseThrow(() -> new NotFoundInBaseException(NC));
-    }
-
-    @Override
-    public Country findCountryByNameWithShipOwners(String name) {
-        return countriesRepository.findByNameWithShipOwners(name).stream()
-                .findAny().orElseThrow(() -> new NotFoundInBaseException(NC));
-    }
-
-    @Override
-    public Country findCountryByNameWithVessels(String name) {
-        return countriesRepository.findByNameWithVessels(name).stream()
                 .findAny().orElseThrow(() -> new NotFoundInBaseException(NC));
     }
 
@@ -63,17 +75,27 @@ public class CountriesServiceImpl implements CountriesService {
     }
 
     @Override
-    public List<ShipOwner> countryShipOwners(String name) {
-        return (List<ShipOwner>) whatIfEmpty(findCountryByNameWithShipOwners(name).getShipOwners(),
-                "that country's ship owners");
+    public void deleteCountry(String name) {
+        countriesRepository.delete(findCountryByName(name));
     }
 
     @Override
-    public void deleteCountry(String name){
-        countriesRepository.delete(findCountryByName(name));
+    public List<ShipOwner> returnShipOwnersRegisteredInCountry(String name) {
+        return findCountryByNameWithShipOwners(name).getShipOwners();
     }
-    public List<Vessel> countryVessels(String name) {
-        return (List<Vessel>) whatIfEmpty(findCountryByNameWithVessels(name).getVessels(),
-                "that country's vessels");
+
+    @Override
+    public List<Vessel> returnVesselsRegisteredInCountry(String name) {
+        return findCountryByNameWithVessels(name).getVessels();
+    }
+
+    @Override
+    public List<Seaman> seamenWithCitizenShipOfCountry(String name){
+        return findCountryByNameWithSeamen(name).getSeamen();
+    }
+
+    @Override
+    public List<Port> portsInCountry(String name){
+        return findCountryByNameWithPorts(name).getPorts();
     }
 }

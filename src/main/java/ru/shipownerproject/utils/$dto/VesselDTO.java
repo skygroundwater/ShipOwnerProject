@@ -30,6 +30,18 @@ public class VesselDTO extends DTO {
 
     private LocalDate buildingDate;
 
+    public VesselDTO(Integer IMO){
+        this.IMO = IMO;
+    }
+
+    public static Vessel convertToVesselJustWithIMO(VesselDTO vesselDTO, ModelMapper modelMapper){
+        return new Vessel(vesselDTO.getIMO());
+    }
+
+    public static VesselDTO convertToVesselDTOJustWithIMO(Vessel vessel){
+        return new VesselDTO(vessel.getIMO());
+    }
+
     public static Vessel convertToVessel(VesselDTO vesselDTO, ModelMapper modelMapper) {
         return new Vessel(vesselDTO.getName(), vesselDTO.getIMO(),
                 ShipOwnerDTO.convertToShipowner(vesselDTO.getShipOwner(), modelMapper),

@@ -67,6 +67,10 @@ public class Vessel implements Serializable {
     public Vessel() {
     }
 
+    public Vessel(Integer IMO) {
+        this.IMO = IMO;
+    }
+
     public Vessel(Integer IMO, String name) {
         this.IMO = IMO;
         this.name = name;

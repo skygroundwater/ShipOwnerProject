@@ -9,7 +9,9 @@ import java.util.List;
 
 public interface SeamenRepository extends JpaRepository<Seaman, Integer> {
 
-    @Query("select seaman from Seaman seaman join fetch seaman.vessel v join fetch v.port join fetch seaman.citizenship join fetch seaman.shipowner where seaman.passportNumber =:passportNumber")
+    @Query("select seaman from Seaman seaman join fetch seaman.vessel v join fetch v.port " +
+            "join fetch seaman.citizenship join fetch seaman.shipowner " +
+            "where seaman.passportNumber =:passportNumber")
     List<Seaman> findByPassportNumber(Integer passportNumber);
 
 }

@@ -1,7 +1,7 @@
-package ru.shipownerproject.services.countryservice.portservice;
+package ru.shipownerproject.services.portservice;
 
-import ru.shipownerproject.models.countries.ports.Port;
-import ru.shipownerproject.models.vessels.Vessel;
+import ru.shipownerproject.models.Port;
+import ru.shipownerproject.models.Vessel;
 
 import java.util.List;
 

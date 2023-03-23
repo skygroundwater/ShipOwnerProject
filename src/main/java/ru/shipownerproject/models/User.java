@@ -1,9 +1,10 @@
-package ru.shipownerproject.models.user;
+package ru.shipownerproject.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
+import ru.shipownerproject.models.enums.Role;
 
 @Entity
 @Table(name ="users")

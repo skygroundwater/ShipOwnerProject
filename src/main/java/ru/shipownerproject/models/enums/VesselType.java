@@ -1,4 +1,4 @@
-package ru.shipownerproject.models.vessels.type;
+package ru.shipownerproject.models.enums;
 
 import lombok.Getter;
 import ru.shipownerproject.utils.exceptions.NotFoundInBaseException;

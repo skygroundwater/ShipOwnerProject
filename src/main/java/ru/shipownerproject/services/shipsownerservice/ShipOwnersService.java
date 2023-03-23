@@ -1,8 +1,8 @@
 package ru.shipownerproject.services.shipsownerservice;
 
-import ru.shipownerproject.models.seaman.Seaman;
-import ru.shipownerproject.models.shipowners.ShipOwner;
-import ru.shipownerproject.models.vessels.Vessel;
+import ru.shipownerproject.models.Seaman;
+import ru.shipownerproject.models.ShipOwner;
+import ru.shipownerproject.models.Vessel;
 
 import java.util.List;
 

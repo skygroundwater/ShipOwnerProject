@@ -1,6 +1,6 @@
 package ru.shipownerproject.services.usersservice;
 
-import ru.shipownerproject.models.user.User;
+import ru.shipownerproject.models.User;
 
 public interface DirectorService {
 

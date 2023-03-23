@@ -1,4 +1,4 @@
-package ru.shipownerproject.models.user;
+package ru.shipownerproject.models.enums;
 
 public enum Role {
 

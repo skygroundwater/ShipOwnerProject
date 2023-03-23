@@ -1,4 +1,4 @@
-package ru.shipownerproject.utils.$dto.validators;
+package ru.shipownerproject.utils.validators;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -40,7 +40,7 @@ public class SeamanDTOValidator implements Validator {
         if (seaman.getBirthPlace() == null || seaman.getBirthPlace().isEmpty()) {
             errors.rejectValue("birthPlace", "", "Enter birth place");
         }
-        if (seaman.getPassportNumber().toString().length()!=7 || seaman.getPassportNumber() == null ) {
+        if (seaman.getPassportNumber().toString().length() != 7 || seaman.getPassportNumber() == null) {
             errors.rejectValue("passportNumber", "",
                     "Seaman cannot to be without passport. Or number has more or less than 7 numbers");
         }

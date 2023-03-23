@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.shipownerproject.repositories.UsersRepository;
-import ru.shipownerproject.models.user.Role;
-import ru.shipownerproject.models.user.User;
+import ru.shipownerproject.models.enums.Role;
+import ru.shipownerproject.models.User;
 import ru.shipownerproject.utils.exceptions.AlreadyAddedToBaseException;
 import ru.shipownerproject.utils.exceptions.NotFoundInBaseException;
 
@@ -45,12 +45,12 @@ public class DirectorServiceImpl implements DirectorService {
     }
 
     @Override
-    public void registerNewAdmin(User user){
+    public void registerNewAdmin(User user) {
         usersRepository.save(processingForUser(user, Role.ROLE_ADMIN));
     }
 
     @Override
-    public void registerNewUser(User user){
+    public void registerNewUser(User user) {
         usersRepository.save(processingForUser(user, Role.ROLE_USER));
     }
 

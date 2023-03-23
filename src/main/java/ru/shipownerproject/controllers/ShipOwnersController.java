@@ -9,7 +9,7 @@ import ru.shipownerproject.services.shipsownerservice.ShipOwnersService;
 import ru.shipownerproject.utils.$dto.SeamanDTO;
 import ru.shipownerproject.utils.$dto.ShipOwnerDTO;
 import ru.shipownerproject.utils.$dto.VesselDTO;
-import ru.shipownerproject.utils.$dto.validators.ShipOwnerDTOValidator;
+import ru.shipownerproject.utils.validators.ShipOwnerDTOValidator;
 
 import java.util.List;
 import java.util.stream.Collectors;

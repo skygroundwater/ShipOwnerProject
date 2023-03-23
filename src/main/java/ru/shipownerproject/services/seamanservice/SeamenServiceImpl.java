@@ -2,9 +2,9 @@ package ru.shipownerproject.services.seamanservice;
 
 import org.springframework.stereotype.Service;
 import ru.shipownerproject.repositories.SeamenRepository;
-import ru.shipownerproject.models.countries.Country;
-import ru.shipownerproject.models.seaman.Seaman;
-import ru.shipownerproject.models.vessels.Vessel;
+import ru.shipownerproject.models.Country;
+import ru.shipownerproject.models.Seaman;
+import ru.shipownerproject.models.Vessel;
 import ru.shipownerproject.services.countryservice.CountriesService;
 import ru.shipownerproject.services.vesselservice.VesselsService;
 import ru.shipownerproject.utils.exceptions.AlreadyAddedToBaseException;

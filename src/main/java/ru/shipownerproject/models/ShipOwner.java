@@ -1,12 +1,9 @@
-package ru.shipownerproject.models.shipowners;
+package ru.shipownerproject.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
-import ru.shipownerproject.models.countries.Country;
-import ru.shipownerproject.models.seaman.Seaman;
-import ru.shipownerproject.models.vessels.Vessel;
 
 import java.io.Serializable;
 import java.util.List;

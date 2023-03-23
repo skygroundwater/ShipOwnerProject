@@ -7,7 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.shipownerproject.services.usersservice.DirectorService;
 import ru.shipownerproject.utils.$dto.UserDTO;
-import ru.shipownerproject.utils.$dto.validators.UserDTOValidator;
+import ru.shipownerproject.utils.validators.UserDTOValidator;
 
 import static ru.shipownerproject.utils.exceptions.ErrorResponse.notCreatedException;
 

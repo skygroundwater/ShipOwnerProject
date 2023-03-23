@@ -7,7 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.shipownerproject.services.countryservice.CountriesService;
 import ru.shipownerproject.utils.$dto.*;
-import ru.shipownerproject.utils.$dto.validators.CountryDTOValidator;
+import ru.shipownerproject.utils.validators.CountryDTOValidator;
 
 import java.util.List;
 import java.util.stream.Collectors;

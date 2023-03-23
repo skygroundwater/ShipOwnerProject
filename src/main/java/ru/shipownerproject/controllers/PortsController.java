@@ -6,10 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.shipownerproject.services.countryservice.portservice.PortsService;
+import ru.shipownerproject.services.portservice.PortsService;
 import ru.shipownerproject.utils.$dto.PortDTO;
 import ru.shipownerproject.utils.$dto.VesselDTO;
-import ru.shipownerproject.utils.$dto.validators.PortDTOValidator;
+import ru.shipownerproject.utils.validators.PortDTOValidator;
 
 import java.util.List;
 import java.util.stream.Collectors;

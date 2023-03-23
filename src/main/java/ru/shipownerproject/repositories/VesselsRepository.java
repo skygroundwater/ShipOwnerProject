@@ -2,8 +2,8 @@ package ru.shipownerproject.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import ru.shipownerproject.models.vessels.Vessel;
-import ru.shipownerproject.models.vessels.type.VesselType;
+import ru.shipownerproject.models.Vessel;
+import ru.shipownerproject.models.enums.VesselType;
 
 import java.util.List;
 

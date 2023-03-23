@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
-import ru.shipownerproject.models.vessels.Vessel;
-import ru.shipownerproject.models.vessels.type.VesselType;
+import ru.shipownerproject.models.Vessel;
+import ru.shipownerproject.models.enums.VesselType;
 
 import java.time.LocalDate;
 
@@ -30,16 +30,8 @@ public class VesselDTO extends DTO {
 
     private LocalDate buildingDate;
 
-    public VesselDTO(Integer IMO){
+    public VesselDTO(Integer IMO) {
         this.IMO = IMO;
-    }
-
-    public static Vessel convertToVesselJustWithIMO(VesselDTO vesselDTO, ModelMapper modelMapper){
-        return new Vessel(vesselDTO.getIMO());
-    }
-
-    public static VesselDTO convertToVesselDTOJustWithIMO(Vessel vessel){
-        return new VesselDTO(vessel.getIMO());
     }
 
     public static Vessel convertToVessel(VesselDTO vesselDTO, ModelMapper modelMapper) {

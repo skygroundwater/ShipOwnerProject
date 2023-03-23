@@ -2,11 +2,11 @@ package ru.shipownerproject.services.countryservice;
 
 import org.springframework.stereotype.Service;
 import ru.shipownerproject.repositories.CountriesRepository;
-import ru.shipownerproject.models.countries.Country;
-import ru.shipownerproject.models.countries.ports.Port;
-import ru.shipownerproject.models.seaman.Seaman;
-import ru.shipownerproject.models.shipowners.ShipOwner;
-import ru.shipownerproject.models.vessels.Vessel;
+import ru.shipownerproject.models.Country;
+import ru.shipownerproject.models.Port;
+import ru.shipownerproject.models.Seaman;
+import ru.shipownerproject.models.ShipOwner;
+import ru.shipownerproject.models.Vessel;
 import ru.shipownerproject.utils.exceptions.AlreadyAddedToBaseException;
 import ru.shipownerproject.utils.exceptions.ListIsEmptyException;
 import ru.shipownerproject.utils.exceptions.NotFoundInBaseException;

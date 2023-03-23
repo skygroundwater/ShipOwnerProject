@@ -1,4 +1,4 @@
-package ru.shipownerproject.models.vessels;
+package ru.shipownerproject.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
@@ -6,11 +6,11 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import ru.shipownerproject.models.countries.Country;
-import ru.shipownerproject.models.countries.ports.Port;
-import ru.shipownerproject.models.seaman.Seaman;
-import ru.shipownerproject.models.shipowners.ShipOwner;
-import ru.shipownerproject.models.vessels.type.VesselType;
+import ru.shipownerproject.models.Country;
+import ru.shipownerproject.models.Port;
+import ru.shipownerproject.models.Seaman;
+import ru.shipownerproject.models.ShipOwner;
+import ru.shipownerproject.models.enums.VesselType;
 
 import java.io.Serializable;
 import java.time.LocalDate;

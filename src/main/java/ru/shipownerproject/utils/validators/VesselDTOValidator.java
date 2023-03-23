@@ -1,4 +1,4 @@
-package ru.shipownerproject.utils.$dto.validators;
+package ru.shipownerproject.utils.validators;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

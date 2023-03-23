@@ -3,7 +3,7 @@ package ru.shipownerproject.security;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import ru.shipownerproject.models.user.User;
+import ru.shipownerproject.models.User;
 
 import java.util.Collection;
 import java.util.Collections;

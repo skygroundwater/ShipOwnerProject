@@ -1,6 +1,6 @@
 package ru.shipownerproject.services.seamanservice;
 
-import ru.shipownerproject.models.seaman.Seaman;
+import ru.shipownerproject.models.Seaman;
 
 public interface SeamenService {
 

@@ -7,7 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.shipownerproject.services.seamanservice.SeamenService;
 import ru.shipownerproject.utils.$dto.SeamanDTO;
-import ru.shipownerproject.utils.$dto.validators.SeamanDTOValidator;
+import ru.shipownerproject.utils.validators.SeamanDTOValidator;
 
 import static ru.shipownerproject.utils.exceptions.ErrorResponse.notCreatedException;
 import static ru.shipownerproject.utils.exceptions.ErrorResponse.notRefactoredException;

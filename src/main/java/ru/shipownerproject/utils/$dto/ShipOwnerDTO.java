@@ -2,7 +2,7 @@ package ru.shipownerproject.utils.$dto;
 
 import lombok.*;
 import org.modelmapper.ModelMapper;
-import ru.shipownerproject.models.shipowners.ShipOwner;
+import ru.shipownerproject.models.ShipOwner;
 
 @Getter
 @Setter

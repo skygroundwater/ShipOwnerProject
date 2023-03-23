@@ -2,14 +2,14 @@ package ru.shipownerproject.services.vesselservice;
 
 import org.springframework.stereotype.Service;
 import ru.shipownerproject.repositories.VesselsRepository;
-import ru.shipownerproject.models.countries.Country;
-import ru.shipownerproject.models.countries.ports.Port;
-import ru.shipownerproject.models.seaman.Seaman;
-import ru.shipownerproject.models.shipowners.ShipOwner;
-import ru.shipownerproject.models.vessels.Vessel;
-import ru.shipownerproject.models.vessels.type.VesselType;
+import ru.shipownerproject.models.Country;
+import ru.shipownerproject.models.Port;
+import ru.shipownerproject.models.Seaman;
+import ru.shipownerproject.models.ShipOwner;
+import ru.shipownerproject.models.Vessel;
+import ru.shipownerproject.models.enums.VesselType;
 import ru.shipownerproject.services.countryservice.CountriesService;
-import ru.shipownerproject.services.countryservice.portservice.PortsService;
+import ru.shipownerproject.services.portservice.PortsService;
 import ru.shipownerproject.services.shipsownerservice.ShipOwnersService;
 import ru.shipownerproject.utils.exceptions.AlreadyAddedToBaseException;
 import ru.shipownerproject.utils.exceptions.NotFoundInBaseException;
@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static ru.shipownerproject.models.vessels.type.VesselType.NVT;
+import static ru.shipownerproject.models.enums.VesselType.NVT;
 import static ru.shipownerproject.utils.exceptions.ErrorResponse.whatIfEmpty;
 
 @Service
@@ -122,9 +122,9 @@ public class VesselsServiceImpl implements VesselsService {
     @Override
     public List<Vessel> allVesselsByType(String type) {
         return (List<Vessel>) whatIfEmpty(vesselsRepository.findVesselByVesselType(
-                Arrays.stream(VesselType.values())
-                        .filter(vt -> vt.getType().equals(type)).findAny()
-                        .orElseThrow(() -> new NotFoundInBaseException(NVT))),
+                        Arrays.stream(VesselType.values())
+                                .filter(vt -> vt.getType().equals(type)).findAny()
+                                .orElseThrow(() -> new NotFoundInBaseException(NVT))),
                 "that type of vessels");
     }
 }

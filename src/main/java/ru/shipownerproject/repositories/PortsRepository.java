@@ -2,7 +2,7 @@ package ru.shipownerproject.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import ru.shipownerproject.models.countries.ports.Port;
+import ru.shipownerproject.models.Port;
 
 import java.util.List;
 

@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
-import ru.shipownerproject.models.countries.ports.Port;
+import ru.shipownerproject.models.Port;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,9 +19,10 @@ public class PortDTO extends DTO {
 
     private String nav_description;
 
-    public PortDTO(String name){
-        this.name=name;
+    public PortDTO(String name) {
+        this.name = name;
     }
+
     public static Port convertToPort(PortDTO portDTO, ModelMapper modelMapper) {
         return new Port(portDTO.getName(), CountryDTO.convertToCountry(portDTO.getCountry(), modelMapper), portDTO.getNav_description());
     }

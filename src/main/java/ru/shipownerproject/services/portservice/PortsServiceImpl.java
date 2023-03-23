@@ -1,10 +1,10 @@
-package ru.shipownerproject.services.countryservice.portservice;
+package ru.shipownerproject.services.portservice;
 
 import org.springframework.stereotype.Service;
 import ru.shipownerproject.repositories.PortsRepository;
-import ru.shipownerproject.models.countries.Country;
-import ru.shipownerproject.models.countries.ports.Port;
-import ru.shipownerproject.models.vessels.Vessel;
+import ru.shipownerproject.models.Country;
+import ru.shipownerproject.models.Port;
+import ru.shipownerproject.models.Vessel;
 import ru.shipownerproject.services.countryservice.CountriesService;
 import ru.shipownerproject.utils.exceptions.AlreadyAddedToBaseException;
 import ru.shipownerproject.utils.exceptions.ListIsEmptyException;

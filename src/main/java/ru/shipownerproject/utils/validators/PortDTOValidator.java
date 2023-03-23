@@ -1,9 +1,9 @@
-package ru.shipownerproject.utils.$dto.validators;
+package ru.shipownerproject.utils.validators;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
-import ru.shipownerproject.models.countries.ports.Port;
+import ru.shipownerproject.models.Port;
 import ru.shipownerproject.utils.$dto.PortDTO;
 
 @Component

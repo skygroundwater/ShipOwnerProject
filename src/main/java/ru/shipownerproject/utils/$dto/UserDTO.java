@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
-import ru.shipownerproject.models.user.Role;
-import ru.shipownerproject.models.user.User;
+import ru.shipownerproject.models.enums.Role;
+import ru.shipownerproject.models.User;
 
 @AllArgsConstructor
 @NoArgsConstructor

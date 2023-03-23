@@ -1,7 +1,7 @@
 package ru.shipownerproject.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.shipownerproject.models.user.User;
+import ru.shipownerproject.models.User;
 
 import java.util.Optional;
 

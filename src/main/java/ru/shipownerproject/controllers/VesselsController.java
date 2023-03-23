@@ -10,7 +10,6 @@ import ru.shipownerproject.utils.$dto.SeamanDTO;
 import ru.shipownerproject.utils.$dto.ShipOwnerDTO;
 import ru.shipownerproject.utils.$dto.VesselDTO;
 import ru.shipownerproject.utils.$dto.validators.VesselDTOValidator;
-import ru.shipownerproject.utils.exceptions.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -75,34 +74,9 @@ public class VesselsController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{IMO}")
+    @DeleteMapping("/{IMO}")
     public ResponseEntity<HttpStatus> removeVesselFromBase(@PathVariable Integer IMO) {
         vesselsService.removeVesselFromBase(IMO);
         return ResponseEntity.ok(HttpStatus.OK);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handlerException(AlreadyAddedToBaseException e) {
-        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handlerException(ListIsEmptyException e) {
-        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handlerException(NotFoundInBaseException e) {
-        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handlerException(NotCreatedException e) {
-        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handlerException(NotRefactoredException e) {
-        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
     }
 }

@@ -5,10 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.shipownerproject.services.seamanservice.SeamenService;
 import ru.shipownerproject.utils.$dto.SeamanDTO;
 import ru.shipownerproject.utils.$dto.validators.SeamanDTOValidator;
-import ru.shipownerproject.services.seamanservice.SeamenService;
-import ru.shipownerproject.utils.exceptions.*;
 
 import static ru.shipownerproject.utils.exceptions.ErrorResponse.notCreatedException;
 import static ru.shipownerproject.utils.exceptions.ErrorResponse.notRefactoredException;
@@ -44,7 +43,7 @@ public class SeamenController {
                 (seamenService.showInfoAboutSeaman(passportNumber), modelMapper));
     }
 
-    @DeleteMapping("/delete/{passportNumber}")
+    @DeleteMapping("/{passportNumber}")
     public ResponseEntity<Object> removeSeamanFromBase(@PathVariable Integer passportNumber) {
         seamenService.removeSeamanFromBase(passportNumber);
         return ResponseEntity.ok(HttpStatus.OK);
@@ -56,30 +55,5 @@ public class SeamenController {
         notRefactoredException(bindingResult, seamanDTOValidator, seamanDTO);
         seamenService.refactorSeamanInBase(SeamanDTO.convertToSeaman(seamanDTO, modelMapper));
         return ResponseEntity.ok(HttpStatus.OK);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handlerException(AlreadyAddedToBaseException e) {
-        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handlerException(ListIsEmptyException e) {
-        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handlerException(NotFoundInBaseException e) {
-        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handlerException(NotCreatedException e) {
-        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handlerException(NotRefactoredException e) {
-        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
     }
 }

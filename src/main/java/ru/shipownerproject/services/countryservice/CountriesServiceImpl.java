@@ -1,7 +1,7 @@
 package ru.shipownerproject.services.countryservice;
 
 import org.springframework.stereotype.Service;
-import ru.shipownerproject.databases.countrybase.CountriesRepository;
+import ru.shipownerproject.repositories.CountriesRepository;
 import ru.shipownerproject.models.countries.Country;
 import ru.shipownerproject.models.countries.ports.Port;
 import ru.shipownerproject.models.seaman.Seaman;

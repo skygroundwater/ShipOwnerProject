@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import ru.shipownerproject.databases.usersdatabase.UsersRepository;
+import ru.shipownerproject.repositories.UsersRepository;
 import ru.shipownerproject.models.user.User;
 import ru.shipownerproject.security.UserWrapper;
 import ru.shipownerproject.utils.exceptions.NotFoundInBaseException;

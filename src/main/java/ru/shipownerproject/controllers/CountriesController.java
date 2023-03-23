@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.shipownerproject.services.countryservice.CountriesService;
 import ru.shipownerproject.utils.$dto.*;
 import ru.shipownerproject.utils.$dto.validators.CountryDTOValidator;
-import ru.shipownerproject.utils.exceptions.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -79,34 +78,9 @@ public class CountriesController {
                 .collect(Collectors.toList()));
     }
 
-    @DeleteMapping("/delete/{name}")
+    @DeleteMapping("/{name}")
     public ResponseEntity<HttpStatus> deleteCountry(@PathVariable String name) {
         countriesService.deleteCountry(name);
         return ResponseEntity.ok(HttpStatus.OK);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handlerException(AlreadyAddedToBaseException e) {
-        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handlerException(ListIsEmptyException e) {
-        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handlerException(NotFoundInBaseException e) {
-        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handlerException(NotCreatedException e) {
-        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handlerException(NotRefactoredException e) {
-        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
     }
 }

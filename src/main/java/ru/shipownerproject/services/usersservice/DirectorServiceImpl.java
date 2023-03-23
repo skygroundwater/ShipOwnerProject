@@ -3,7 +3,7 @@ package ru.shipownerproject.services.usersservice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.shipownerproject.databases.usersdatabase.UsersRepository;
+import ru.shipownerproject.repositories.UsersRepository;
 import ru.shipownerproject.models.user.Role;
 import ru.shipownerproject.models.user.User;
 import ru.shipownerproject.utils.exceptions.AlreadyAddedToBaseException;

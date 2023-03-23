@@ -1,4 +1,4 @@
-package ru.shipownerproject.databases.usersdatabase;
+package ru.shipownerproject.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.shipownerproject.models.user.User;

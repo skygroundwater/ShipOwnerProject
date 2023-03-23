@@ -1,4 +1,4 @@
-package ru.shipownerproject.databases.countrybase;
+package ru.shipownerproject.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

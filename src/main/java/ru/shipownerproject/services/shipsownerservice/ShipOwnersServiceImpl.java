@@ -1,7 +1,7 @@
 package ru.shipownerproject.services.shipsownerservice;
 
 import org.springframework.stereotype.Service;
-import ru.shipownerproject.databases.shipownerdatabase.ShipOwnersRepository;
+import ru.shipownerproject.repositories.ShipOwnersRepository;
 import ru.shipownerproject.models.countries.Country;
 import ru.shipownerproject.models.seaman.Seaman;
 import ru.shipownerproject.models.shipowners.ShipOwner;

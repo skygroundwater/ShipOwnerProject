@@ -10,7 +10,6 @@ import ru.shipownerproject.services.countryservice.portservice.PortsService;
 import ru.shipownerproject.utils.$dto.PortDTO;
 import ru.shipownerproject.utils.$dto.VesselDTO;
 import ru.shipownerproject.utils.$dto.validators.PortDTOValidator;
-import ru.shipownerproject.utils.exceptions.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -61,34 +60,9 @@ public class PortsController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{name}")
+    @DeleteMapping("/{name}")
     public ResponseEntity<HttpStatus> deletePortFromDB(@PathVariable String name) {
         portsService.deletePortFromDB(name);
         return ResponseEntity.ok(HttpStatus.OK);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handlerException(AlreadyAddedToBaseException e) {
-        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handlerException(ListIsEmptyException e) {
-        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handlerException(NotFoundInBaseException e) {
-        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handlerException(NotCreatedException e) {
-        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handlerException(NotRefactoredException e) {
-        return new ResponseEntity<>(new ErrorResponse(e.getMessage(), System.currentTimeMillis()), HttpStatus.BAD_REQUEST);
     }
 }

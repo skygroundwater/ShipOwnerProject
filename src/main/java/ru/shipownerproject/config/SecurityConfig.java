@@ -23,28 +23,6 @@ public class SecurityConfig {
         this.usersService = usersService;
     }
 
-    private static final String DRT = "/director";
-
-    private static final String CNT = "/countries";
-
-    private static final String SWR = "/shipowners";
-
-    private static final String SMN = "/seamen";
-
-    private static final String VSL = "/vessels";
-
-    private static final String PRT = "/ports";
-
-    private static final String IMO = "/{IMO}";
-
-    private static final String name = "/{name}";
-
-    private static final String dlt = "/delete";
-
-    private static final String rfc = "/refactor";
-
-    private static final String id = "/{id}";
-
     @Bean
     public PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
@@ -59,36 +37,36 @@ public class SecurityConfig {
 
                     //director
                     auth.requestMatchers(
-                            DRT + "/user",
-                            DRT + "/admin",
-                            DRT + DRT,
-                            DRT + dlt + "/{username}").hasRole("DIRECTOR");
+                            "/director" + "/user",
+                            "/director" + "/admin",
+                            "/director" + "/director",
+                            "/director" + "/{username}").hasRole("DIRECTOR");
 
                     //admin, director
                     auth.requestMatchers(
                             //countries
-                            CNT,
-                            CNT + rfc + name,
+                            "/countries",
+                            "/countries" + "/refactor" + "/{name}",
 
                             //shipowners
-                            SWR,
-                            SWR + dlt + name,
-                            SWR + rfc + name,
+                            "/shipowners",
+                            "/shipowners" + "/{name}",
+                            "/shipowners" + "/refactor" + "/{name}",
 
                             //ports
-                            PRT,
-                            PRT + dlt + name,
-                            PRT + rfc + name,
+                            "/ports",
+                            "/ports" + "/{name}",
+                            "/ports" + "/refactor" + "/{name}",
 
                             //seamen
-                            SMN,
-                            SMN + dlt + id,
-                            SMN + rfc + id,
+                            "/seamen",
+                            "/seamen" + "/{passportNumber}",
+                            "/seamen" + "/refactor" + "/{passportNumber}",
 
                             //vessels
-                            VSL,
-                            VSL + rfc + IMO,
-                            VSL + dlt + IMO
+                            "/vessels",
+                            "/vessels" + "/refactor" + "/{IMO}",
+                            "/vessels" + "/{IMO}"
                     ).hasAnyRole("ADMIN", "DIRECTOR");
 
                     //user, admin, director

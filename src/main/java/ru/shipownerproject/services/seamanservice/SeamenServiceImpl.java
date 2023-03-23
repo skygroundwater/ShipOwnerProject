@@ -1,7 +1,7 @@
 package ru.shipownerproject.services.seamanservice;
 
 import org.springframework.stereotype.Service;
-import ru.shipownerproject.databases.seamandatabase.SeamenRepository;
+import ru.shipownerproject.repositories.SeamenRepository;
 import ru.shipownerproject.models.countries.Country;
 import ru.shipownerproject.models.seaman.Seaman;
 import ru.shipownerproject.models.vessels.Vessel;
@@ -42,13 +42,11 @@ public class SeamenServiceImpl implements SeamenService {
     }
 
     private Seaman findSeamanByPassportNumber(Integer passportNumber) {
-        return seamenRepository.findByPassportNumber(passportNumber).stream().findAny()
-                .orElseThrow(() -> new NotFoundInBaseException(NSM));
+        return seamenRepository.findByPassportNumber(passportNumber).stream().findAny().orElseThrow(() -> new NotFoundInBaseException(NSM));
     }
 
     private void checkSeamanInDataBase(Integer passportNumber){
-        if(seamenRepository.findByPassportNumber(passportNumber).stream().findAny().isPresent())
-            throw new AlreadyAddedToBaseException(THAT_SEAMAN);
+        if(seamenRepository.findByPassportNumber(passportNumber).stream().findAny().isPresent()) throw new AlreadyAddedToBaseException(THAT_SEAMAN);
     }
 
     @Override

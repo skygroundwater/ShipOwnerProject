@@ -1,7 +1,7 @@
 package ru.shipownerproject.services.vesselservice;
 
 import org.springframework.stereotype.Service;
-import ru.shipownerproject.databases.vesselrepository.VesselsRepository;
+import ru.shipownerproject.repositories.VesselsRepository;
 import ru.shipownerproject.models.countries.Country;
 import ru.shipownerproject.models.countries.ports.Port;
 import ru.shipownerproject.models.seaman.Seaman;
@@ -12,7 +12,6 @@ import ru.shipownerproject.services.countryservice.CountriesService;
 import ru.shipownerproject.services.countryservice.portservice.PortsService;
 import ru.shipownerproject.services.shipsownerservice.ShipOwnersService;
 import ru.shipownerproject.utils.exceptions.AlreadyAddedToBaseException;
-import ru.shipownerproject.utils.exceptions.ListIsEmptyException;
 import ru.shipownerproject.utils.exceptions.NotFoundInBaseException;
 
 import java.util.Arrays;
@@ -54,7 +53,7 @@ public class VesselsServiceImpl implements VesselsService {
     }
 
     private ShipOwner findShipOwnerByName(Vessel vessel) {
-        return shipOwnersService.findShipOwnerByName(vessel.getShipOwner().getName());
+        return shipOwnersService.findShipOwnerByNameWithSeamen(vessel.getShipOwner().getName());
     }
 
     private Port findPortByName(Vessel vessel) {
@@ -65,10 +64,6 @@ public class VesselsServiceImpl implements VesselsService {
         return Arrays.stream(VesselType.values()).filter(vesselType ->
                         vesselType.getType().equals(vessel.getVesselType().getType()))
                 .findAny().orElseThrow(() -> new NotFoundInBaseException(NVT));
-    }
-
-    private Vessel getCrewForVessel(Integer IMO){
-        return vesselsRepository.findByIMOWithSeamen(IMO).stream().findAny().orElseThrow(() -> new ListIsEmptyException("that vessel' crew"));
     }
 
     @Override
@@ -93,7 +88,8 @@ public class VesselsServiceImpl implements VesselsService {
 
     @Override
     public List<Seaman> getInfoAboutCrew(Integer IMO) {
-        return getCrewForVessel(IMO).getSeamen();
+        return (List<Seaman>) whatIfEmpty(findVesselByIMO(IMO).getSeamen(),
+                "that vessel's crew");
     }
 
     @Override
@@ -125,6 +121,10 @@ public class VesselsServiceImpl implements VesselsService {
 
     @Override
     public List<Vessel> allVesselsByType(String type) {
-        return (List<Vessel>) whatIfEmpty(vesselsRepository.findVesselByVesselType(VesselType.getVesselType(type)), "that type of vessels");
+        return (List<Vessel>) whatIfEmpty(vesselsRepository.findVesselByVesselType(
+                Arrays.stream(VesselType.values())
+                        .filter(vt -> vt.getType().equals(type)).findAny()
+                        .orElseThrow(() -> new NotFoundInBaseException(NVT))),
+                "that type of vessels");
     }
 }

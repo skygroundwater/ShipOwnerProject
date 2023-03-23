@@ -1,7 +1,7 @@
 package ru.shipownerproject.services.countryservice.portservice;
 
 import org.springframework.stereotype.Service;
-import ru.shipownerproject.databases.portsdatabase.PortsRepository;
+import ru.shipownerproject.repositories.PortsRepository;
 import ru.shipownerproject.models.countries.Country;
 import ru.shipownerproject.models.countries.ports.Port;
 import ru.shipownerproject.models.vessels.Vessel;
@@ -38,7 +38,7 @@ public class PortsServiceImpl implements PortsService {
         return countriesService.findCountryByName(port.getCountry().getName());
     }
 
-    private Port findPortByNameWithVessels(String name){
+    private Port findPortByNameWithVessels(String name) {
         return portsRepository.findByNameWithVessels(name).stream().findAny()
                 .orElseThrow(() -> new ListIsEmptyException("that port's vessels"));
     }
@@ -68,7 +68,7 @@ public class PortsServiceImpl implements PortsService {
     }
 
     @Override
-    public List<Vessel> vesselRegisteredThisPort(String name){
+    public List<Vessel> vesselRegisteredThisPort(String name) {
         return findPortByNameWithVessels(name).getRegVessels();
     }
 

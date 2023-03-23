@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface PortsService {
 
-
     Port findPortByName(String name);
 
     void addNewPort(Port port);

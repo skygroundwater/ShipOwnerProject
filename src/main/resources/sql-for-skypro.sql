@@ -17,6 +17,7 @@ insert into employee(first_name, last_name, gender) VALUES ('Oleg', 'Metelev', '
 insert into employee(first_name, last_name, gender) VALUES ('Arina', 'Rodionova', 'female');
 insert into employee(first_name, last_name, gender) VALUES ('Koytus', 'Priemniy', 'male');
 insert into employee(first_name, last_name, gender) VALUES ('Mikushez', 'Rodionova-Meteleva', 'female');
+insert into employee(first_name, last_name, gender) VALUES ('Aleksey', 'Koshelev', 'male');
 
 select * from employee;
 
@@ -34,14 +35,18 @@ set city_id=2 where first_name='Arina';
 update employee
 set city_id=3 where first_name='Oleg';
 
+select first_name, last_name, name
+from city
+         inner join employee e on city.id = e.city_id;
+
 select name, first_name, last_name
+from city
+         left join employee e on e.city_id = city.id;
+
+select name, first_name
 from city
          full join employee e on city.id = e.city_id;
 
 select first_name, name
 from employee
-         full join city c on c.id = employee.city_id;
-
-select name, first_name
-from employee
-         left join city c on c.id = employee.city_id;
+         inner join city c on c.id = employee.city_id;

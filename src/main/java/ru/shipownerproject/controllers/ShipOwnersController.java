@@ -27,7 +27,9 @@ public class ShipOwnersController {
 
     private final ModelMapper modelMapper;
 
-    public ShipOwnersController(ShipOwnersService shipOwnersService, ShipOwnerDTOValidator shipOwnerDTOValidator, ModelMapper modelMapper) {
+    public ShipOwnersController(ShipOwnersService shipOwnersService,
+                                ShipOwnerDTOValidator shipOwnerDTOValidator,
+                                ModelMapper modelMapper) {
         this.shipOwnersService = shipOwnersService;
         this.shipOwnerDTOValidator = shipOwnerDTOValidator;
         this.modelMapper = modelMapper;

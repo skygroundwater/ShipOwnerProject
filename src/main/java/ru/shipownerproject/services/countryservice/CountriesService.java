@@ -10,9 +10,9 @@ import java.util.List;
 
 public interface CountriesService {
 
-    void newCountry(Country country);
+    Country newCountry(Country country);
 
-    void deleteCountry(String name);
+    boolean deleteCountry(String name);
 
     Country findCountryByName(String name);
 

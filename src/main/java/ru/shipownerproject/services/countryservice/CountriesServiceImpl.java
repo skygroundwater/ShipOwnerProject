@@ -9,6 +9,7 @@ import ru.shipownerproject.models.ShipOwner;
 import ru.shipownerproject.models.Vessel;
 import ru.shipownerproject.utils.exceptions.AlreadyAddedToBaseException;
 import ru.shipownerproject.utils.exceptions.ListIsEmptyException;
+import ru.shipownerproject.utils.exceptions.NotCreatedException;
 import ru.shipownerproject.utils.exceptions.NotFoundInBaseException;
 
 import java.util.List;
@@ -33,6 +34,8 @@ public class CountriesServiceImpl implements CountriesService {
     }
 
     private void checkCountryByName(Country country) {
+        if (country == null || country.getName() == null || country.getName().isEmpty())
+            throw new NotCreatedException("Country cannot to be without name");
         if (countriesRepository.findByName(country.getName()).stream().findAny().isPresent())
             throw new AlreadyAddedToBaseException(THAT_COUNTRY);
     }
@@ -65,18 +68,19 @@ public class CountriesServiceImpl implements CountriesService {
 
     @Override
     public List<Country> allCountries() {
-        return (List<Country>) whatIfEmpty(findAll(), "of countries for that project");
+        return (List<Country>) whatIfEmpty(findAll(), "countries for that project");
     }
 
     @Override
-    public void newCountry(Country country) {
+    public Country newCountry(Country country) {
         checkCountryByName(country);
-        countriesRepository.save(country);
+        return countriesRepository.save(country);
     }
 
     @Override
-    public void deleteCountry(String name) {
+    public boolean deleteCountry(String name) {
         countriesRepository.delete(findCountryByName(name));
+        return true;
     }
 
     @Override
@@ -90,12 +94,12 @@ public class CountriesServiceImpl implements CountriesService {
     }
 
     @Override
-    public List<Seaman> seamenWithCitizenShipOfCountry(String name){
+    public List<Seaman> seamenWithCitizenShipOfCountry(String name) {
         return findCountryByNameWithSeamen(name).getSeamen();
     }
 
     @Override
-    public List<Port> portsInCountry(String name){
+    public List<Port> portsInCountry(String name) {
         return findCountryByNameWithPorts(name).getPorts();
     }
 }

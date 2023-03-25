@@ -12,7 +12,7 @@ public interface CountriesRepository extends JpaRepository<Country, String> {
     @Query("select c from Country c join fetch c.shipOwners where c.name =:name")
     List<Country> findByNameWithShipOwners(String name);
 
-    @Query("select c from Country c join fetch c.vessels v join fetch v.shipOwner join fetch v.port where c.name =:name")
+    @Query("select c from Country c join fetch c.vessels v join v.shipOwner join v.port where c.name =:name")
     List<Country> findByNameWithVessels(String name);
 
     @Query("select c from Country c join fetch c.seamen s join s.vessel v join s.shipowner join v.shipOwner where c.name =:name")

@@ -10,7 +10,8 @@ public interface PortsRepository extends JpaRepository<Port, String> {
 
     List<Port> findByName(String name);
 
-    @Query("select p from Port p join fetch p.regVessels v join fetch v.shipOwner where p.name =:name")
+    @Query("select p from Port p join fetch p.regVessels v " +
+            "join fetch v.shipOwner where p.name =:name")
     List<Port> findByNameWithVessels(String name);
 
 }

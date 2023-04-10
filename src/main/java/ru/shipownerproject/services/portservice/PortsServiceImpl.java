@@ -50,9 +50,9 @@ public class PortsServiceImpl implements PortsService {
     }
 
     @Override
-    public void addNewPort(Port port) {
+    public Port addNewPort(Port port) {
         checkPortInDB(port);
-        portsRepository.save(new Port(port.getName(),
+        return portsRepository.save(new Port(port.getName(),
                 findCountryByName(port), port.getNav_description()));
     }
 

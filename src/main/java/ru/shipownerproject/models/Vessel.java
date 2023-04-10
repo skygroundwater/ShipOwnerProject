@@ -6,10 +6,6 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import ru.shipownerproject.models.Country;
-import ru.shipownerproject.models.Port;
-import ru.shipownerproject.models.Seaman;
-import ru.shipownerproject.models.ShipOwner;
 import ru.shipownerproject.models.enums.VesselType;
 
 import java.io.Serializable;

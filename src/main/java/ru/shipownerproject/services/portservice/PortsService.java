@@ -9,7 +9,7 @@ public interface PortsService {
 
     Port findPortByName(String name);
 
-    void addNewPort(Port port);
+    Port addNewPort(Port port);
 
     void refactorPort(Port port);
 
